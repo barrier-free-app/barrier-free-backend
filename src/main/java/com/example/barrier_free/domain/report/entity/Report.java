@@ -3,6 +3,7 @@ package com.example.barrier_free.domain.report.entity;
 import java.util.ArrayList;
 import java.util.List;
 
+import com.example.barrier_free.domain.comment.entity.Comment;
 import com.example.barrier_free.domain.facility.entity.ReportFacility;
 import com.example.barrier_free.global.entity.PlaceEntity;
 
@@ -22,4 +23,9 @@ public class Report extends PlaceEntity {
 
 	@OneToMany(mappedBy = "report", cascade = CascadeType.ALL, orphanRemoval = true)
 	private List<ReportFacility> reportFacilities = new ArrayList<>();
+	@OneToMany(mappedBy = "report", cascade = CascadeType.ALL, orphanRemoval = true)
+	private List<Comment> comments = new ArrayList<>();
+	@OneToMany(mappedBy = "report", cascade = CascadeType.ALL, orphanRemoval = true)
+	private List<ReportImage> reportImages = new ArrayList<>();
+
 }

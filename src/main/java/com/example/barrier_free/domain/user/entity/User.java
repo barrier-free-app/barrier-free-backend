@@ -6,7 +6,9 @@ import java.util.List;
 
 import org.springframework.data.annotation.CreatedDate;
 
+import com.example.barrier_free.domain.comment.entity.Comment;
 import com.example.barrier_free.domain.facility.entity.UserFacility;
+import com.example.barrier_free.domain.favorite.entity.Favorite;
 import com.example.barrier_free.domain.user.enums.Role;
 import com.example.barrier_free.domain.user.enums.SocialType;
 import com.example.barrier_free.domain.user.enums.UserType;
@@ -53,5 +55,11 @@ public class User extends BaseEntity {
 	private LocalDateTime nicknameUpdatedAt;
 	@OneToMany(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)
 	private List<UserFacility> userFacilities = new ArrayList<>();
+	@OneToMany(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)
+	private List<Comment> comments = new ArrayList<>();
+	@OneToMany(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)
+	private List<Favorite> favorites = new ArrayList<>();
+
+
 
 }

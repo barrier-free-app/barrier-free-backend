@@ -1,4 +1,4 @@
-package com.example.barrier_free.domain.like.entity;
+package com.example.barrier_free.domain.favorite.entity;
 
 import com.example.barrier_free.domain.map.entity.Map;
 import com.example.barrier_free.domain.user.entity.User;
@@ -11,7 +11,7 @@ import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
 
 @Entity
-public class Likes {
+public class Favorite {
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long id;
