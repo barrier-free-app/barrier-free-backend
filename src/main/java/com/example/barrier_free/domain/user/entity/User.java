@@ -9,6 +9,7 @@ import org.springframework.data.annotation.CreatedDate;
 import com.example.barrier_free.domain.comment.entity.Comment;
 import com.example.barrier_free.domain.facility.entity.UserFacility;
 import com.example.barrier_free.domain.favorite.entity.Favorite;
+import com.example.barrier_free.domain.report.entity.Report;
 import com.example.barrier_free.domain.user.enums.Role;
 import com.example.barrier_free.domain.user.enums.SocialType;
 import com.example.barrier_free.domain.user.enums.UserType;
@@ -28,12 +29,6 @@ import jakarta.validation.constraints.Email;
 @Entity
 public class User extends BaseEntity {
 
-	@OneToMany(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)
-	private final List<UserFacility> userFacilities = new ArrayList<>();
-	@OneToMany(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)
-	private final List<Comment> comments = new ArrayList<>();
-	@OneToMany(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)
-	private final List<Favorite> favorites = new ArrayList<>();
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long id;
@@ -45,16 +40,27 @@ public class User extends BaseEntity {
 	private String nickname;
 	private String accessToken;
 	private String refreshToken;
+
 	@Enumerated(EnumType.STRING)
 	private UserType userType;
 	@Enumerated(EnumType.STRING)
 	private SocialType socialType;
 	@Enumerated(EnumType.STRING)
 	private Role role;
+
 	@Column(name = "incorrect_times")
 	private int incorrectTimes;
+
 	@CreatedDate
 	@Column(name = "nickname_updated_at")
 	private LocalDateTime nicknameUpdatedAt;
+	@OneToMany(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)
+	private List<UserFacility> userFacilities = new ArrayList<>();
+	@OneToMany(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)
+	private List<Comment> comments = new ArrayList<>();
+	@OneToMany(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)
+	private List<Favorite> favorites = new ArrayList<>();
+	@OneToMany(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)
+	private List<Report> reports = new ArrayList<>();
 
 }

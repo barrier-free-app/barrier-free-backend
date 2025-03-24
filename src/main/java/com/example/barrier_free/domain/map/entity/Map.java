@@ -5,6 +5,7 @@ import java.util.List;
 
 import com.example.barrier_free.domain.facility.entity.MapFacility;
 import com.example.barrier_free.domain.favorite.entity.Favorite;
+import com.example.barrier_free.domain.review.entity.Review;
 import com.example.barrier_free.global.entity.PlaceEntity;
 
 import jakarta.persistence.CascadeType;
@@ -16,17 +17,20 @@ import jakarta.persistence.OneToMany;
 
 @Entity
 public class Map extends PlaceEntity {
-	@OneToMany(mappedBy = "map", cascade = CascadeType.ALL, orphanRemoval = true)
-	private final List<MapFacility> mapFacilities = new ArrayList<>();
-	@OneToMany(mappedBy = "map", cascade = CascadeType.ALL, orphanRemoval = true)
-	private final List<Favorite> favorites = new ArrayList<>();
-	@OneToMany(mappedBy = "map", cascade = CascadeType.ALL, orphanRemoval = true)
-	private final List<MapImage> mapImages = new ArrayList<>();
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long id;
 	private float totalRating;
 	private float latitude;
-	private float altitude;
+	private float longitude;
+
+	@OneToMany(mappedBy = "map", cascade = CascadeType.ALL, orphanRemoval = true)
+	private List<MapFacility> mapFacilities = new ArrayList<>();
+	@OneToMany(mappedBy = "map", cascade = CascadeType.ALL, orphanRemoval = true)
+	private List<Favorite> favorites = new ArrayList<>();
+	@OneToMany(mappedBy = "map", cascade = CascadeType.ALL, orphanRemoval = true)
+	private List<MapImage> mapImages = new ArrayList<>();
+	@OneToMany(mappedBy = "map", cascade = CascadeType.ALL, orphanRemoval = true)
+	private List<Review> reviews = new ArrayList<>();
 
 }
