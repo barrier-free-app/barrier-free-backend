@@ -2,8 +2,6 @@ package com.example.barrier_free.global.entity;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.MappedSuperclass;
-import lombok.Data;
-
 
 @MappedSuperclass
 public abstract class PlaceEntity extends BaseEntity {
