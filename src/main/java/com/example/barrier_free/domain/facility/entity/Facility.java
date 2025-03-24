@@ -12,16 +12,15 @@ import jakarta.persistence.OneToMany;
 
 @Entity
 public class Facility {
+	@OneToMany(mappedBy = "facility", fetch = FetchType.LAZY)
+	private final List<MapFacility> mapFacilities = new ArrayList<>();
+	@OneToMany(mappedBy = "facility", fetch = FetchType.LAZY)
+	private final List<ReportFacility> reportFacilities = new ArrayList<>();
+	@OneToMany(mappedBy = "facility", fetch = FetchType.LAZY)
+	private final List<UserFacility> userFacilities = new ArrayList<>();
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long id;
 	private String name;
-
-	@OneToMany(mappedBy = "facility", fetch = FetchType.LAZY)
-	private List<MapFacility> mapFacilities = new ArrayList<>();
-	@OneToMany(mappedBy = "facility", fetch = FetchType.LAZY)
-	private List<ReportFacility> reportFacilities = new ArrayList<>();
-	@OneToMany(mappedBy = "facility", fetch = FetchType.LAZY)
-	private List<UserFacility> userFacilities = new ArrayList<>();
 
 }

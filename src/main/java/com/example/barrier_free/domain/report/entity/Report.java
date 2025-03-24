@@ -17,15 +17,14 @@ import jakarta.persistence.OneToMany;
 @Entity
 public class Report extends PlaceEntity {
 
+	@OneToMany(mappedBy = "report", cascade = CascadeType.ALL, orphanRemoval = true)
+	private final List<ReportFacility> reportFacilities = new ArrayList<>();
+	@OneToMany(mappedBy = "report", cascade = CascadeType.ALL, orphanRemoval = true)
+	private final List<Comment> comments = new ArrayList<>();
+	@OneToMany(mappedBy = "report", cascade = CascadeType.ALL, orphanRemoval = true)
+	private final List<ReportImage> reportImages = new ArrayList<>();
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long id;
-
-	@OneToMany(mappedBy = "report", cascade = CascadeType.ALL, orphanRemoval = true)
-	private List<ReportFacility> reportFacilities = new ArrayList<>();
-	@OneToMany(mappedBy = "report", cascade = CascadeType.ALL, orphanRemoval = true)
-	private List<Comment> comments = new ArrayList<>();
-	@OneToMany(mappedBy = "report", cascade = CascadeType.ALL, orphanRemoval = true)
-	private List<ReportImage> reportImages = new ArrayList<>();
 
 }

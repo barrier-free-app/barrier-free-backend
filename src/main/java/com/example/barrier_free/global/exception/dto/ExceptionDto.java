@@ -4,6 +4,11 @@ import org.antlr.v4.runtime.misc.NotNull;
 
 import com.example.barrier_free.global.exception.ErrorCode;
 
+import lombok.AllArgsConstructor;
+import lombok.Getter;
+
+@Getter
+@AllArgsConstructor
 public class ExceptionDto {
 	@NotNull
 	private final String code;
