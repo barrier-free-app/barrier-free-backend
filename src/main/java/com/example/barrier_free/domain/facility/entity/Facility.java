@@ -3,6 +3,7 @@ package com.example.barrier_free.domain.facility.entity;
 import java.util.ArrayList;
 import java.util.List;
 
+import jakarta.persistence.CascadeType;
 import jakarta.persistence.Entity;
 import jakarta.persistence.FetchType;
 import jakarta.persistence.GeneratedValue;
@@ -17,11 +18,11 @@ public class Facility {
 	private Long id;
 	private String name;
 
-	@OneToMany(mappedBy = "facility", fetch = FetchType.LAZY)
+	@OneToMany(mappedBy = "facility", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
 	private List<MapFacility> mapFacilities = new ArrayList<>();
-	@OneToMany(mappedBy = "facility", fetch = FetchType.LAZY)
+	@OneToMany(mappedBy = "facility", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
 	private List<ReportFacility> reportFacilities = new ArrayList<>();
-	@OneToMany(mappedBy = "facility", fetch = FetchType.LAZY)
+	@OneToMany(mappedBy = "facility", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
 	private List<UserFacility> userFacilities = new ArrayList<>();
 
 }

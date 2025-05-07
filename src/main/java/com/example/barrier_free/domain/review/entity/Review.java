@@ -3,7 +3,6 @@ package com.example.barrier_free.domain.review.entity;
 import java.util.ArrayList;
 import java.util.List;
 
-import com.example.barrier_free.domain.comment.entity.Comment;
 import com.example.barrier_free.domain.map.entity.Map;
 import com.example.barrier_free.domain.user.entity.User;
 import com.example.barrier_free.global.entity.BaseEntity;
@@ -33,9 +32,7 @@ public class Review extends BaseEntity {
 	private Map map;
 	@OneToMany(mappedBy = "review", cascade = CascadeType.ALL, orphanRemoval = true)
 	private List<ReviewImage> reviewImages = new ArrayList<>();
-
 	private float rating; // 별점
-
 	@Column(columnDefinition = "TEXT")
 	private String content; // 리뷰 내용
 }

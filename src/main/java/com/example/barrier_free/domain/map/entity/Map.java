@@ -29,8 +29,6 @@ public class Map extends PlaceEntity {
 	@OneToMany(mappedBy = "map", cascade = CascadeType.ALL, orphanRemoval = true)
 	private List<Favorite> favorites = new ArrayList<>();
 	@OneToMany(mappedBy = "map", cascade = CascadeType.ALL, orphanRemoval = true)
-	private List<MapImage> mapImages = new ArrayList<>();
-	@OneToMany(mappedBy = "map", cascade = CascadeType.ALL, orphanRemoval = true)
 	private List<Review> reviews = new ArrayList<>();
-
+	
 }
