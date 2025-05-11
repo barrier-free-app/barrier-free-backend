@@ -20,19 +20,19 @@ import jakarta.persistence.OneToMany;
 
 @Entity
 public class Review extends BaseEntity {
-	@OneToMany(mappedBy = "review", cascade = CascadeType.ALL, orphanRemoval = true)
-	private final List<ReviewImage> reviewImages = new ArrayList<>();
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long id;
+
 	@ManyToOne(fetch = FetchType.LAZY)
 	@JoinColumn(name = "user_id")
 	private User user;
 	@ManyToOne(fetch = FetchType.LAZY)
 	@JoinColumn(name = "map_id")
 	private Map map;
+	@OneToMany(mappedBy = "review", cascade = CascadeType.ALL, orphanRemoval = true)
+	private List<ReviewImage> reviewImages = new ArrayList<>();
 	private float rating; // 별점
-
 	@Column(columnDefinition = "TEXT")
 	private String content; // 리뷰 내용
 }
