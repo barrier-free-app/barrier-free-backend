@@ -5,7 +5,7 @@ import java.util.List;
 
 import com.example.barrier_free.domain.map.entity.Map;
 import com.example.barrier_free.domain.user.entity.User;
-import com.example.barrier_free.global.entity.BaseEntity;
+import com.example.barrier_free.global.common.BaseEntity;
 
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;

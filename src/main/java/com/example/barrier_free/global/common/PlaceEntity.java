@@ -1,4 +1,4 @@
-package com.example.barrier_free.global.entity;
+package com.example.barrier_free.global.common;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.MappedSuperclass;

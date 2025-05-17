@@ -13,7 +13,7 @@ import com.example.barrier_free.domain.report.entity.Vote;
 import com.example.barrier_free.domain.user.enums.Role;
 import com.example.barrier_free.domain.user.enums.SocialType;
 import com.example.barrier_free.domain.user.enums.UserType;
-import com.example.barrier_free.global.entity.BaseEntity;
+import com.example.barrier_free.global.common.BaseEntity;
 
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
