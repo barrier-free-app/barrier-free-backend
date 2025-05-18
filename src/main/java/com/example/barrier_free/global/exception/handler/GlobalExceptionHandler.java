@@ -11,7 +11,7 @@ import org.springframework.web.bind.annotation.RestControllerAdvice;
 import org.springframework.web.servlet.NoHandlerFoundException;
 
 import com.example.barrier_free.global.exception.CustomException;
-import com.example.barrier_free.global.exception.ErrorCode;
+import com.example.barrier_free.global.response.ErrorCode;
 import com.example.barrier_free.global.response.ApiResponse;
 
 import jakarta.validation.ConstraintViolation;

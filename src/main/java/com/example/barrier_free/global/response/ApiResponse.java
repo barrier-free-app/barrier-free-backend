@@ -1,8 +1,5 @@
 package com.example.barrier_free.global.response;
 
-import com.example.barrier_free.global.exception.ErrorCode;
-import com.example.barrier_free.global.exception.SuccessCode;
-
 import io.micrometer.common.lang.Nullable;
 import org.springframework.http.HttpStatus;
 

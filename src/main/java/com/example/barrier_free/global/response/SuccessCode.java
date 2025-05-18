@@ -1,4 +1,4 @@
-package com.example.barrier_free.global.exception;
+package com.example.barrier_free.global.response;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;

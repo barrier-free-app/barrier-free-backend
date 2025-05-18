@@ -4,6 +4,7 @@ import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
+import lombok.*;
 import org.springframework.data.annotation.CreatedDate;
 
 import com.example.barrier_free.domain.facility.entity.UserFacility;
@@ -27,17 +28,25 @@ import jakarta.persistence.OneToMany;
 import jakarta.validation.constraints.Email;
 
 @Entity
+@Getter
+@NoArgsConstructor
 public class User extends BaseEntity {
 
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long id;
+
 	@Email
 	@Column(unique = true)
 	private String email;
+
 	private String password;
+
 	@Column(length = 30)
 	private String nickname;
+
+	private String profile;
+
 	private String accessToken;
 	private String refreshToken;
 
@@ -63,4 +72,16 @@ public class User extends BaseEntity {
 	@OneToMany(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)
 	private List<Vote> votes = new ArrayList<>();
 
+	// 생성자
+	public User(String email, String nickname, String profile, SocialType socialType) {
+		this.email = email;
+		this.nickname = nickname;
+		this.profile = profile;
+		this.socialType = socialType;
+	}
+
+	public void setTokens(String accessToken, String refreshToken) {
+		this.accessToken = accessToken;
+		this.refreshToken = refreshToken;
+	}
 }

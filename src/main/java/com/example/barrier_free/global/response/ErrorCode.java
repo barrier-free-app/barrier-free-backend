@@ -1,4 +1,4 @@
-package com.example.barrier_free.global.exception;
+package com.example.barrier_free.global.response;
 
 import org.springframework.http.HttpStatus;
 
@@ -26,13 +26,21 @@ public enum ErrorCode {
 	LOGIN_FAILED(HttpStatus.UNAUTHORIZED, "USER4011", "로그인 정보가 잘못되었습니다."),
 
 	/* JWT 관련 에러 */
+	// TODO: 이름 바꾸기
 	INVALID_TOKEN(HttpStatus.UNAUTHORIZED, "JWT4001", "유효하지 않은 JWT 토큰입니다."),
 	INVALID_SIGNATURE(HttpStatus.UNAUTHORIZED, "JWT4002", "JWT 서명이 유효하지 않습니다."),
 	TOKEN_EXPIRED(HttpStatus.UNAUTHORIZED, "JWT4003", "JWT 토큰이 만료되었습니다."),
 	MISSING_TOKEN(HttpStatus.UNAUTHORIZED, "JWT4000", "JWT 토큰이 요청에 포함되어 있지 않습니다."),
 	JWT_MALFORMED(HttpStatus.UNAUTHORIZED, "JWT4002", "JWT 토큰의 형식이 잘못되었습니다."), // 형식 오류
 	UNSUPPORTED_JWT(HttpStatus.UNAUTHORIZED, "JWT4004", "지원하지 않는 JWT 토큰입니다."),
-	EMPTY_JWT(HttpStatus.UNAUTHORIZED, "JWT4005", "JWT 클레임이 비어 있습니다.");
+	EMPTY_JWT(HttpStatus.UNAUTHORIZED, "JWT4005", "JWT 클레임이 비어 있습니다."),
+
+	JWT_INVALID(HttpStatus.UNAUTHORIZED, "JWT4001", "유효하지 않은 JWT 토큰입니다."),
+	JWT_EXPIRED(HttpStatus.UNAUTHORIZED, "JWT4002", "JWT 토큰이 만료되었습니다."),
+	JWT_NOT_FOUND(HttpStatus.UNAUTHORIZED, "JWT4003", "Authorization 헤더에 토큰이 존재하지 않습니다."),
+	JWT_UNKNOWN_ERROR(HttpStatus.INTERNAL_SERVER_ERROR, "JWT5001", "토큰 처리 중 예기치 않은 오류가 발생했습니다.");
+
+
 
 	private final HttpStatus httpStatus;
 	private final String code;
