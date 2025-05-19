@@ -37,13 +37,10 @@ public enum ErrorCode {
 
 	NOT_FOUND_FACILITY(HttpStatus.BAD_REQUEST, "FACILITY400", "존재하지 않는 편의시설입니다."),
 
-	EMPTY_JWT(HttpStatus.UNAUTHORIZED, "JWT4005", "JWT 클레임이 비어 있습니다."),
 	JWT_INVALID(HttpStatus.UNAUTHORIZED, "JWT4001", "유효하지 않은 JWT 토큰입니다."),
 	JWT_EXPIRED(HttpStatus.UNAUTHORIZED, "JWT4002", "JWT 토큰이 만료되었습니다."),
 	JWT_NOT_FOUND(HttpStatus.UNAUTHORIZED, "JWT4003", "Authorization 헤더에 토큰이 존재하지 않습니다."),
 	JWT_UNKNOWN_ERROR(HttpStatus.INTERNAL_SERVER_ERROR, "JWT5001", "토큰 처리 중 예기치 않은 오류가 발생했습니다.");
-
-
 
 	private final HttpStatus httpStatus;
 	private final String code;

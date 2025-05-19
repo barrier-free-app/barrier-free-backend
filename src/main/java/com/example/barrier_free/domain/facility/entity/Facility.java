@@ -14,7 +14,6 @@ import lombok.Getter;
 
 @Getter
 @Entity
-@Getter
 public class Facility {
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
