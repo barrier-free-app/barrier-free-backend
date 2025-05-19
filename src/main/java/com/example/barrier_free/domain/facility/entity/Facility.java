@@ -12,6 +12,7 @@ import jakarta.persistence.Id;
 import jakarta.persistence.OneToMany;
 import lombok.Getter;
 
+@Getter
 @Entity
 @Getter
 public class Facility {
@@ -19,7 +20,7 @@ public class Facility {
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Integer id;
 	private String name;
-
+	private int facilityType;
 	@OneToMany(mappedBy = "facility", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
 	private List<MapFacility> mapFacilities = new ArrayList<>();
 	@OneToMany(mappedBy = "facility", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
