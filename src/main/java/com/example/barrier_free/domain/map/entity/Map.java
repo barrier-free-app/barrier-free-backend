@@ -6,7 +6,7 @@ import java.util.List;
 import com.example.barrier_free.domain.facility.entity.MapFacility;
 import com.example.barrier_free.domain.favorite.entity.Favorite;
 import com.example.barrier_free.domain.review.entity.Review;
-import com.example.barrier_free.global.entity.PlaceEntity;
+import com.example.barrier_free.global.common.PlaceEntity;
 
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Entity;
