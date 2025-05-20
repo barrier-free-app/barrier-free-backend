@@ -1,10 +1,9 @@
 package com.example.barrier_free.domain.report.service;
 
 import java.util.List;
-import java.util.Map;
-import java.util.stream.Collectors;
 
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import com.example.barrier_free.domain.facility.entity.Facility;
 import com.example.barrier_free.domain.facility.entity.ReportFacility;
@@ -28,22 +27,22 @@ public class ReportService {
 	private final UserRepository userRepository;
 	private final FacilityRepository facilityRepository;
 
+	@Transactional
 	public Long createReport(ReportRequestDto dto) {
 		User user = userRepository.findById(dto.getUserId())
 			.orElseThrow(() -> new IllegalArgumentException("사용자 없음"));
 
 		Report report = ReportMapper.toEntity(dto, user);
 
-		List<Facility> facilities = facilityRepository.findAllByFacilityTypeIn(dto.getFacilities());
-		Map<Integer, Facility> facilityMap = facilities.stream()
-			.collect(Collectors.toMap(Facility::getFacilityType, f -> f));
+		List<Facility> facilities = facilityRepository.findAllByIdIn(dto.getFacilities());
 
-		for (Integer type : dto.getFacilities()) {
-			Facility facility = facilityMap.get(type);
-			if (facility == null) {
-				throw new CustomException(ErrorCode.NOT_FOUND_FACILITY);
-			}
-			ReportFacility rf = new ReportFacility(report, facility);
+		//요청한 편의시설이 진짜 편의시설에 있는지 확인
+		if (facilities.size() != dto.getFacilities().size()) {
+			throw new CustomException(ErrorCode.NOT_FOUND_FACILITY);
+		}
+
+		for (Facility facility : facilities) {
+			ReportFacility rf = new ReportFacility(facility, report);
 			report.addReportFacility(rf);
 		}
 

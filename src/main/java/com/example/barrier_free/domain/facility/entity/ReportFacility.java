@@ -10,7 +10,6 @@ import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
 import lombok.AccessLevel;
-import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
@@ -30,8 +29,7 @@ public class ReportFacility {
 	@JoinColumn(name = "facility_id")
 	private Facility facility;
 
-	@Builder
-	public ReportFacility(Report report, Facility facility) {
+	public ReportFacility(Facility facility, Report report) {
 		this.report = report;
 		this.facility = facility;
 	}

@@ -20,9 +20,6 @@ public class ReportMapper {
 	}
 
 	public static ReportFacility toEntity(Facility facility, Report report) {
-		return ReportFacility.builder()
-			.facility(facility)
-			.report(report)
-			.build();
+		return new ReportFacility(facility, report);
 	}
 }

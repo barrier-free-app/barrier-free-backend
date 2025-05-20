@@ -8,5 +8,5 @@ import com.example.barrier_free.domain.facility.entity.Facility;
 
 public interface FacilityRepository extends JpaRepository<Facility, Long> {
 
-	List<Facility> findAllByFacilityTypeIn(List<Integer> facilities);
+	List<Facility> findAllByIdIn(List<Integer> ids);
 }
