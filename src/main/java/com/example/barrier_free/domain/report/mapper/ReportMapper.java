@@ -1,7 +1,5 @@
 package com.example.barrier_free.domain.report.mapper;
 
-import com.example.barrier_free.domain.facility.entity.Facility;
-import com.example.barrier_free.domain.facility.entity.ReportFacility;
 import com.example.barrier_free.domain.report.dto.ReportRequestDto;
 import com.example.barrier_free.domain.report.entity.Report;
 import com.example.barrier_free.domain.user.entity.User;
@@ -19,7 +17,4 @@ public class ReportMapper {
 			.build();
 	}
 
-	public static ReportFacility toEntity(Facility facility, Report report) {
-		return new ReportFacility(facility, report);
-	}
 }
