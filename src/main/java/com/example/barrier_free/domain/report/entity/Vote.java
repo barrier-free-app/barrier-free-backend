@@ -12,7 +12,12 @@ import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
+import lombok.AccessLevel;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
 
+@Getter
+@NoArgsConstructor(access = AccessLevel.PROTECTED)
 @Entity
 public class Vote {
 	@Id
@@ -26,4 +31,10 @@ public class Vote {
 	private User user;
 	@Enumerated(EnumType.STRING)
 	private VoteType voteType;
+
+	public Vote(VoteType voteType, User user, Report report) {
+		this.voteType = voteType;
+		this.user = user;
+		this.report = report;
+	}
 }
