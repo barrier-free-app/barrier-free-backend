@@ -42,7 +42,8 @@ public enum ErrorCode {
 
 	S3_UPLOAD_FAILED(HttpStatus.INTERNAL_SERVER_ERROR, "S3_5001", "파일 업로드 중 오류가 발생했습니다."),
 	S3_DELETE_FAILED(HttpStatus.INTERNAL_SERVER_ERROR, "S3_5002", "파일 삭제 중 오류가 발생했습니다."),
-	PLACE_NOT_FOUND(HttpStatus.BAD_REQUEST, "PLACE_404", "해당 장소를 찾을 수 없음");
+	PLACE_NOT_FOUND(HttpStatus.BAD_REQUEST, "PLACE_404", "해당 장소를 찾을 수 없음"),
+	REVIEW_NOT_FOUND(HttpStatus.BAD_REQUEST, "REVIEW_404", "해당 리뷰를 찾을 수 없음");
 
 	private final HttpStatus httpStatus;
 	private final String code;
