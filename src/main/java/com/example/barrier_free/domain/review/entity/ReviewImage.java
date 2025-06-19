@@ -22,4 +22,12 @@ public class ReviewImage {
 	@Column(length = 500)
 	private String url;
 
+	public ReviewImage(String url) {
+		this.url = url;
+	}
+	
+	protected void setReview(Review review) {
+		this.review = review;
+	}
+
 }

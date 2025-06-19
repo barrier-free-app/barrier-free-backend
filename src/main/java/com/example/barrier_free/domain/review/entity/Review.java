@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import com.example.barrier_free.domain.map.entity.Map;
+import com.example.barrier_free.domain.report.entity.Report;
 import com.example.barrier_free.domain.user.entity.User;
 import com.example.barrier_free.global.common.BaseEntity;
 
@@ -17,9 +18,13 @@ import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.OneToMany;
+import lombok.Builder;
+import lombok.Getter;
 
+@Builder
 @Entity
 public class Review extends BaseEntity {
+	@Getter
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long id;
@@ -30,9 +35,27 @@ public class Review extends BaseEntity {
 	@ManyToOne(fetch = FetchType.LAZY)
 	@JoinColumn(name = "map_id")
 	private Map map;
+	@ManyToOne(fetch = FetchType.LAZY)
+	@JoinColumn(name = "report_id")
+	private Report report;
+	@Builder.Default
 	@OneToMany(mappedBy = "review", cascade = CascadeType.ALL, orphanRemoval = true)
 	private List<ReviewImage> reviewImages = new ArrayList<>();
 	private float rating; // 별점
 	@Column(columnDefinition = "TEXT")
 	private String content; // 리뷰 내용
+
+	public void addImage(ReviewImage image) {
+		reviewImages.add(image);         // 리뷰에 이미지 추가
+		image.setReview(this);     // 이미지에 리뷰 설정
+	}
+
+	public void attachMap(Map map) {
+		this.map = map;
+	}
+
+	public void attachReport(Report report) {
+		this.report = report;
+	}
+
 }
