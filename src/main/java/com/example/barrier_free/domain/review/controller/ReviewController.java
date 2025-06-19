@@ -24,7 +24,7 @@ import lombok.RequiredArgsConstructor;
 public class ReviewController {
 	private final ReviewService reviewService;
 
-	@PostMapping(value = "places/{placeId}/report-reviews", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
+	@PostMapping(value = "places/{placeId}/reviews", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
 	public ApiResponse<?> createReview(@RequestPart("review") ReviewRequestDto requestDto,
 		@RequestPart(value = "image", required = false) List<MultipartFile> images,
 		@PathVariable long placeId,
