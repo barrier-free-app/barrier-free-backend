@@ -8,7 +8,10 @@ import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
+import lombok.AccessLevel;
+import lombok.NoArgsConstructor;
 
+@NoArgsConstructor(access = AccessLevel.PROTECTED)
 @Entity
 public class ReviewImage {
 	@Id
@@ -25,9 +28,12 @@ public class ReviewImage {
 	public ReviewImage(String url) {
 		this.url = url;
 	}
-	
+
 	protected void setReview(Review review) {
 		this.review = review;
 	}
 
+	public String getUrl() {
+		return this.url;
+	}
 }
