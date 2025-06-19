@@ -31,7 +31,7 @@ public class ReviewService {
 	private final MapRepository mapRepository;
 	private final UserRepository userRepository;
 	private final ReportRepository reportRepository;
-	
+
 	@Transactional
 	public Long createReview(Long placeId, ReviewRequestDto dto, List<MultipartFile> images, PlaceType placeType) {
 		User user = userRepository.findById(dto.getUserId())
@@ -59,6 +59,25 @@ public class ReviewService {
 			}
 			throw e;
 		}
+	}
+
+	@Transactional
+	public void deleteReview(long userId, long reviewId) {
+		User user = userRepository.findById(userId)
+			.orElseThrow(() -> new CustomException(ErrorCode.USER_NOT_FOUND));
+
+		Review review = reviewRepository.findById(reviewId)
+			.orElseThrow(() -> new CustomException(ErrorCode.REVIEW_NOT_FOUND));
+		Long writer = review.getUser().getId();
+		if (!writer.equals(user.getId())) {
+			throw new CustomException(ErrorCode.USER_NOT_AUTHORIZED);
+		}
+
+		review.getReviewImages().forEach(image -> {
+			s3Service.deleteFile(image.getUrl()); // 이미지 URL이 S3 key면 OK
+		});
+
+		reviewRepository.delete(review);
 	}
 
 	private Place findPlace(Long placeId, PlaceType placeType) {
