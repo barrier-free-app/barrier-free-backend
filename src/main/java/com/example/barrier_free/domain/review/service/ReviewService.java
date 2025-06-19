@@ -81,7 +81,7 @@ public class ReviewService {
 	}
 
 	private Place findPlace(Long placeId, PlaceType placeType) {
-		if (placeType == PlaceType.REPORT) {
+		if (placeType == PlaceType.report) {
 			return reportRepository.findById(placeId)
 				.orElseThrow(() -> new CustomException(ErrorCode.PLACE_NOT_FOUND));
 		} else {
