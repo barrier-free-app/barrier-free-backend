@@ -35,6 +35,8 @@ public enum ErrorCode {
 	UNSUPPORTED_JWT(HttpStatus.UNAUTHORIZED, "JWT4004", "지원하지 않는 JWT 토큰입니다."),
 	EMPTY_JWT(HttpStatus.UNAUTHORIZED, "JWT4005", "JWT 클레임이 비어 있습니다."),
 
+	NOT_FOUND_FACILITY(HttpStatus.BAD_REQUEST, "FACILITY400", "존재하지 않는 편의시설입니다."),
+
 	JWT_INVALID(HttpStatus.UNAUTHORIZED, "JWT4001", "유효하지 않은 JWT 토큰입니다."),
 	JWT_EXPIRED(HttpStatus.UNAUTHORIZED, "JWT4002", "JWT 토큰이 만료되었습니다."),
 	JWT_NOT_FOUND(HttpStatus.UNAUTHORIZED, "JWT4003", "Authorization 헤더에 토큰이 존재하지 않습니다."),
@@ -43,7 +45,12 @@ public enum ErrorCode {
 	S3_UPLOAD_FAILED(HttpStatus.INTERNAL_SERVER_ERROR, "S3_5001", "파일 업로드 중 오류가 발생했습니다."),
 	S3_DELETE_FAILED(HttpStatus.INTERNAL_SERVER_ERROR, "S3_5002", "파일 삭제 중 오류가 발생했습니다."),
 	PLACE_NOT_FOUND(HttpStatus.BAD_REQUEST, "PLACE_404", "해당 장소를 찾을 수 없음"),
-	REVIEW_NOT_FOUND(HttpStatus.BAD_REQUEST, "REVIEW_404", "해당 리뷰를 찾을 수 없음");
+	REVIEW_NOT_FOUND(HttpStatus.BAD_REQUEST, "REVIEW_404", "해당 리뷰를 찾을 수 없음"),
+	ALREADY_VOTE(HttpStatus.BAD_REQUEST, "VOTE2001", "이미 투표했습니다."),
+
+	NOT_FOUND_REPORT(HttpStatus.NOT_FOUND, "REPORT4041", "존재하지 않는 제보장소입니다."),
+
+	NOT_FOUND_USER(HttpStatus.NOT_FOUND, "USER4041", "존재하지 않는 사용자입니다.");
 
 	private final HttpStatus httpStatus;
 	private final String code;
