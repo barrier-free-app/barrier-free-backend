@@ -6,7 +6,9 @@ import java.util.List;
 import com.example.barrier_free.domain.facility.entity.ReportFacility;
 import com.example.barrier_free.domain.favorite.entity.Favorite;
 import com.example.barrier_free.domain.report.enums.VoteType;
+import com.example.barrier_free.domain.review.entity.Review;
 import com.example.barrier_free.domain.user.entity.User;
+import com.example.barrier_free.global.common.Place;
 import com.example.barrier_free.global.common.PlaceEntity;
 
 import jakarta.persistence.CascadeType;
@@ -29,7 +31,7 @@ import lombok.experimental.SuperBuilder;
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @Entity
-public class Report extends PlaceEntity {
+public class Report extends PlaceEntity implements Place {
 
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -59,6 +61,11 @@ public class Report extends PlaceEntity {
 		Vote vote = new Vote(voteType, user, this);
 		votes.add(vote);
 		return vote;
+	}
+
+	@Override
+	public void attachTo(Review review) {
+		review.attachReport(this); // 리뷰에 맵 연결
 	}
 
 }

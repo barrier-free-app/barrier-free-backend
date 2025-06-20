@@ -6,6 +6,7 @@ import java.util.List;
 import com.example.barrier_free.domain.facility.entity.MapFacility;
 import com.example.barrier_free.domain.favorite.entity.Favorite;
 import com.example.barrier_free.domain.review.entity.Review;
+import com.example.barrier_free.global.common.Place;
 import com.example.barrier_free.global.common.PlaceEntity;
 
 import jakarta.persistence.CascadeType;
@@ -16,7 +17,7 @@ import jakarta.persistence.Id;
 import jakarta.persistence.OneToMany;
 
 @Entity
-public class Map extends PlaceEntity {
+public class Map extends PlaceEntity implements Place {
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long id;
@@ -30,5 +31,10 @@ public class Map extends PlaceEntity {
 	private List<Favorite> favorites = new ArrayList<>();
 	@OneToMany(mappedBy = "map", cascade = CascadeType.ALL, orphanRemoval = true)
 	private List<Review> reviews = new ArrayList<>();
-	
+
+	@Override
+	public void attachTo(Review review) {
+		review.attachMap(this); // 리뷰에 맵 연결
+	}
+
 }

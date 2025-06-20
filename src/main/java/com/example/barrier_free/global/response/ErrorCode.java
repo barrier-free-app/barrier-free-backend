@@ -42,6 +42,10 @@ public enum ErrorCode {
 	JWT_NOT_FOUND(HttpStatus.UNAUTHORIZED, "JWT4003", "Authorization 헤더에 토큰이 존재하지 않습니다."),
 	JWT_UNKNOWN_ERROR(HttpStatus.INTERNAL_SERVER_ERROR, "JWT5001", "토큰 처리 중 예기치 않은 오류가 발생했습니다."),
 
+	S3_UPLOAD_FAILED(HttpStatus.INTERNAL_SERVER_ERROR, "S3_5001", "파일 업로드 중 오류가 발생했습니다."),
+	S3_DELETE_FAILED(HttpStatus.INTERNAL_SERVER_ERROR, "S3_5002", "파일 삭제 중 오류가 발생했습니다."),
+	PLACE_NOT_FOUND(HttpStatus.BAD_REQUEST, "PLACE_404", "해당 장소를 찾을 수 없음"),
+	REVIEW_NOT_FOUND(HttpStatus.BAD_REQUEST, "REVIEW_404", "해당 리뷰를 찾을 수 없음"),
 	ALREADY_VOTE(HttpStatus.BAD_REQUEST, "VOTE2001", "이미 투표했습니다."),
 
 	NOT_FOUND_REPORT(HttpStatus.NOT_FOUND, "REPORT4041", "존재하지 않는 제보장소입니다."),
