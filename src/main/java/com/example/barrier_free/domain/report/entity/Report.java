@@ -31,7 +31,7 @@ import lombok.experimental.SuperBuilder;
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @Entity
-public class Report extends PlaceEntity {
+public class Report extends PlaceEntity implements Place {
 
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
