@@ -9,9 +9,12 @@ import com.example.barrier_free.domain.facility.entity.Facility;
 import com.example.barrier_free.domain.facility.entity.ReportFacility;
 import com.example.barrier_free.domain.facility.repository.FacilityRepository;
 import com.example.barrier_free.domain.report.dto.ReportRequestDto;
+import com.example.barrier_free.domain.report.dto.VoteRequestDto;
 import com.example.barrier_free.domain.report.entity.Report;
+import com.example.barrier_free.domain.report.entity.Vote;
 import com.example.barrier_free.domain.report.mapper.ReportMapper;
 import com.example.barrier_free.domain.report.repository.ReportRepository;
+import com.example.barrier_free.domain.report.repository.VoteRepository;
 import com.example.barrier_free.domain.user.UserRepository;
 import com.example.barrier_free.domain.user.entity.User;
 import com.example.barrier_free.global.exception.CustomException;
@@ -23,6 +26,7 @@ import lombok.RequiredArgsConstructor;
 @Service
 public class ReportService {
 
+	private final VoteRepository voteRepository;
 	private final ReportRepository reportRepository;
 	private final UserRepository userRepository;
 	private final FacilityRepository facilityRepository;
@@ -48,5 +52,21 @@ public class ReportService {
 
 		reportRepository.save(report);
 		return report.getId();
+	}
+
+	@Transactional
+	public long createVote(VoteRequestDto dto, Long reportId) {
+		User user = userRepository.findById(dto.getUserId())
+			.orElseThrow(() -> new CustomException(ErrorCode.NOT_FOUND_USER));
+
+		Report report = reportRepository.findById(reportId)
+			.orElseThrow(() -> new CustomException(ErrorCode.NOT_FOUND_REPORT));
+		if (voteRepository.existsByUserAndReport(user, report)) {
+			throw new CustomException(ErrorCode.ALREADY_VOTE);
+		}
+
+		Vote vote = report.createVote(dto.getVoteType(), user);
+		voteRepository.save(vote);
+		return vote.getId();
 	}
 }
