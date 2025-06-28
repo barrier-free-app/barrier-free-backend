@@ -79,7 +79,7 @@ public class Report extends PlaceEntity implements Place {
 
 	@Override
 	public String getDescription() {
-		return "";
+		return description;
 	}
 
 	@Override
