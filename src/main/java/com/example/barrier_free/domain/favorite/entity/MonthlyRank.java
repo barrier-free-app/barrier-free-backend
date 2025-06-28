@@ -1,8 +1,9 @@
 package com.example.barrier_free.domain.favorite.entity;
 
+import java.time.YearMonth;
+
 import com.example.barrier_free.domain.map.entity.Map;
 import com.example.barrier_free.domain.report.entity.Report;
-import com.example.barrier_free.domain.user.entity.User;
 
 import jakarta.persistence.Entity;
 import jakarta.persistence.FetchType;
@@ -18,33 +19,37 @@ import lombok.NoArgsConstructor;
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @Entity
-public class Favorite {
+public class MonthlyRank {
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long id;
 
-	@ManyToOne(fetch = FetchType.LAZY)
-	@JoinColumn(name = "report_id")
-	private Report report;
-	@ManyToOne(fetch = FetchType.LAZY)
-	@JoinColumn(name = "user_id")
-	private User user;
+	private String rankMonth;
+
 	@ManyToOne(fetch = FetchType.LAZY)
 	@JoinColumn(name = "map_id")
 	private Map map;
 
-	public static Favorite fromMap(User user, Map map) {
-		Favorite favorite = new Favorite();
-		favorite.user = user;
-		favorite.map = map;
-		return favorite;
+	@ManyToOne(fetch = FetchType.LAZY)
+	@JoinColumn(name = "report_id")
+	private Report report;
+
+	private long favoriteCount;
+
+	public static MonthlyRank from(Map map, YearMonth month, long favoriteCount) {
+		MonthlyRank rank = new MonthlyRank();
+		rank.map = map;
+		rank.rankMonth = month.toString();
+		rank.favoriteCount = favoriteCount;
+		return rank;
 	}
 
-	public static Favorite fromReport(User user, Report report) {
-		Favorite favorite = new Favorite();
-		favorite.user = user;
-		favorite.report = report;
-		return favorite;
+	public static MonthlyRank from(Report report, YearMonth month, long favoriteCount) {
+		MonthlyRank rank = new MonthlyRank();
+		rank.report = report;
+		rank.rankMonth = month.toString();
+		rank.favoriteCount = favoriteCount;
+		return rank;
 	}
 
 }

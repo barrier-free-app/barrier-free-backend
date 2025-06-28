@@ -9,7 +9,9 @@ import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
+import lombok.Getter;
 
+@Getter
 @Entity
 public class MapFacility {
 	@Id
@@ -23,4 +25,5 @@ public class MapFacility {
 	@ManyToOne(fetch = FetchType.LAZY)
 	@JoinColumn(name = "facility_id")
 	private Facility facility;
+
 }
