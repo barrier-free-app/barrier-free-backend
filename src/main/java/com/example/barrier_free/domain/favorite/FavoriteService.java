@@ -41,7 +41,7 @@ public class FavoriteService {
 	private final RedisTemplate<String, Object> redisTemplate;
 	private final MonthlyRankRepository monthlyRankRepository;
 
-	@Transactional
+	@Transactional(readOnly = true)
 	public List<PlaceResponse> getMonthlyTop3() {
 		YearMonth beforeMonth = YearMonth.now().minusMonths(1);
 		String beforeMonthString = beforeMonth.toString();
