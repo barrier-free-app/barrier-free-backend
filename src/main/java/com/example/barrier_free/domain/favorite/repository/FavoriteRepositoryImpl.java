@@ -10,6 +10,7 @@ import com.example.barrier_free.domain.map.entity.Map;
 import com.example.barrier_free.domain.map.entity.QMap;
 import com.example.barrier_free.domain.report.entity.QReport;
 import com.example.barrier_free.domain.report.entity.Report;
+import com.querydsl.core.BooleanBuilder;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 
 import lombok.AllArgsConstructor;
@@ -25,48 +26,46 @@ public class FavoriteRepositoryImpl implements FavoriteRepositoryCustom {
 
 	@Override
 	public FavoritePlaceGroup findFilteredFavorites(Long userId, List<Integer> facilityIds) {
+		BooleanBuilder mapWhere = new BooleanBuilder();
+		mapWhere.and(favorite.user.id.eq(userId));
+
+		BooleanBuilder reportWhere = new BooleanBuilder();
+		reportWhere.and(favorite.user.id.eq(userId));
+
+		if (facilityIds != null && !facilityIds.isEmpty()) {
+			mapWhere.and(mapFacility.facility.id.in(facilityIds));
+			reportWhere.and(reportFacility.facility.id.in(facilityIds));
+		}
 
 		List<Map> mapFavorites = queryFactory
 			.select(map)
 			.from(favorite)
 			.join(favorite.map, map)
-			.join(mapFacility).on(mapFacility.map.eq(map))
-			.where(favorite.user.id.eq(userId)
-				.and(mapFacility.facility.id.in(facilityIds)))
+			.leftJoin(mapFacility).on(mapFacility.map.eq(map))
+			.where(mapWhere)
 			.groupBy(favorite.id)
-			.having(mapFacility.facility.id.countDistinct().eq((long)facilityIds.size()))
+			.having(
+				facilityIds != null && !facilityIds.isEmpty()
+					? mapFacility.facility.id.countDistinct().eq((long)facilityIds.size())
+					: null
+			)
 			.fetch();
 
 		List<Report> reportFavorites = queryFactory
 			.select(report)
 			.from(favorite)
 			.join(favorite.report, report)
-			.join(reportFacility).on(reportFacility.report.eq(report))
-			.where(favorite.user.id.eq(userId)
-				.and(reportFacility.facility.id.in(facilityIds)))
+			.leftJoin(reportFacility).on(reportFacility.report.eq(report))
+			.where(reportWhere)
 			.groupBy(favorite.id)
-			.having(reportFacility.facility.id.countDistinct().eq((long)facilityIds.size()))
-			.fetch();
-		return new FavoritePlaceGroup(mapFavorites, reportFavorites);
-	}
-
-	@Override
-	public FavoritePlaceGroup findFavoriteByUserIdWithPlace(Long userId) {
-
-		List<Map> mapFavorites = queryFactory
-			.select(map)
-			.from(favorite)
-			.join(favorite.map, map)
-			.where(favorite.user.id.eq(userId))
-			.fetch();
-
-		List<Report> reportFavorites = queryFactory
-			.select(report)
-			.from(favorite)
-			.join(favorite.report, report)
-			.where(favorite.user.id.eq(userId))
+			.having(
+				facilityIds != null && !facilityIds.isEmpty()
+					? reportFacility.facility.id.countDistinct().eq((long)facilityIds.size())
+					: null
+			)
 			.fetch();
 
 		return new FavoritePlaceGroup(mapFavorites, reportFavorites);
 	}
+
 }

@@ -24,14 +24,10 @@ public class UserService {
 
 	@Transactional
 	public FavoritePlaceGroupResponse getFavorite(Long userId, List<Integer> facilities) {
-
 		User user = userRepository.findById(userId)
 			.orElseThrow(() -> new CustomException(ErrorCode.USER_NOT_FOUND));
 
-		//1. 필터없는 경우  2. 필터 존재하는 경우
-		FavoritePlaceGroup favoritePlace = isNoFilter(facilities)
-			? getAllFavorites(userId)
-			: getFilteredFavorites(userId, facilities);
+		FavoritePlaceGroup favoritePlace = favoriteRepository.findFilteredFavorites(userId, facilities);
 
 		List<PlaceResponse> mapResponses = favoritePlace.getMapFavorites().stream()
 			.map(PlaceResponse::fromPlace)
@@ -44,15 +40,5 @@ public class UserService {
 		return new FavoritePlaceGroupResponse(mapResponses, reportResponses);
 	}
 
-	private FavoritePlaceGroup getFilteredFavorites(Long userId, List<Integer> facilities) {
-		return favoriteRepository.findFilteredFavorites(userId, facilities);
-	}
-
-	private FavoritePlaceGroup getAllFavorites(Long userId) {
-		return favoriteRepository.findFavoriteByUserIdWithPlace(userId);
-	}
-
-	private boolean isNoFilter(List<Integer> facilities) {
-		return facilities == null || facilities.isEmpty();
-	}
 }
+
