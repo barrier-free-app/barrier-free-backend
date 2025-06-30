@@ -20,8 +20,6 @@ public class OAuthContoller {
     @Value("${kakao.client_id}")
     private String client_id;
 
-
-
     @Value("${kakao.redirect_uri}")
     private String redirect_uri;
 
@@ -39,7 +37,7 @@ public class OAuthContoller {
         response.sendRedirect(kakaoUrl);
     }
 
-    // 2. 카카오 로그인 성공 후 리다이렉트 URI로 인가코드(code) 보내줌
+    // 2. 카카오 로그인 성공 후 리다이렉트 URI로 인가코드(code) 발급
     @GetMapping("/kakao/success")
     @Operation(summary = "카카오 로그인 성공 후 인가코드 발급 API",
             description = "유저 정보, Access Token, Refresh Token 응답")
@@ -51,7 +49,7 @@ public class OAuthContoller {
         System.out.println("인가 코드: " + code);
     }
 
-    // 3. 앱이 받은 인가코드를 백엔드에 보내면 → JWT 발급
+    // 3.인가코드로 JWT 발급
     @PostMapping("/token")
     @Operation(summary = "인가코드로 JWT 발급",
             description = "앱이 인가코드를 보내면 서버 자체 AccessToken/RefreshToken 발급")
