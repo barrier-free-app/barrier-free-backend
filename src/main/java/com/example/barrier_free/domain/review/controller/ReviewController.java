@@ -3,8 +3,11 @@ package com.example.barrier_free.domain.review.controller;
 import java.util.List;
 import java.util.Map;
 
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.web.PageableDefault;
 import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.DeleteMapping;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -12,6 +15,7 @@ import org.springframework.web.bind.annotation.RequestPart;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
 
+import com.example.barrier_free.domain.review.dto.ReviewPageResponse;
 import com.example.barrier_free.domain.review.dto.ReviewRequestDto;
 import com.example.barrier_free.domain.review.service.ReviewService;
 import com.example.barrier_free.global.common.PlaceType;
@@ -24,6 +28,15 @@ import lombok.RequiredArgsConstructor;
 @RestController
 public class ReviewController {
 	private final ReviewService reviewService;
+
+	@GetMapping(value = "places/{placeId}/reviews")
+	public ApiResponse<?> getReviews(
+		@PathVariable long placeId,
+		@RequestParam PlaceType type,
+		@PageableDefault(size = 10) Pageable pageable) {
+		ReviewPageResponse reviews = reviewService.getReviewsByPlace(placeId, type, pageable);
+		return ApiResponse.success(SuccessCode.OK, reviews);
+	}
 
 	@PostMapping(value = "places/{placeId}/reviews", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
 	public ApiResponse<?> createReview(@RequestPart("review") ReviewRequestDto requestDto,
