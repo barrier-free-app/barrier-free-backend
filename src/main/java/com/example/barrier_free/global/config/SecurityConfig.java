@@ -1,5 +1,8 @@
 package com.example.barrier_free.global.config;
 
+import com.example.barrier_free.domain.user.UserRepository;
+import com.example.barrier_free.global.jwt.JwtAuthenticationFilter;
+import com.example.barrier_free.global.jwt.JwtManager;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -10,9 +13,10 @@ import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 
 @Configuration
-@EnableWebSecurity
 @RequiredArgsConstructor
 public class SecurityConfig {
+
+    private final JwtAuthenticationFilter jwtAuthenticationFilter;
 
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
@@ -21,12 +25,11 @@ public class SecurityConfig {
                 .csrf(csrf -> csrf.disable())
                 .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
                 .authorizeHttpRequests( auth -> auth
-                        .requestMatchers("/**")
-//                        .requestMatchers("/auth/**", "/swagger-ui/**", "/v3/api-docs/**")
+                        .requestMatchers("/oauth/**", "/swagger-ui/**", "/v3/api-docs/**")
                         .permitAll()
                         .anyRequest().authenticated()
-                );
-//                .addFilterBefore(new JwtAuthenticationFilter(jwtManager), UsernamePasswordAuthenticationFilter.class);
+                )
+                .addFilterBefore(jwtAuthenticationFilter, UsernamePasswordAuthenticationFilter.class);
 
         return http.build();
     }
