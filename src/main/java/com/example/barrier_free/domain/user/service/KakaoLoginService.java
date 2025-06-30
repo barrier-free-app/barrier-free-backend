@@ -68,8 +68,7 @@ public class KakaoLoginService {
         user.setTokens(accessToken, refreshToken);
         userRepository.save(user);
 
-        UserResponse userResponse = UserConverter.toUserResponse(user);
-        return new LoginResponse(userResponse, accessToken, refreshToken);
+        return new LoginResponse(userId, accessToken, refreshToken);
     }
 
     public JsonNode getKakaoUserInfo(String kAccessToken) {
