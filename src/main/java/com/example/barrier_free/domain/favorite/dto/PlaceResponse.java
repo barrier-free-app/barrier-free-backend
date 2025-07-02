@@ -2,9 +2,11 @@ package com.example.barrier_free.domain.favorite.dto;
 
 import java.util.List;
 
-import com.example.barrier_free.domain.favorite.entity.MonthlyRank;
+import com.example.barrier_free.domain.favorite.entity.WeeklyRank;
 import com.example.barrier_free.global.common.Place;
 import com.example.barrier_free.global.common.PlaceType;
+import com.example.barrier_free.global.exception.CustomException;
+import com.example.barrier_free.global.response.ErrorCode;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -28,25 +30,25 @@ public class PlaceResponse {
 		);
 	}
 
-	public static PlaceResponse from(MonthlyRank monthlyRank) {
-		if (monthlyRank.getMap() != null) {
+	public static PlaceResponse from(WeeklyRank weeklyRank) {
+		if (weeklyRank.getMap() != null) {
 			return new PlaceResponse(
-				monthlyRank.getMap().getId(),
+				weeklyRank.getMap().getId(),
 				PlaceType.map,
-				monthlyRank.getMap().getName(),
-				monthlyRank.getMap().getDescription(),
-				monthlyRank.getMap().getFacility()
+				weeklyRank.getMap().getName(),
+				weeklyRank.getMap().getDescription(),
+				weeklyRank.getMap().getFacility()
 			);
-		} else if (monthlyRank.getReport() != null) {
+		} else if (weeklyRank.getReport() != null) {
 			return new PlaceResponse(
-				monthlyRank.getReport().getId(),
+				weeklyRank.getReport().getId(),
 				PlaceType.report,
-				monthlyRank.getReport().getName(),
-				monthlyRank.getReport().getDescription(),
-				monthlyRank.getReport().getFacility()
+				weeklyRank.getReport().getName(),
+				weeklyRank.getReport().getDescription(),
+				weeklyRank.getReport().getFacility()
 			);
 		} else {
-			throw new IllegalStateException("MonthlyRank이상");
+			throw new CustomException(ErrorCode.INVALID_WEEKLY_RANK);
 		}
 
 	}
