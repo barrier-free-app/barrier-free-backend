@@ -1,8 +1,10 @@
 package com.example.barrier_free.domain.favorite;
 
-import java.time.YearMonth;
+import java.time.LocalDate;
+import java.time.temporal.WeekFields;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Locale;
 import java.util.Optional;
 import java.util.Set;
 import java.util.stream.Collectors;
@@ -15,10 +17,11 @@ import org.springframework.transaction.annotation.Transactional;
 
 import com.example.barrier_free.domain.favorite.dto.FavoriteRequestDto;
 import com.example.barrier_free.domain.favorite.dto.PlaceResponse;
+import com.example.barrier_free.domain.favorite.dto.YearWeek;
 import com.example.barrier_free.domain.favorite.entity.Favorite;
-import com.example.barrier_free.domain.favorite.entity.MonthlyRank;
+import com.example.barrier_free.domain.favorite.entity.WeeklyRank;
 import com.example.barrier_free.domain.favorite.repository.FavoriteRepository;
-import com.example.barrier_free.domain.favorite.repository.MonthlyRankRepository;
+import com.example.barrier_free.domain.favorite.repository.WeeklyRankRepository;
 import com.example.barrier_free.domain.map.entity.Map;
 import com.example.barrier_free.domain.map.repository.MapRepository;
 import com.example.barrier_free.domain.report.entity.Report;
@@ -39,13 +42,25 @@ public class FavoriteService {
 	private final MapRepository mapRepository;
 	private final ReportRepository reportRepository;
 	private final RedisTemplate<String, Object> redisTemplate;
-	private final MonthlyRankRepository monthlyRankRepository;
+	private final WeeklyRankRepository weeklyRankRepository;
 
 	@Transactional(readOnly = true)
-	public List<PlaceResponse> getMonthlyTop3() {
-		YearMonth beforeMonth = YearMonth.now().minusMonths(1);
-		String beforeMonthString = beforeMonth.toString();
-		List<MonthlyRank> rankings = monthlyRankRepository.findByRankMonthOrderByFavoriteCountDesc(beforeMonthString);
+	public List<PlaceResponse> getWeeklyTop3() {
+
+		String redisKey = getLastWeekKey();
+		YearWeek yearWeek = extractYearAndWeek(redisKey);
+
+		List<WeeklyRank> rankings = weeklyRankRepository.findTop3ByYearAndWeekOrderByFavoriteCountDesc(
+			yearWeek.getYear(), yearWeek.getWeek());
+
+		if (rankings.isEmpty()) {
+			// 지난 주 랭킹 없으면, 이번 주 데이터로 대체
+			String currentKey = getCurrentKey();
+			YearWeek currentYearWeek = extractYearAndWeek(currentKey);
+			rankings = weeklyRankRepository.findTop3ByYearAndWeekOrderByFavoriteCountDesc(currentYearWeek.getYear(),
+				currentYearWeek.getWeek());
+		}
+
 		return rankings.stream()
 			.map(PlaceResponse::from)
 			.collect((Collectors.toList()));
@@ -60,7 +75,7 @@ public class FavoriteService {
 		User user = userRepository.findById(userId)
 			.orElseThrow(() -> new CustomException(ErrorCode.USER_NOT_FOUND));
 
-		String key = getCurrentMonthKey();
+		String key = getCurrentKey(); // 현재 주간 키
 		String redisValue = getRedisValue(type, placeId);
 
 		Optional<Favorite> existingFavorite = findExistingFavorite(userId, placeId, type);
@@ -95,8 +110,20 @@ public class FavoriteService {
 
 	}
 
-	private String getCurrentMonthKey() {
-		return "popular:" + YearMonth.now();
+	private String getCurrentKey() {
+		LocalDate now = LocalDate.now();
+		WeekFields weekFields = WeekFields.of(Locale.getDefault());
+		int weekNum = now.get(weekFields.weekOfWeekBasedYear());
+		int year = now.getYear();
+		return "popular:" + year + "-W" + weekNum;
+	}
+
+	private String getLastWeekKey() {
+		LocalDate lastWeek = LocalDate.now().minusWeeks(1);
+		WeekFields weekFields = WeekFields.of(Locale.getDefault());
+		int week = lastWeek.get(weekFields.weekOfWeekBasedYear());
+		int year = lastWeek.getYear();
+		return "popular:" + year + "-W" + week;
 	}
 
 	private String getRedisValue(PlaceType type, Long placeId) {
@@ -113,38 +140,42 @@ public class FavoriteService {
 		return favorite;
 	}
 
-	@Scheduled(cron = "0 0 3 1 * ?") // 매월 1일 새벽 3시 ->이전 좋아요 랭킹 redis에서 지우기
-	public void cleanupOldMonthlyRankings() {
-		String prevMonthKey = "popular:" + YearMonth.now().minusMonths(1);
-		redisTemplate.delete(prevMonthKey);
+	@Scheduled(cron = "0 0 3 ? * MON") // 매주 월요일일 새벽 3시 ->이전 좋아요 랭킹 redis에서 지우기
+	public void cleanupLastWeeklyRankFromRedis() {
+		String prevWeekKey = getLastWeekKey();
+		redisTemplate.delete(prevWeekKey);
 	}
 
 	@Transactional
-	@Scheduled(cron = "0 0 2 1 * ?") // 매월 1일 새벽 2시
-	public void saveMonthlyRanking() {
-		//지난 달 좋아요 총합에 따라 탑3를 DB에 저장
-		YearMonth month = YearMonth.now().minusMonths(1);
-		String redisKey = buildRedisKey(month);
+	@Scheduled(cron = "0 0 2 ? * MON") // 매주 월요일 새벽 2시
+	public void saveWeeklyRanking() {
+		//지난 주 기준 키를 부르기
+		// popular: 2025 - W2  같은 형식의 키
+		String redisKey = getLastWeekKey();
+
+		//테스트 때문에 이미 있는 경우엔 db에서 지우고 스케쥴링함
+		YearWeek yearWeek = extractYearAndWeek(redisKey);
+
+		weeklyRankRepository.deleteByYearAndWeek(yearWeek.getYear(), yearWeek.getWeek());
 
 		Set<ZSetOperations.TypedTuple<Object>> top3 = getTop3FromRedis(redisKey);
 
 		if (top3 == null || top3.isEmpty())
 			return;
 
-		List<MonthlyRank> rankings = convertToMonthlyRanks(top3, month);
-		monthlyRankRepository.saveAll(rankings);
-	}
-
-	private String buildRedisKey(YearMonth month) {
-		return "popular:" + month;
+		List<WeeklyRank> rankings = convertToWeeklyRanks(top3, redisKey);
+		weeklyRankRepository.saveAll(rankings);
 	}
 
 	private Set<ZSetOperations.TypedTuple<Object>> getTop3FromRedis(String key) {
 		return redisTemplate.opsForZSet().reverseRangeWithScores(key, 0, 2);
 	}
 
-	private List<MonthlyRank> convertToMonthlyRanks(Set<ZSetOperations.TypedTuple<Object>> top3, YearMonth month) {
-		List<MonthlyRank> result = new ArrayList<>();
+	private List<WeeklyRank> convertToWeeklyRanks(Set<ZSetOperations.TypedTuple<Object>> top3, String redisKey) {
+		//year 랑 week 나누기
+		YearWeek yearWeek = extractYearAndWeek(redisKey);
+
+		List<WeeklyRank> result = new ArrayList<>();
 
 		for (ZSetOperations.TypedTuple<Object> tuple : top3) {
 			String redisValue = (String)tuple.getValue();
@@ -153,14 +184,27 @@ public class FavoriteService {
 			if (redisValue == null || score == null)
 				continue;
 
-			parseMonthlyRank(redisValue, score.longValue(), month)
+			parseWeeklyRank(redisValue, score.longValue(), yearWeek.getYear(), yearWeek.getWeek())
 				.ifPresent(result::add);
 		}
 
 		return result;
 	}
 
-	private Optional<MonthlyRank> parseMonthlyRank(String redisValue, long likeCount, YearMonth month) {
+	private YearWeek extractYearAndWeek(String redisKey) {
+		// redisKey - "popular:2025-W27"
+		try {
+			String[] split = redisKey.split(":")[1].split("-W");
+			int year = Integer.parseInt(split[0]);
+			int week = Integer.parseInt(split[1]);
+			return new YearWeek(year, week);
+		} catch (Exception e) {
+			throw new CustomException(ErrorCode.INVALID_REDISKEY);
+		}
+	}
+
+	private Optional<WeeklyRank> parseWeeklyRank(String redisValue, long likeCount, int year, int week) {
+
 		String[] parts = redisValue.split(":");
 		if (parts.length != 2)
 			return Optional.empty();
@@ -170,12 +214,27 @@ public class FavoriteService {
 
 		return switch (type) {
 			case "map" -> mapRepository.findById(id)
-				.map(map -> MonthlyRank.from(map, month, likeCount));
+				.map(map -> WeeklyRank.from(map, year, week, likeCount));
 			case "report" -> reportRepository.findById(id)
-				.map(report -> MonthlyRank.from(report, month, likeCount));
+				.map(report -> WeeklyRank.from(report, year, week, likeCount));
 			default -> Optional.empty();
 		};
 
+	}
+
+	@Transactional
+	public void saveCurrentWeeklyRanking() {
+		String redisKey = getCurrentKey();
+		YearWeek yearWeek = extractYearAndWeek(redisKey);
+		weeklyRankRepository.deleteByYearAndWeek(yearWeek.getYear(), yearWeek.getWeek());
+
+		Set<ZSetOperations.TypedTuple<Object>> top3 = getTop3FromRedis(redisKey);
+
+		if (top3 == null || top3.isEmpty())
+			return;
+
+		List<WeeklyRank> rankings = convertToWeeklyRanks(top3, redisKey);
+		weeklyRankRepository.saveAll(rankings);
 	}
 }
 
