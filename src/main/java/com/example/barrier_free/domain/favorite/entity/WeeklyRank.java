@@ -1,7 +1,5 @@
 package com.example.barrier_free.domain.favorite.entity;
 
-import java.time.YearMonth;
-
 import com.example.barrier_free.domain.map.entity.Map;
 import com.example.barrier_free.domain.report.entity.Report;
 
@@ -19,12 +17,13 @@ import lombok.NoArgsConstructor;
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @Entity
-public class MonthlyRank {
+public class WeeklyRank {
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long id;
 
-	private String rankMonth;
+	private int year;
+	private int week;
 
 	@ManyToOne(fetch = FetchType.LAZY)
 	@JoinColumn(name = "map_id")
@@ -36,18 +35,20 @@ public class MonthlyRank {
 
 	private long favoriteCount;
 
-	public static MonthlyRank from(Map map, YearMonth month, long favoriteCount) {
-		MonthlyRank rank = new MonthlyRank();
+	public static WeeklyRank from(Map map, int year, int week, long favoriteCount) {
+		WeeklyRank rank = new WeeklyRank();
 		rank.map = map;
-		rank.rankMonth = month.toString();
+		rank.year = year;
+		rank.week = week;
 		rank.favoriteCount = favoriteCount;
 		return rank;
 	}
 
-	public static MonthlyRank from(Report report, YearMonth month, long favoriteCount) {
-		MonthlyRank rank = new MonthlyRank();
+	public static WeeklyRank from(Report report, int year, int week, long favoriteCount) {
+		WeeklyRank rank = new WeeklyRank();
 		rank.report = report;
-		rank.rankMonth = month.toString();
+		rank.year = year;
+		rank.week = week;
 		rank.favoriteCount = favoriteCount;
 		return rank;
 	}

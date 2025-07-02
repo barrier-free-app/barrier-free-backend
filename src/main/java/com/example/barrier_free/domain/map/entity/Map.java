@@ -5,7 +5,7 @@ import java.util.List;
 
 import com.example.barrier_free.domain.facility.entity.MapFacility;
 import com.example.barrier_free.domain.favorite.entity.Favorite;
-import com.example.barrier_free.domain.favorite.entity.MonthlyRank;
+import com.example.barrier_free.domain.favorite.entity.WeeklyRank;
 import com.example.barrier_free.domain.review.entity.Review;
 import com.example.barrier_free.global.common.Place;
 import com.example.barrier_free.global.common.PlaceEntity;
@@ -40,7 +40,7 @@ public class Map extends PlaceEntity implements Place {
 	@OneToMany(mappedBy = "map", cascade = CascadeType.ALL, orphanRemoval = true)
 	private List<Review> reviews = new ArrayList<>();
 	@OneToMany(mappedBy = "map", cascade = CascadeType.REMOVE, orphanRemoval = true)
-	private List<MonthlyRank> monthlyRanks = new ArrayList<>();
+	private List<WeeklyRank> weeklyRanks = new ArrayList<>();
 
 	@Override
 	public void attachTo(Review review) {
