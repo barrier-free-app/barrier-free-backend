@@ -13,11 +13,11 @@ import com.example.barrier_free.domain.report.entity.Report;
 import com.querydsl.core.BooleanBuilder;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 
-import lombok.AllArgsConstructor;
+import lombok.RequiredArgsConstructor;
 
-@AllArgsConstructor
+@RequiredArgsConstructor
 public class FavoriteRepositoryImpl implements FavoriteRepositoryCustom {
-	private JPAQueryFactory queryFactory;
+	private final JPAQueryFactory queryFactory;
 	private static final QFavorite favorite = QFavorite.favorite;
 	private static final QMap map = QMap.map;
 	private static final QReport report = QReport.report;
