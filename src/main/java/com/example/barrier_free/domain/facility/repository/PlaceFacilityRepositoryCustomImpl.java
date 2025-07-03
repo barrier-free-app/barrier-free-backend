@@ -13,9 +13,9 @@ import com.example.barrier_free.domain.report.entity.Report;
 import com.example.barrier_free.global.common.Place;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 
-import lombok.AllArgsConstructor;
+import lombok.RequiredArgsConstructor;
 
-@AllArgsConstructor
+@RequiredArgsConstructor
 public class PlaceFacilityRepositoryCustomImpl implements PlaceFacilityRepositoryCustom {
 
 	private final JPAQueryFactory queryFactory;
@@ -41,8 +41,8 @@ public class PlaceFacilityRepositoryCustomImpl implements PlaceFacilityRepositor
 			.having(reportFacility.facility.id.countDistinct().eq((long)facilityIds.size()))
 			.fetch();
 		List<Place> p = new ArrayList<>();
-		p.add((Place)maps);
-		p.add((Place)reports);
+		p.addAll(maps);
+		p.addAll(reports);
 		return p;
 	}
 

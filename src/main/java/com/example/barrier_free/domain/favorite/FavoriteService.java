@@ -15,6 +15,8 @@ import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import com.example.barrier_free.domain.favorite.dto.FavoritePlaceGroup;
+import com.example.barrier_free.domain.favorite.dto.FavoritePlaceGroupResponse;
 import com.example.barrier_free.domain.favorite.dto.FavoriteRequestDto;
 import com.example.barrier_free.domain.favorite.dto.PlaceResponse;
 import com.example.barrier_free.domain.favorite.dto.YearWeek;
@@ -32,9 +34,9 @@ import com.example.barrier_free.global.common.PlaceType;
 import com.example.barrier_free.global.exception.CustomException;
 import com.example.barrier_free.global.response.ErrorCode;
 
-import lombok.AllArgsConstructor;
+import lombok.RequiredArgsConstructor;
 
-@AllArgsConstructor
+@RequiredArgsConstructor
 @Service
 public class FavoriteService {
 	private final FavoriteRepository favoriteRepository;
@@ -235,6 +237,24 @@ public class FavoriteService {
 
 		List<WeeklyRank> rankings = convertToWeeklyRanks(top3, redisKey);
 		weeklyRankRepository.saveAll(rankings);
+	}
+
+	@Transactional
+	public FavoritePlaceGroupResponse getFavorite(Long userId, List<Integer> facilities) {
+		User user = userRepository.findById(userId)
+			.orElseThrow(() -> new CustomException(ErrorCode.USER_NOT_FOUND));
+
+		FavoritePlaceGroup favoritePlace = favoriteRepository.findFilteredFavorites(userId, facilities);
+
+		List<PlaceResponse> mapResponses = favoritePlace.getMapFavorites().stream()
+			.map(PlaceResponse::fromPlace)
+			.toList();
+
+		List<PlaceResponse> reportResponses = favoritePlace.getReportFavorites().stream()
+			.map(PlaceResponse::fromPlace)
+			.toList();
+
+		return new FavoritePlaceGroupResponse(mapResponses, reportResponses);
 	}
 }
 
