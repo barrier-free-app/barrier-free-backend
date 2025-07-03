@@ -50,7 +50,10 @@ public enum ErrorCode {
 
 	NOT_FOUND_REPORT(HttpStatus.NOT_FOUND, "REPORT4041", "존재하지 않는 제보장소입니다."),
 
-	NOT_FOUND_USER(HttpStatus.NOT_FOUND, "USER4041", "존재하지 않는 사용자입니다.");
+	NOT_FOUND_USER(HttpStatus.NOT_FOUND, "USER4041", "존재하지 않는 사용자입니다."),
+
+	INVALID_REDISKEY(HttpStatus.BAD_REQUEST, "REDIS4001", "유효하지 않은 키 형식입니다."),
+	INVALID_WEEKLY_RANK(HttpStatus.INTERNAL_SERVER_ERROR, "WEEKLY5001", "주간 랭킹에 장소 정보가 없습니다.");
 
 	private final HttpStatus httpStatus;
 	private final String code;
