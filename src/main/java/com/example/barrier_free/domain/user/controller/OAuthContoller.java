@@ -13,7 +13,7 @@ import org.springframework.web.bind.annotation.*;
 import java.io.IOException;
 
 @RestController
-@RequestMapping("/auth/oauth")
+@RequestMapping("/oauth")
 @RequiredArgsConstructor
 public class OAuthContoller {
 
@@ -26,8 +26,9 @@ public class OAuthContoller {
     private final KakaoLoginService kakaoLoginService;
 
     // 1. 카카오 로그인 창으로 이동
-    // 로그인 성공 후 리다이렉트 URI로 인가 코드 보내줌
-    @GetMapping("/")
+    @GetMapping("/kakao")
+    @Operation(summary = "카카오 로그인 API",
+            description = "유저 정보, Access Token, Refresh Token 응답")
     public void redirectToKakao(HttpServletResponse response) throws IOException {
         String kakaoUrl = "https://kauth.kakao.com/oauth/authorize"
                 + "?client_id=" + client_id
@@ -36,12 +37,24 @@ public class OAuthContoller {
         response.sendRedirect(kakaoUrl);
     }
 
-    // 2. 인가코드 받아 로그인 진행
-    @GetMapping("/kakao")
-    @Operation(summary = "카카오 로그인 API",
+    // 2. 카카오 로그인 성공 후 리다이렉트 URI로 인가코드(code) 발급
+    @GetMapping("/kakao/success")
+    @Operation(summary = "카카오 로그인 성공 후 인가코드 발급 API",
             description = "유저 정보, Access Token, Refresh Token 응답")
-    public ApiResponse<?> loginWithKakao(@RequestParam String code) {
-        LoginResponse loginResponse =  kakaoLoginService.getKakaoAccessToken(code);
-        return ApiResponse.success(SuccessCode.LOGIN_SUCCESSFUL,loginResponse);
+    public void redirectToApp(@RequestParam String code, HttpServletResponse response) throws IOException {
+        // 앱 전용 딥링크로 리디렉션
+        String deepLink = "myapp://login-success?code=" + code;
+        response.sendRedirect(deepLink);
+
+        System.out.println("인가 코드: " + code);
+    }
+
+    // 3.인가코드로 JWT 발급
+    @PostMapping("/token")
+    @Operation(summary = "인가코드로 JWT 발급",
+            description = "앱이 인가코드를 보내면 서버 자체 AccessToken/RefreshToken 발급")
+    public ApiResponse<?> exchangeCodeToToken(@RequestParam String code) {
+        LoginResponse loginResponse = kakaoLoginService.getKakaoAccessToken(code);
+        return ApiResponse.success(SuccessCode.LOGIN_SUCCESSFUL, loginResponse);
     }
 }

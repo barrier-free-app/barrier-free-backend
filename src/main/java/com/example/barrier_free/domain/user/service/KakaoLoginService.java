@@ -1,12 +1,10 @@
 package com.example.barrier_free.domain.user.service;
 
 import com.example.barrier_free.domain.user.UserRepository;
-import com.example.barrier_free.domain.user.converter.UserConverter;
 import com.example.barrier_free.domain.user.dto.LoginResponse;
-import com.example.barrier_free.domain.user.dto.UserResponse;
 import com.example.barrier_free.domain.user.entity.User;
 import com.example.barrier_free.domain.user.enums.SocialType;
-import com.example.barrier_free.global.auth.JwtManager;
+import com.example.barrier_free.global.jwt.JwtManager;
 import com.fasterxml.jackson.databind.JsonNode;
 import io.netty.handler.codec.http.HttpHeaderValues;
 import lombok.RequiredArgsConstructor;
@@ -68,8 +66,7 @@ public class KakaoLoginService {
         user.setTokens(accessToken, refreshToken);
         userRepository.save(user);
 
-        UserResponse userResponse = UserConverter.toUserResponse(user);
-        return new LoginResponse(userResponse, accessToken, refreshToken);
+        return new LoginResponse(userId, accessToken, refreshToken);
     }
 
     public JsonNode getKakaoUserInfo(String kAccessToken) {

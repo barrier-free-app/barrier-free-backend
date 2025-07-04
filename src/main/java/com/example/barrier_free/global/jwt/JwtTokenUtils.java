@@ -1,4 +1,4 @@
-package com.example.barrier_free.global.auth;
+package com.example.barrier_free.global.jwt;
 
 import com.example.barrier_free.global.exception.CustomException;
 import com.example.barrier_free.global.response.ErrorCode;
@@ -14,7 +14,7 @@ import java.util.Date;
 
 @Component
 @RequiredArgsConstructor
-public class JwtUtil {
+public class JwtTokenUtils {
 
     private final SecretKey key = Jwts.SIG.HS256.key().build();
 

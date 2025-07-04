@@ -1,8 +1,7 @@
-package com.example.barrier_free.global.auth;
+package com.example.barrier_free.global.jwt;
 
 import com.example.barrier_free.global.exception.CustomException;
 import com.example.barrier_free.global.response.ErrorCode;
-import io.jsonwebtoken.JwtException;
 import jakarta.servlet.http.HttpServletRequest;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
@@ -11,26 +10,26 @@ import org.springframework.stereotype.Component;
 @RequiredArgsConstructor
 public class JwtManager {
 
-    private final JwtUtil jwtUtil;
+    private final JwtTokenUtils jwtTokenUtils;
 
     // accessToken 발급
     public String createAccessToken(Long userId) {
-        return jwtUtil.createAccessToken(userId);
+        return jwtTokenUtils.createAccessToken(userId);
     }
 
     // refreshToken 발급
     public String createRefreshToken(Long userId) {
-        return jwtUtil.createRefreshToken(userId);
+        return jwtTokenUtils.createRefreshToken(userId);
     }
 
     // accessToken 검증
     public Long validateAccessToken(String token) {
-        return jwtUtil.validateToken(token);
+        return jwtTokenUtils.validateToken(token);
     }
 
     // refreshToken 검증
     public Long validateRefreshToken(String token) {
-        return jwtUtil.validateToken(token);
+        return jwtTokenUtils.validateToken(token);
     }
 
     // Authorization 헤더에서 토큰 추출
