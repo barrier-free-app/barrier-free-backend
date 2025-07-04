@@ -9,7 +9,12 @@ import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
+import lombok.AccessLevel;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
 
+@NoArgsConstructor(access = AccessLevel.PROTECTED)
+@Getter
 @Entity
 public class ReportFacility {
 	@Id
@@ -23,4 +28,14 @@ public class ReportFacility {
 	@ManyToOne(fetch = FetchType.LAZY)
 	@JoinColumn(name = "facility_id")
 	private Facility facility;
+
+	public ReportFacility(Facility facility, Report report) {
+		this.report = report;
+		this.facility = facility;
+	}
+
+	public void setReport(Report report) {
+		this.report = report;
+	}
+
 }

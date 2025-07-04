@@ -1,4 +1,4 @@
-package com.example.barrier_free.config;
+package com.example.barrier_free.global.config;
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;

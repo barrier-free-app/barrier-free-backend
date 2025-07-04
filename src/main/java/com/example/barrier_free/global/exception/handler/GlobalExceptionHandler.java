@@ -11,7 +11,7 @@ import org.springframework.web.bind.annotation.RestControllerAdvice;
 import org.springframework.web.servlet.NoHandlerFoundException;
 
 import com.example.barrier_free.global.exception.CustomException;
-import com.example.barrier_free.global.exception.ErrorCode;
+import com.example.barrier_free.global.response.ErrorCode;
 import com.example.barrier_free.global.response.ApiResponse;
 
 import jakarta.validation.ConstraintViolation;
@@ -26,7 +26,7 @@ public class GlobalExceptionHandler {
 	@ExceptionHandler(value = {NoHandlerFoundException.class})
 	public ResponseEntity<ApiResponse<?>> handleNoPageFoundException(Exception e) {
 		log.error("NoHandlerFoundException: {}", e.getMessage());
-		return buildResponse(ErrorCode._NOT_FOUND_END_POINT, null);
+		return buildResponse(ErrorCode._NOT_FOUND_END_POINT);
 	}
 
 	// 검증 실패 (RequestParam 유효성 검증)
@@ -37,7 +37,7 @@ public class GlobalExceptionHandler {
 			.findFirst()
 			.orElse("Validation error occurred");
 		log.error("Validation error: {}", errorMessage);
-		return buildResponse(ErrorCode._BAD_REQUEST, errorMessage);
+		return buildResponse(ErrorCode._BAD_REQUEST);
 	}
 
 	// 검증 실패 (RequestBody 유효성 검증)
@@ -47,21 +47,22 @@ public class GlobalExceptionHandler {
 		e.getBindingResult().getFieldErrors()
 			.forEach(fieldError -> errors.put(fieldError.getField(), fieldError.getDefaultMessage()));
 		log.error("MethodArgumentNotValidException: {}", errors);
-		return buildResponse(ErrorCode._BAD_REQUEST, errors);
+		return buildResponse(ErrorCode._BAD_REQUEST);
 	}
 
 	// 커스텀 예외
 	@ExceptionHandler(value = {CustomException.class})
 	public ResponseEntity<ApiResponse<?>> handleCustomException(CustomException e) {
 		log.error("CustomException: {}", e.getMessage());
-		return buildResponse(e.getErrorCode(), null);
+		return buildResponse(e.getErrorcode());
 	}
 
 	@ExceptionHandler(value = {HttpRequestMethodNotSupportedException.class})
 	public ResponseEntity<ApiResponse<?>> handleHttpRequestMethodNotSupported(
 		HttpRequestMethodNotSupportedException e) {
 		log.warn("HttpRequestMethodNotSupportedException: {}", e.getMessage());
-		return buildResponse(ErrorCode._METHOD_NOT_ALLOWED, "허용되지 않은 HTTP 메서드입니다.");
+//		return buildResponse(ErrorCode._METHOD_NOT_ALLOWED, "허용되지 않은 HTTP 메서드입니다.");
+		return buildResponse(ErrorCode._METHOD_NOT_ALLOWED);
 	}
 
 	// 기본 예외
@@ -69,14 +70,13 @@ public class GlobalExceptionHandler {
 	public ResponseEntity<ApiResponse<?>> handleAllException(Exception e) {
 
 		log.error("Unexpected error: {}", e.getMessage());
-		return buildResponse(ErrorCode._INTERNAL_SERVER_ERROR, e.getMessage());
+//		return buildResponse(ErrorCode._INTERNAL_SERVER_ERROR, e.getMessage());
+		return buildResponse(ErrorCode._INTERNAL_SERVER_ERROR);
 	}
 
-	private ResponseEntity<ApiResponse<?>> buildResponse(ErrorCode errorCode, Object result) {
-		CustomException customException = new CustomException(errorCode);
-		ApiResponse<?> response = ApiResponse.fail(customException, result);
+	private ResponseEntity<ApiResponse<?>> buildResponse(ErrorCode errorCode) {
 		return ResponseEntity
-			.status(customException.getHttpStatus())
-			.body(response);
+			.status(errorCode.getHttpStatus())
+			.body(ApiResponse.fail(errorCode));
 	}
 }

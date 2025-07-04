@@ -11,7 +11,12 @@ import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
+import lombok.AccessLevel;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
 
+@Getter
+@NoArgsConstructor(access = AccessLevel.PROTECTED)
 @Entity
 public class Favorite {
 	@Id
@@ -27,4 +32,19 @@ public class Favorite {
 	@ManyToOne(fetch = FetchType.LAZY)
 	@JoinColumn(name = "map_id")
 	private Map map;
+
+	public static Favorite fromMap(User user, Map map) {
+		Favorite favorite = new Favorite();
+		favorite.user = user;
+		favorite.map = map;
+		return favorite;
+	}
+
+	public static Favorite fromReport(User user, Report report) {
+		Favorite favorite = new Favorite();
+		favorite.user = user;
+		favorite.report = report;
+		return favorite;
+	}
+
 }
