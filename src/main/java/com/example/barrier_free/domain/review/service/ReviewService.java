@@ -11,8 +11,9 @@ import org.springframework.web.multipart.MultipartFile;
 
 import com.example.barrier_free.domain.map.repository.MapRepository;
 import com.example.barrier_free.domain.report.repository.ReportRepository;
-import com.example.barrier_free.domain.review.dto.ReviewPageResponse;
+import com.example.barrier_free.domain.review.dto.PlaceReviewPageResponse;
 import com.example.barrier_free.domain.review.dto.ReviewRequestDto;
+import com.example.barrier_free.domain.review.dto.UserReviewPageResponse;
 import com.example.barrier_free.domain.review.entity.Review;
 import com.example.barrier_free.domain.review.entity.ReviewImage;
 import com.example.barrier_free.domain.review.repository.ReviewRepository;
@@ -36,30 +37,16 @@ public class ReviewService {
 	private final ReportRepository reportRepository;
 	//1.리뷰 조회 getReviewsByPlace 페이징 받기
 
-	public ReviewPageResponse getReviewsByPlace(Long placeId, PlaceType placeType, Pageable pageable) {
-		//1. 장소찾기
+	public PlaceReviewPageResponse getReviewsByPlace(Long placeId, PlaceType placeType, Pageable pageable) {
 		Place place = findPlace(placeId, placeType);
-		//2.리뷰 찾기
 		Page<Review> reviews = getReviewsFromPlace(place, pageable);
-		return ReviewPageResponse.from(reviews, s3Service);
+		return PlaceReviewPageResponse.from(reviews, s3Service);
 	}
 
-	public ReviewPageResponse getReviewsByUser(Long userId) {
-		//유저 존재 확인
+	public UserReviewPageResponse getReviewsByUser(Long userId, Pageable pageable) {
 		User user = userRepository.findById(userId).orElseThrow(() -> new CustomException(ErrorCode.USER_NOT_FOUND));
-		//리뷰 찾기
-		//facilities 를 필터링에 이용
-		//이거 할때 userId->리뷰 찾기
-		//리뷰->map/report 장소찾기
-		// in facilities 해당하는 애들 찾기
-		//걔네의 placeId와 type 가지고 오기
-		//걔네만 response로 변경해서 return 하기
-
-		List<Review> reviews = reviewRepository.findByUserId(userId);
-
-		//리뷰 Id, PlaceId(map또는 report겟다), 사진, content, rating 전달
-		return UserReviewResponse.from(reviews, s3Service);
-
+		Page<Review> reviews = reviewRepository.findByUserId(userId, pageable);
+		return UserReviewPageResponse.from(reviews, s3Service);
 	}
 
 	@Transactional
