@@ -53,6 +53,7 @@ public class Report extends PlaceEntity implements Place {
 	@ManyToOne(fetch = FetchType.LAZY)
 	@JoinColumn(name = "user_id")
 	private User user;
+	@Builder.Default
 	@OneToMany(mappedBy = "report", cascade = CascadeType.REMOVE, orphanRemoval = true)
 	private List<WeeklyRank> weeklyRanks = new ArrayList<>();
 
