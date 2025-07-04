@@ -13,7 +13,7 @@ import lombok.Getter;
 
 @Getter
 @AllArgsConstructor
-public class ReviewPageResponse {
+public class PlaceReviewPageResponse {
 	private List<PlaceReviewResponse> reviews;
 	private int page;
 	private int size;
@@ -21,12 +21,12 @@ public class ReviewPageResponse {
 	private long totalElements;
 	private boolean hasNext;
 
-	public static ReviewPageResponse from(Page<Review> reviewPage, S3Service s3Service) {
+	public static PlaceReviewPageResponse from(Page<Review> reviewPage, S3Service s3Service) {
 		List<PlaceReviewResponse> reviewDtos = reviewPage.getContent().stream()
 			.map(review -> PlaceReviewResponse.from(review, s3Service))
 			.collect(Collectors.toList());
 
-		return new ReviewPageResponse(
+		return new PlaceReviewPageResponse(
 			reviewDtos,
 			reviewPage.getNumber(),
 			reviewPage.getSize(),
