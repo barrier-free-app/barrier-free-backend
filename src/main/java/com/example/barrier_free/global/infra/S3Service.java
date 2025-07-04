@@ -25,6 +25,9 @@ public class S3Service {
 	@Value("${cloud.aws.s3.bucket}")
 	private String bucket;
 
+	@Value("${cloud.aws.region.static}")
+	private String region;
+
 	public String uploadFile(MultipartFile multipartFile, String dirName) {
 
 		String fileName = dirName + "/" + UUID.randomUUID() + "_" + multipartFile.getOriginalFilename();
@@ -49,6 +52,10 @@ public class S3Service {
 		} catch (Exception e) {
 			throw new CustomException(ErrorCode.S3_DELETE_FAILED);
 		}
+	}
+
+	public String getFullUrl(String key) {
+		return "https://" + bucket + ".s3." + region + ".amazonaws.com/" + key;
 	}
 
 }
