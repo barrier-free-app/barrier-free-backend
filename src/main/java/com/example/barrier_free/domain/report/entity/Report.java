@@ -5,11 +5,13 @@ import java.util.List;
 
 import com.example.barrier_free.domain.facility.entity.ReportFacility;
 import com.example.barrier_free.domain.favorite.entity.Favorite;
+import com.example.barrier_free.domain.favorite.entity.WeeklyRank;
 import com.example.barrier_free.domain.report.enums.VoteType;
 import com.example.barrier_free.domain.review.entity.Review;
 import com.example.barrier_free.domain.user.entity.User;
 import com.example.barrier_free.global.common.Place;
 import com.example.barrier_free.global.common.PlaceEntity;
+import com.example.barrier_free.global.common.PlaceType;
 
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
@@ -51,6 +53,9 @@ public class Report extends PlaceEntity implements Place {
 	@ManyToOne(fetch = FetchType.LAZY)
 	@JoinColumn(name = "user_id")
 	private User user;
+	@Builder.Default
+	@OneToMany(mappedBy = "report", cascade = CascadeType.REMOVE, orphanRemoval = true)
+	private List<WeeklyRank> weeklyRanks = new ArrayList<>();
 
 	public void addReportFacility(ReportFacility reportFacility) {
 		reportFacilities.add(reportFacility);
@@ -66,6 +71,28 @@ public class Report extends PlaceEntity implements Place {
 	@Override
 	public void attachTo(Review review) {
 		review.attachReport(this); // 리뷰에 맵 연결
+	}
+
+	@Override
+	public Long getId() {
+		return id;
+	}
+
+	@Override
+	public String getDescription() {
+		return description;
+	}
+
+	@Override
+	public PlaceType getPlaceType() {
+		return PlaceType.report;
+	}
+
+	@Override
+	public List<Integer> getFacility() {
+		return reportFacilities.stream()
+			.map(mapFacility -> mapFacility.getFacility().getId())
+			.toList();
 	}
 
 }

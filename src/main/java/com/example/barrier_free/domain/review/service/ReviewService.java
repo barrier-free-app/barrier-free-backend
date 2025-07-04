@@ -3,13 +3,17 @@ package com.example.barrier_free.domain.review.service;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
 
 import com.example.barrier_free.domain.map.repository.MapRepository;
 import com.example.barrier_free.domain.report.repository.ReportRepository;
+import com.example.barrier_free.domain.review.dto.PlaceReviewPageResponse;
 import com.example.barrier_free.domain.review.dto.ReviewRequestDto;
+import com.example.barrier_free.domain.review.dto.UserReviewPageResponse;
 import com.example.barrier_free.domain.review.entity.Review;
 import com.example.barrier_free.domain.review.entity.ReviewImage;
 import com.example.barrier_free.domain.review.repository.ReviewRepository;
@@ -31,6 +35,19 @@ public class ReviewService {
 	private final MapRepository mapRepository;
 	private final UserRepository userRepository;
 	private final ReportRepository reportRepository;
+	//1.리뷰 조회 getReviewsByPlace 페이징 받기
+
+	public PlaceReviewPageResponse getReviewsByPlace(Long placeId, PlaceType placeType, Pageable pageable) {
+		Place place = findPlace(placeId, placeType);
+		Page<Review> reviews = getReviewsFromPlace(place, pageable);
+		return PlaceReviewPageResponse.from(reviews, s3Service);
+	}
+
+	public UserReviewPageResponse getReviewsByUser(Long userId, Pageable pageable) {
+		User user = userRepository.findById(userId).orElseThrow(() -> new CustomException(ErrorCode.USER_NOT_FOUND));
+		Page<Review> reviews = reviewRepository.findByUserId(userId, pageable);
+		return UserReviewPageResponse.from(reviews, s3Service);
+	}
 
 	@Transactional
 	public Long createReview(Long placeId, ReviewRequestDto dto, List<MultipartFile> images, PlaceType placeType) {
@@ -88,6 +105,18 @@ public class ReviewService {
 			return mapRepository.findById(placeId)
 				.orElseThrow(() -> new CustomException(ErrorCode.PLACE_NOT_FOUND));
 		}
+	}
+
+	private Page<Review> getReviewsFromPlace(Place place, Pageable pageable) {
+		Page<Review> reviews;
+
+		if (place.getPlaceType() == PlaceType.report) {
+			reviews = reviewRepository.findByReportId(place.getId(), pageable);
+		} else {
+			reviews = reviewRepository.findByMapId(place.getId(), pageable);
+		}
+
+		return reviews;
 	}
 
 	private List<String> uploadAndAttachReviewImages(Review review, List<MultipartFile> images) {

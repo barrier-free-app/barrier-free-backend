@@ -3,6 +3,8 @@ package com.example.barrier_free.domain.review.entity;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.hibernate.annotations.BatchSize;
+
 import com.example.barrier_free.domain.map.entity.Map;
 import com.example.barrier_free.domain.report.entity.Report;
 import com.example.barrier_free.domain.user.entity.User;
@@ -42,6 +44,7 @@ public class Review extends BaseEntity {
 	@JoinColumn(name = "report_id")
 	private Report report;
 	@OneToMany(mappedBy = "review", cascade = CascadeType.ALL, orphanRemoval = true)
+	@BatchSize(size = 10)
 	private List<ReviewImage> reviewImages = new ArrayList<>();
 	private float rating; // 별점
 	@Column(columnDefinition = "TEXT")
