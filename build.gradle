@@ -36,7 +36,7 @@ dependencies {
     testImplementation 'org.springframework.boot:spring-boot-starter-test'
     testRuntimeOnly 'org.junit.platform:junit-platform-launcher'
 
-    // WebClient
+    // webClient
     implementation 'org.springframework.boot:spring-boot-starter-webflux'
 
     // jwt
@@ -47,16 +47,17 @@ dependencies {
     // spring security
     implementation 'org.springframework.boot:spring-boot-starter-security'
 
-
-    //QueryDsl
+    // queryDsl
     implementation 'com.querydsl:querydsl-jpa:5.0.0:jakarta'
     annotationProcessor 'com.querydsl:querydsl-apt:5.0.0:jakarta'
     annotationProcessor 'jakarta.persistence:jakarta.persistence-api:3.1.0'
     annotationProcessor 'jakarta.annotation:jakarta.annotation-api:2.1.1'
 
-    //Redis
+    // redis
     implementation 'org.springframework.boot:spring-boot-starter-data-redis:2.3.1.RELEASE'
 
+    // mail
+    implementation 'org.springframework.boot:spring-boot-starter-mail'
 }
 
 tasks.named('test') {

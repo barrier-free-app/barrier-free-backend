@@ -7,9 +7,7 @@ import com.example.barrier_free.global.response.ApiResponse;
 import com.example.barrier_free.global.response.SuccessCode;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequestMapping("/auth")
@@ -24,5 +22,11 @@ public class AuthController {
     public ApiResponse<?> getMe() {
         Long userId = JwtUserUtils.getCurrentUserId();
         return ApiResponse.success(SuccessCode.OK, userService.getUser(userId));
+    }
+
+    // 이메일 인증코드 요청
+    @PostMapping
+    public ApiResponse<?> createAuthCode(@RequestBody String email) {
+        return null;
     }
 }
