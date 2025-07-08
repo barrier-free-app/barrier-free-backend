@@ -1,9 +1,10 @@
 package com.example.barrier_free.domain.user.controller;
 
-import com.example.barrier_free.domain.user.dto.EmailAuthCodeRequest;
+import com.example.barrier_free.domain.user.dto.EmailVeriCodeRequest;
 import com.example.barrier_free.domain.user.dto.EmailRequest;
 import com.example.barrier_free.domain.user.service.EmailService;
 import com.example.barrier_free.global.response.ApiResponse;
+import com.example.barrier_free.global.response.SuccessCode;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
 
@@ -15,14 +16,14 @@ public class AuthController {
     private final EmailService emailService;
 
     // 이메일 인증코드 요청
-    @PostMapping("/auth/email/code")
-    public ApiResponse<?> createEmailAuthCode(@RequestBody EmailRequest email) {
-        return null;
+    @PostMapping("/veri-code/create")
+    public ApiResponse<?> createEmailAuthCode(@RequestBody EmailRequest emailRequest) {
+        return ApiResponse.success(SuccessCode.OK, emailService.sendToEmail(emailRequest));
     }
 
     // 이메일 인증코드 확인
-    @PostMapping("/auth/email/verify")
-    public ApiResponse<?> verifyEmailAuthCode(@RequestBody EmailAuthCodeRequest emailAuthCode) {
+    @PostMapping("/veri-code/verify")
+    public ApiResponse<?> verifyEmailAuthCode(@RequestBody EmailVeriCodeRequest emailVeriCodeRequest) {
         return null;
     }
 }

@@ -37,8 +37,10 @@ public class User extends BaseEntity {
 	private Long id;
 
 	@Email
+	private String email; 	 // 이메일, 겹칠 수 있음
+
 	@Column(unique = true)
-	private String email;
+	private String username; // 아이디, 겹치면 안 됨
 
 	private String password;
 
@@ -47,13 +49,16 @@ public class User extends BaseEntity {
 
 	private String profile;
 
+	// TODO: 토큰 삭제
 	private String accessToken;
 	private String refreshToken;
 
 	@Enumerated(EnumType.STRING)
 	private UserType userType;
+
 	@Enumerated(EnumType.STRING)
 	private SocialType socialType;
+
 	@Enumerated(EnumType.STRING)
 	private Role role;
 

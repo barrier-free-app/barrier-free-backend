@@ -54,8 +54,8 @@ public class OAuthContoller {
     @PostMapping("/token")
     @Operation(summary = "인가코드로 JWT 발급",
             description = "앱이 인가코드를 보내면 서버 자체 AccessToken/RefreshToken 발급")
-    public ApiResponse<?> exchangeCodeToToken(@RequestBody KakaoAuthCodeRequest code) {
-        LoginResponse loginResponse = kakaoLoginService.getKakaoAccessToken(code);
+    public ApiResponse<?> exchangeCodeToToken(@RequestBody KakaoAuthCodeRequest kakaoAuthCodeRequest) {
+        LoginResponse loginResponse = kakaoLoginService.getKakaoAccessToken(kakaoAuthCodeRequest);
         return ApiResponse.success(SuccessCode.LOGIN_SUCCESSFUL, loginResponse);
     }
 }
