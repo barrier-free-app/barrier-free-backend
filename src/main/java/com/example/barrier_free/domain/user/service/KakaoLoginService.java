@@ -1,6 +1,7 @@
 package com.example.barrier_free.domain.user.service;
 
 import com.example.barrier_free.domain.user.UserRepository;
+import com.example.barrier_free.domain.user.dto.KakaoAuthCodeRequest;
 import com.example.barrier_free.domain.user.dto.LoginResponse;
 import com.example.barrier_free.domain.user.entity.User;
 import com.example.barrier_free.domain.user.enums.SocialType;
@@ -28,7 +29,7 @@ public class KakaoLoginService {
     private final JwtManager jwtManager;
 
     // 인가코드로부터 카카오 액세스 토큰 발급
-    public LoginResponse getKakaoAccessToken(String code) {
+    public LoginResponse getKakaoAccessToken(KakaoAuthCodeRequest code) {
 
         // 카카오 로그인 api 이용하므로 WebClient 이용
         JsonNode tokenNode = WebClient.create("https://kauth.kakao.com")
@@ -38,7 +39,7 @@ public class KakaoLoginService {
                 .body(BodyInserters.fromFormData("grant_type", "authorization_code")
                         .with("client_id", client_id)
                         .with("redirect_uri", redirect_uri)
-                        .with("code", code))
+                        .with("code", code.getAuthCode()))
                 .retrieve()
                 .bodyToMono(JsonNode.class)
                 .block();
