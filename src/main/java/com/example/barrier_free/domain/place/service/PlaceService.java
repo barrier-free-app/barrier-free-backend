@@ -4,15 +4,14 @@ import org.springframework.stereotype.Service;
 
 import com.example.barrier_free.domain.favorite.repository.FavoriteRepository;
 import com.example.barrier_free.domain.map.repository.MapRepository;
-import com.example.barrier_free.domain.place.converter.PlaceDetailResponseConverter;
-import com.example.barrier_free.domain.place.converter.PlaceSummaryResponseConverter;
+import com.example.barrier_free.domain.place.converter.PlaceConverter;
 import com.example.barrier_free.domain.place.dto.PlaceDetailResponse;
 import com.example.barrier_free.domain.place.dto.PlaceSummaryResponse;
-import com.example.barrier_free.domain.place.util.PlaceFinder;
 import com.example.barrier_free.domain.report.repository.ReportRepository;
 import com.example.barrier_free.domain.user.UserRepository;
 import com.example.barrier_free.domain.user.entity.User;
 import com.example.barrier_free.global.common.Place;
+import com.example.barrier_free.global.common.PlaceFinder;
 import com.example.barrier_free.global.common.PlaceType;
 import com.example.barrier_free.global.exception.CustomException;
 import com.example.barrier_free.global.jwt.JwtUserUtils;
@@ -36,7 +35,7 @@ public class PlaceService {
 			.orElseThrow(() -> new CustomException(ErrorCode.USER_NOT_FOUND));
 
 		boolean favoriteStatus = isFavorite(user.getId(), placeId, placeType);
-		return PlaceSummaryResponseConverter.from(place, favoriteStatus);
+		return PlaceConverter.toPlaceSummaryResponse(place, favoriteStatus);
 
 	}
 
@@ -48,7 +47,7 @@ public class PlaceService {
 
 		boolean favoriteStatus = isFavorite(user.getId(), placeId, placeType);
 
-		return PlaceDetailResponseConverter.from(place, favoriteStatus);
+		return PlaceConverter.toPlaceDetailResponse(place, favoriteStatus);
 
 	}
 
