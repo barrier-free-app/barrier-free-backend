@@ -97,4 +97,9 @@ public class User extends BaseEntity {
 			addUserFacility(uf);
 		}
 	}
+
+	public void updateNickname(String nickname) {
+		this.nickname = nickname;
+		this.nicknameUpdatedAt = LocalDateTime.now();
+	}
 }

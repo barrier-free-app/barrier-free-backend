@@ -54,7 +54,8 @@ public enum ErrorCode {
 
 	INVALID_REDISKEY(HttpStatus.BAD_REQUEST, "REDIS4001", "유효하지 않은 키 형식입니다."),
 	INVALID_WEEKLY_RANK(HttpStatus.INTERNAL_SERVER_ERROR, "WEEKLY5001", "주간 랭킹에 장소 정보가 없습니다."),
-	INVALID_REVIEW(HttpStatus.BAD_REQUEST, "REVIEW4001", "리뷰에 연결된 장소가 없습니다.");
+	INVALID_REVIEW(HttpStatus.BAD_REQUEST, "REVIEW4001", "리뷰에 연결된 장소가 없습니다."),
+	NICKNAME_UPDATE_NOT_ALLOWED(HttpStatus.BAD_REQUEST, "USER4007", "닉네임은 한달에 한 번 변경 가능합니다");
 
 	private final HttpStatus httpStatus;
 	private final String code;
