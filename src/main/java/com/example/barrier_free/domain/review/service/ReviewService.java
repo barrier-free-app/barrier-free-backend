@@ -20,6 +20,7 @@ import com.example.barrier_free.domain.review.repository.ReviewRepository;
 import com.example.barrier_free.domain.user.UserRepository;
 import com.example.barrier_free.domain.user.entity.User;
 import com.example.barrier_free.global.common.Place;
+import com.example.barrier_free.global.common.PlaceFinder;
 import com.example.barrier_free.global.common.PlaceType;
 import com.example.barrier_free.global.exception.CustomException;
 import com.example.barrier_free.global.infra.S3Service;
@@ -35,10 +36,11 @@ public class ReviewService {
 	private final MapRepository mapRepository;
 	private final UserRepository userRepository;
 	private final ReportRepository reportRepository;
+	private final PlaceFinder placeFinder;
 	//1.리뷰 조회 getReviewsByPlace 페이징 받기
 
 	public PlaceReviewPageResponse getReviewsByPlace(Long placeId, PlaceType placeType, Pageable pageable) {
-		Place place = findPlace(placeId, placeType);
+		Place place = placeFinder.findPlace(placeId, placeType);
 		Page<Review> reviews = getReviewsFromPlace(place, pageable);
 		return PlaceReviewPageResponse.from(reviews, s3Service);
 	}
@@ -60,7 +62,7 @@ public class ReviewService {
 			.rating(dto.getRating())
 			.build();
 
-		Place place = findPlace(placeId, placeType);
+		Place place = placeFinder.findPlace(placeId, placeType);
 		place.attachTo(review);
 		List<String> uploadedKeys = new ArrayList<>();
 
@@ -95,16 +97,6 @@ public class ReviewService {
 		});
 
 		reviewRepository.delete(review);
-	}
-
-	private Place findPlace(Long placeId, PlaceType placeType) {
-		if (placeType == PlaceType.report) {
-			return reportRepository.findById(placeId)
-				.orElseThrow(() -> new CustomException(ErrorCode.PLACE_NOT_FOUND));
-		} else {
-			return mapRepository.findById(placeId)
-				.orElseThrow(() -> new CustomException(ErrorCode.PLACE_NOT_FOUND));
-		}
 	}
 
 	private Page<Review> getReviewsFromPlace(Place place, Pageable pageable) {

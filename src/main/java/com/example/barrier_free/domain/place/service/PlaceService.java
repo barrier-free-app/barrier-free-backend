@@ -11,14 +11,23 @@ import com.example.barrier_free.domain.facility.entity.Facility;
 import com.example.barrier_free.domain.facility.repository.FacilityRepository;
 import com.example.barrier_free.domain.facility.repository.mapFacility.MapFacilityRepository;
 import com.example.barrier_free.domain.facility.repository.reportFacility.ReportFacilityRepository;
+import com.example.barrier_free.domain.favorite.repository.FavoriteRepository;
+import com.example.barrier_free.domain.place.converter.PlaceConverter;
+import com.example.barrier_free.domain.place.dto.PlaceDetailResponse;
 import com.example.barrier_free.domain.place.dto.PlaceSearchCondition;
 import com.example.barrier_free.domain.place.dto.PlaceSearchResponse;
 import com.example.barrier_free.domain.place.dto.PlaceSearchResponseConverter;
 import com.example.barrier_free.domain.place.dto.PlaceSearchResponsePage;
+import com.example.barrier_free.domain.place.dto.PlaceSummaryResponse;
 import com.example.barrier_free.domain.place.entity.PlaceView;
 import com.example.barrier_free.domain.place.repository.PlaceRepository;
+import com.example.barrier_free.domain.user.UserRepository;
+import com.example.barrier_free.domain.user.entity.User;
+import com.example.barrier_free.global.common.Place;
+import com.example.barrier_free.global.common.PlaceFinder;
 import com.example.barrier_free.global.common.PlaceType;
 import com.example.barrier_free.global.exception.CustomException;
+import com.example.barrier_free.global.jwt.JwtUserUtils;
 import com.example.barrier_free.global.response.ErrorCode;
 
 import lombok.RequiredArgsConstructor;
@@ -31,6 +40,9 @@ public class PlaceService {
 	private final MapFacilityRepository mapFacilityRepository;
 	private final ReportFacilityRepository reportFacilityRepository;
 	private final FacilityRepository facilityRepository;
+	private final PlaceFinder placeFinder;
+	private final FavoriteRepository favoriteRepository;
+	private final UserRepository userRepository;
 
 	public PlaceSearchResponsePage searchPlace(PlaceSearchCondition condition, Pageable pageable) {
 
@@ -39,7 +51,6 @@ public class PlaceService {
 
 		validateFacilityIds(facilityIds);
 
-		//키워드랑 편의시설, 페이징 =>place View 로
 		Page<PlaceView> placeViewPage = placeRepository.searchPlacesByKeywordAndFacilities(keyword, facilityIds,
 			pageable);
 		List<PlaceView> placeViews = placeViewPage.getContent();
@@ -47,7 +58,6 @@ public class PlaceService {
 		List<Long> mapIds = extractIdsByPlaceType(placeViews, PlaceType.map);
 		List<Long> reportIds = extractIdsByPlaceType(placeViews, PlaceType.report);
 
-		//해당하는 거 편의시설 찾기
 		Map<Long, List<Integer>> mapFacilities = mapFacilityRepository.findFacilitiesByMapIds(mapIds);
 		Map<Long, List<Integer>> reportFacilities = reportFacilityRepository.findFacilitiesByReportIds(reportIds);
 
@@ -73,6 +83,38 @@ public class PlaceService {
 		if (facilities.size() != facilityIds.size()) {
 			throw new CustomException(ErrorCode.NOT_FOUND_FACILITY);
 		}
+	}
+
+	public PlaceSummaryResponse getSummary(Long placeId, PlaceType placeType) {
+		Place place = placeFinder.findPlace(placeId, placeType);
+		Long currentUserId = JwtUserUtils.getCurrentUserId();
+		User user = userRepository.findById(currentUserId)
+			.orElseThrow(() -> new CustomException(ErrorCode.USER_NOT_FOUND));
+
+		boolean favoriteStatus = isFavorite(user.getId(), placeId, placeType);
+		return PlaceConverter.toPlaceSummaryResponse(place, favoriteStatus);
+
+	}
+
+	public PlaceDetailResponse getDetail(Long placeId, PlaceType placeType) {
+		Place place = placeFinder.findPlace(placeId, placeType);
+		Long currentUserId = JwtUserUtils.getCurrentUserId();
+		User user = userRepository.findById(currentUserId)
+			.orElseThrow(() -> new CustomException(ErrorCode.USER_NOT_FOUND));
+
+		boolean favoriteStatus = isFavorite(user.getId(), placeId, placeType);
+
+		return PlaceConverter.toPlaceDetailResponse(place, favoriteStatus);
+
+	}
+
+	private boolean isFavorite(Long userId, Long placeId, PlaceType placeType) {
+		if (placeType == PlaceType.map) {
+			return favoriteRepository.existsByUserIdAndMapId(userId, placeId);
+		} else {
+			return favoriteRepository.existsByUserIdAndReportId(userId, placeId);
+		}
+
 	}
 
 }
