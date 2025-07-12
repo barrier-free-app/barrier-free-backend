@@ -1,10 +1,15 @@
 package com.example.barrier_free.domain.user.controller;
 
+import java.util.Map;
+
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.example.barrier_free.domain.user.dto.UpdateNicknameRequest;
 import com.example.barrier_free.domain.user.dto.UpdateUserFacilitiesRequest;
 import com.example.barrier_free.domain.user.service.UserService;
 import com.example.barrier_free.global.response.ApiResponse;
@@ -21,7 +26,19 @@ public class UserController {
 	@PutMapping("/facilities")
 	public ApiResponse<?> updateUserFacilities(@RequestBody UpdateUserFacilitiesRequest request) {
 		userService.updateUserFacilities(request.getFacilityIds());
-		return ApiResponse.success(SuccessCode.OK, "update success");
+		return ApiResponse.success(SuccessCode.OK, "Facilities updated");
+	}
+
+	@PutMapping("/nickname")
+	public ApiResponse<?> updateNickname(@RequestBody UpdateNicknameRequest request) {
+		userService.updateUserNickname(request.getNickname());
+		return ApiResponse.success(SuccessCode.OK, "Nickname updated");
+	}
+
+	@GetMapping("/check-nickname")
+	public ApiResponse<?> checkNicknameDuplicate(@RequestParam String nickname) {
+		Map<String, Boolean> result = userService.checkNicknameDuplicate(nickname);
+		return ApiResponse.success(SuccessCode.OK, result);
 	}
 
 }
