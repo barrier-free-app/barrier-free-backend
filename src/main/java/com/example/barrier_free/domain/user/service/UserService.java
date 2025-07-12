@@ -1,6 +1,9 @@
 package com.example.barrier_free.domain.user.service;
 
+import java.time.LocalDateTime;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.stream.Collectors;
 
 import org.springframework.stereotype.Service;
@@ -47,6 +50,34 @@ public class UserService {
 
 	}
 
+	public Map<String, Boolean> checkNicknameDuplicate(String nickname) {
+		Map<String, Boolean> result = new HashMap<>();
+		result.put("available", !userRepository.existsByNickname(nickname));
+		return result;
+	}
+
+	@Transactional
+	public void updateUserNickname(String nickname) {
+		Long userId = JwtUserUtils.getCurrentUserId();
+		User user = userRepository.findById(userId)
+			.orElseThrow(() -> new CustomException(ErrorCode.USER_NOT_FOUND));
+
+		if (!isNicknameChangeAllowed(user)) {
+			throw new CustomException(ErrorCode.NICKNAME_UPDATE_NOT_ALLOWED);
+		}
+
+		user.updateNickname(nickname);
+
+	}
+
+	private boolean isNicknameChangeAllowed(User user) {
+		LocalDateTime updatedAt = user.getNicknameUpdatedAt();
+		if (updatedAt == null) {
+			return true;
+		}
+		return updatedAt.plusMonths(1).isBefore(LocalDateTime.now());
+	}
+
 	// 내정보 테스트
 	// TODO: 삭제
 	public UserResponse getUser(Long userId) {
@@ -55,4 +86,5 @@ public class UserService {
 			.orElseThrow(() -> new CustomException(ErrorCode.USER_NOT_FOUND));
 		return UserConverter.toUserResponse(user);
 	}
+
 }
