@@ -11,6 +11,8 @@ public interface Place {
 
 	String getName();         // 장소 이름
 
+	String getAddress();
+
 	String getDescription();  // 장소 부연설명
 
 	PlaceType getPlaceType(); //타입
