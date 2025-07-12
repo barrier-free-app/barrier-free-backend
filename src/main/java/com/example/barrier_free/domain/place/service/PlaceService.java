@@ -51,7 +51,6 @@ public class PlaceService {
 
 		validateFacilityIds(facilityIds);
 
-		//키워드랑 편의시설, 페이징 =>place View 로
 		Page<PlaceView> placeViewPage = placeRepository.searchPlacesByKeywordAndFacilities(keyword, facilityIds,
 			pageable);
 		List<PlaceView> placeViews = placeViewPage.getContent();
@@ -59,7 +58,6 @@ public class PlaceService {
 		List<Long> mapIds = extractIdsByPlaceType(placeViews, PlaceType.map);
 		List<Long> reportIds = extractIdsByPlaceType(placeViews, PlaceType.report);
 
-		//해당하는 거 편의시설 찾기
 		Map<Long, List<Integer>> mapFacilities = mapFacilityRepository.findFacilitiesByMapIds(mapIds);
 		Map<Long, List<Integer>> reportFacilities = reportFacilityRepository.findFacilitiesByReportIds(reportIds);
 
@@ -86,6 +84,7 @@ public class PlaceService {
 			throw new CustomException(ErrorCode.NOT_FOUND_FACILITY);
 		}
 	}
+
 	public PlaceSummaryResponse getSummary(Long placeId, PlaceType placeType) {
 		Place place = placeFinder.findPlace(placeId, placeType);
 		Long currentUserId = JwtUserUtils.getCurrentUserId();
