@@ -5,8 +5,6 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.example.barrier_free.domain.place.dto.PlaceDetailResponse;
-import com.example.barrier_free.domain.place.dto.PlaceSummaryResponse;
 import com.example.barrier_free.domain.place.service.PlaceService;
 import com.example.barrier_free.global.common.PlaceType;
 import com.example.barrier_free.global.response.ApiResponse;
@@ -19,6 +17,12 @@ import lombok.RequiredArgsConstructor;
 public class PlaceController {
 	private final PlaceService placeService;
 
+	@GetMapping(value = "/places/search")
+	public ApiResponse<?> searchPlace(
+		PlaceSearchCondition condition,
+		@PageableDefault(size = 10, sort = "createdAt", direction = Sort.Direction.DESC) Pageable pageable) {
+		PlaceSearchResponsePage placeSearchResponsePage = placeService.searchPlace(condition, pageable);
+		return ApiResponse.success(SuccessCode.OK, placeSearchResponsePage);
 	@GetMapping("/places/{placeId}/summary")
 	public ApiResponse<?> getSummaryOfPlace(@PathVariable Long placeId,
 		@RequestParam(required = true) PlaceType placeType
