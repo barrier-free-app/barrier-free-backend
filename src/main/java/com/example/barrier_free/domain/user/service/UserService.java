@@ -1,9 +1,7 @@
 package com.example.barrier_free.domain.user.service;
 
 import java.time.LocalDateTime;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 import java.util.stream.Collectors;
 
 import org.springframework.stereotype.Service;
@@ -14,8 +12,10 @@ import com.example.barrier_free.domain.facility.entity.UserFacility;
 import com.example.barrier_free.domain.facility.repository.FacilityRepository;
 import com.example.barrier_free.domain.user.UserRepository;
 import com.example.barrier_free.domain.user.converter.UserConverter;
+import com.example.barrier_free.domain.user.dto.NicknameCheckResponse;
 import com.example.barrier_free.domain.user.dto.UserResponse;
 import com.example.barrier_free.domain.user.entity.User;
+import com.example.barrier_free.domain.user.enums.UserType;
 import com.example.barrier_free.global.exception.CustomException;
 import com.example.barrier_free.global.jwt.JwtUserUtils;
 import com.example.barrier_free.global.response.ErrorCode;
@@ -50,10 +50,9 @@ public class UserService {
 
 	}
 
-	public Map<String, Boolean> checkNicknameDuplicate(String nickname) {
-		Map<String, Boolean> result = new HashMap<>();
-		result.put("available", !userRepository.existsByNickname(nickname));
-		return result;
+	public NicknameCheckResponse checkNicknameDuplicate(String nickname) {
+		return new NicknameCheckResponse(!userRepository.existsByNickname(nickname));
+
 	}
 
 	@Transactional
@@ -68,6 +67,15 @@ public class UserService {
 
 		user.updateNickname(nickname);
 
+	}
+
+	@Transactional
+	public void updateUserType(UserType userType) {
+		Long userId = JwtUserUtils.getCurrentUserId();
+		User user = userRepository.findById(userId)
+			.orElseThrow(() -> new CustomException(ErrorCode.USER_NOT_FOUND));
+
+		user.updateUserType(userType);
 	}
 
 	private boolean isNicknameChangeAllowed(User user) {

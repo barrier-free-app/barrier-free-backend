@@ -102,4 +102,8 @@ public class User extends BaseEntity {
 		this.nickname = nickname;
 		this.nicknameUpdatedAt = LocalDateTime.now();
 	}
+
+	public void updateUserType(UserType userType) {
+		this.userType = userType;
+	}
 }
