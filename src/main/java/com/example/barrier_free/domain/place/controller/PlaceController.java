@@ -5,6 +5,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.example.barrier_free.domain.place.dto.PlaceDetailResponse;
 import com.example.barrier_free.domain.place.dto.PlaceSummaryResponse;
 import com.example.barrier_free.domain.place.service.PlaceService;
 import com.example.barrier_free.global.common.PlaceType;
@@ -24,6 +25,14 @@ public class PlaceController {
 	) {
 		PlaceSummaryResponse placeSummaryResponse = placeService.getSummary(placeId, placeType);
 		return ApiResponse.success(SuccessCode.OK, placeSummaryResponse);
+	}
+
+	@GetMapping("/places/{placeId}/detail")
+	public ApiResponse<?> getDetailOfPlace(@PathVariable Long placeId,
+		@RequestParam(required = true) PlaceType placeType
+	) {
+		PlaceDetailResponse placeDetailResponse = placeService.getDetail(placeId, placeType);
+		return ApiResponse.success(SuccessCode.OK, placeDetailResponse);
 	}
 
 }
