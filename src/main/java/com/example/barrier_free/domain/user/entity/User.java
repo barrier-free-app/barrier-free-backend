@@ -4,7 +4,6 @@ import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
-import lombok.*;
 import org.springframework.data.annotation.CreatedDate;
 
 import com.example.barrier_free.domain.facility.entity.UserFacility;
@@ -26,6 +25,8 @@ import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.OneToMany;
 import jakarta.validation.constraints.Email;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
 
 @Entity
 @Getter
@@ -83,5 +84,17 @@ public class User extends BaseEntity {
 	public void setTokens(String accessToken, String refreshToken) {
 		this.accessToken = accessToken;
 		this.refreshToken = refreshToken;
+	}
+
+	public void addUserFacility(UserFacility uf) {
+		this.userFacilities.add(uf);
+		uf.setUser(this);
+	}
+
+	public void updateUserFacilities(List<UserFacility> newFacilities) {
+		this.userFacilities.clear();
+		for (UserFacility uf : newFacilities) {
+			addUserFacility(uf);
+		}
 	}
 }
