@@ -15,6 +15,8 @@ public interface Place {
 
 	String getDescription();  // 장소 부연설명
 
+	String getOpeningHours();
+
 	PlaceType getPlaceType(); //타입
 
 	List<Integer> getFacility();     // 편의시설 정보
