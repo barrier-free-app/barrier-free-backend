@@ -4,7 +4,9 @@ import org.springframework.stereotype.Service;
 
 import com.example.barrier_free.domain.favorite.repository.FavoriteRepository;
 import com.example.barrier_free.domain.map.repository.MapRepository;
+import com.example.barrier_free.domain.place.converter.PlaceDetailResponseConverter;
 import com.example.barrier_free.domain.place.converter.PlaceSummaryResponseConverter;
+import com.example.barrier_free.domain.place.dto.PlaceDetailResponse;
 import com.example.barrier_free.domain.place.dto.PlaceSummaryResponse;
 import com.example.barrier_free.domain.place.util.PlaceFinder;
 import com.example.barrier_free.domain.report.repository.ReportRepository;
@@ -35,6 +37,18 @@ public class PlaceService {
 
 		boolean favoriteStatus = isFavorite(user.getId(), placeId, placeType);
 		return PlaceSummaryResponseConverter.from(place, favoriteStatus);
+
+	}
+
+	public PlaceDetailResponse getDetail(Long placeId, PlaceType placeType) {
+		Place place = placeFinder.findPlace(placeId, placeType);
+		Long currentUserId = JwtUserUtils.getCurrentUserId();
+		User user = userRepository.findById(currentUserId)
+			.orElseThrow(() -> new CustomException(ErrorCode.USER_NOT_FOUND));
+
+		boolean favoriteStatus = isFavorite(user.getId(), placeId, placeType);
+
+		return PlaceDetailResponseConverter.from(place, favoriteStatus);
 
 	}
 
