@@ -3,7 +3,7 @@ package com.example.barrier_free.domain.user.service;
 import com.example.barrier_free.domain.user.VerificationCodeRepository;
 import com.example.barrier_free.domain.user.UserRepository;
 import com.example.barrier_free.domain.user.dto.EmailRequest;
-import com.example.barrier_free.domain.user.dto.EmailVeriCodeRequest;
+import com.example.barrier_free.domain.user.dto.EmailCodeRequest;
 import com.example.barrier_free.domain.user.entity.VerificationCode;
 import com.example.barrier_free.domain.user.enums.SocialType;
 import com.example.barrier_free.global.exception.CustomException;
@@ -34,7 +34,7 @@ public class EmailService {
 
         // 일반 로그인 이메일 중복 확인
         if (userRepository.existsByEmailAndSocialType(email, SocialType.GENERAL)) {
-            throw new CustomException(ErrorCode.EMAIL_DUPLICATE);
+            throw new CustomException(ErrorCode.EMAIL_ALREADY_EXISTED);
         }
 
         // 4자리 인증코드 생성
@@ -77,11 +77,11 @@ public class EmailService {
 
     // 메일 인증
     @Transactional
-    public String verifyCode(EmailVeriCodeRequest emailVeriCodeRequest) {
+    public String verifyCode(EmailCodeRequest emailCodeRequest) {
 
         // 이메일의 최근 인증번호
         VerificationCode verificationCode =
-                verificationCodeRepository.findTopByEmailOrderByCreatedAtDesc(emailVeriCodeRequest.getEmail())
+                verificationCodeRepository.findTopByEmailOrderByCreatedAtDesc(emailCodeRequest.getEmail())
                         .orElseThrow(() -> new CustomException(ErrorCode.VERIFICATION_CODE_NOT_FOUND));
 
         // 인증 완료된 경우
@@ -89,7 +89,7 @@ public class EmailService {
 
         // 인증 번호 다른 경우
         else if (!verificationCode.getVerificationCode()
-                .equals(emailVeriCodeRequest.getVerificationCode()))
+                .equals(emailCodeRequest.getVerificationCode()))
             throw new CustomException(ErrorCode.VERIFICATION_CODE_MISMATCH);
 
         // 유효 기간 완료된 경우 (5분)
@@ -98,6 +98,6 @@ public class EmailService {
 
         else verificationCode.setVerified();
 
-        return "인증되었습니다. 상태:" + verificationCode.isVerified();
+        return "인증되었습니다. 상태-" + verificationCode.isVerified();
     }
 }

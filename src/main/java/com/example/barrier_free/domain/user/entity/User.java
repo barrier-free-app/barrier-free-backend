@@ -4,6 +4,7 @@ import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
+import com.example.barrier_free.domain.facility.entity.Facility;
 import lombok.*;
 import org.springframework.data.annotation.CreatedDate;
 
@@ -44,10 +45,8 @@ public class User extends BaseEntity {
 
 	private String password;
 
-	@Column(length = 30)
-	private String nickname;
-
-	private String profile;
+	@Column(unique = true, length = 30)
+	private String nickname; // 닉네임, 겹치면 안 됨
 
 	// TODO: 토큰 삭제
 	private String accessToken;
@@ -78,15 +77,55 @@ public class User extends BaseEntity {
 	private List<Vote> votes = new ArrayList<>();
 
 	// 생성자
-	public User(String email, String nickname, String profile, SocialType socialType) {
+	// 일반 로그인
+	public User(String email, String nickname, String username,
+				String password, UserType userType) {
 		this.email = email;
 		this.nickname = nickname;
-		this.profile = profile;
+		this.username = username;
+		this.password = password;
+		this.userType = userType;
+
+		this.incorrectTimes = 0;	// 실패 횟수 초기화
+		this.socialType = SocialType.GENERAL;
+	}
+
+	// 소셜 로그인
+	public User(String email, String nickname, SocialType socialType) {
+		this.email = email;
+		this.nickname = nickname;
 		this.socialType = socialType;
 	}
 
 	public void setTokens(String accessToken, String refreshToken) {
 		this.accessToken = accessToken;
 		this.refreshToken = refreshToken;
+	}
+
+	// 사용자 편의시설 단일 추가 (중복 방지)
+	public void setUserFacility(Facility facility) {
+		boolean alreadyExists = this.userFacilities.stream()
+				.anyMatch(uf -> uf.getFacility().getId().equals(facility.getId()));
+
+		if (!alreadyExists) {
+			UserFacility uf = new UserFacility(this, facility);  // 연관관계 직접 설정
+			this.userFacilities.add(uf);
+		}
+	}
+
+	// 여러 사용자 편의시설 한번에 추가 (중복 방지 포함)
+	public void setUserFacilities(List<Facility> facilities) {
+		this.userFacilities.clear();
+		facilities.forEach(this::setUserFacility);
+	}
+
+	// 비밀번호 틀린 횟수
+	public void setIncorrectTimes() {
+		this.incorrectTimes++;
+	}
+
+	// 비밀번호 실패 횟수 초기화
+	public void resetIncorrectTimes() {
+		this.incorrectTimes = 0;
 	}
 }

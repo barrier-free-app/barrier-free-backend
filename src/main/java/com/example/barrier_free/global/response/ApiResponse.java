@@ -30,4 +30,8 @@ public record ApiResponse<T>(
 	public static <T> ApiResponse<T> fail(ErrorCode code) {
 		return new ApiResponse<>(false, code.getHttpStatus(), code.getCode(), code.getMessage(), null);
 	}
+
+	public static <T> ApiResponse<T> fail(HttpStatus httpStatus, String code, String message, T data) {
+		return new ApiResponse<>(false, httpStatus, code, message, data);
+	}
 }

@@ -25,13 +25,25 @@ public enum ErrorCode {
 	LOGIN_FAILED(HttpStatus.UNAUTHORIZED, "USER4011", "로그인 정보가 잘못되었습니다."),
 
 	// 이메일 관련
-	EMAIL_DUPLICATE(HttpStatus.BAD_REQUEST, "EMAIL4001", "중복된 이메일입니다"),
+	EMAIL_ALREADY_EXISTED(HttpStatus.BAD_REQUEST, "EMAIL4001", "해당 계정으로 가입된 이메일이 존재합니다."),
+	EMAIL_UNAUTHORIZED(HttpStatus.BAD_REQUEST, "EMAIL4002", "인증되지 않은 이메일입니다"),
 
 	// 인증코드 관련 에러
 	VERIFICATION_CODE_NOT_FOUND(HttpStatus.NOT_FOUND, "VERIFICATIONCODE4001", "인증코드를 찾을 수 없습니다."),
 	VERIFICATION_CODE_ALREADY_VERIFIED(HttpStatus.BAD_REQUEST, "VERIFICATIONCODE4002", "이미 인증 완료된 인증코드입니다."),
 	VERIFICATION_CODE_MISMATCH(HttpStatus.UNAUTHORIZED, "VERIFICATIONCODE4003", "인증코드가 일치하지 않습니다."),
 	VERIFICATION_CODE_EXPIRED(HttpStatus.UNAUTHORIZED, "VERIFICATIONCODE4004", "인증코드가 만료되었습니다."),
+
+	// 유저 관련 에러
+	USER_TYPE_NOT_FOUND(HttpStatus.NOT_FOUND, "USER4001", "잘못된 유저 타입입니다. (ALL/DISABLED/PREGNANT 중 입력 바랍니다.)"),
+	USER_NICKNAME_DUPLICATE(HttpStatus.BAD_REQUEST, "USER4002", "중복된 닉네임입니다."),
+	USER_USERNAME_DUPLICATE(HttpStatus.BAD_REQUEST, "USER4003", "중복된 아이디입니다."),
+	USER_PASSWORD_MISMATCH(HttpStatus.BAD_REQUEST, "USER4004", "비밀번호가 일치하지 않습니다."),
+	USER_INVALID_LENGTH(HttpStatus.BAD_REQUEST, "USER4005", "유효하지 않은 길이입니다. (6자 이상 16자 이하여야 합니다.)"),
+	USER_INVALID_FORMAT(HttpStatus.BAD_REQUEST, "USER4006", "유효하지 않은 형식입니다. (영문+숫자만 가능합니다)"),
+	USER_INVALID_TYPE(HttpStatus.BAD_REQUEST, "USER4007", "유효하지 않은 검사 타입입니다. (nickname/username 중 입력 바랍니다.)"),
+	USER_INPUT_REQUIRED(HttpStatus.BAD_REQUEST, "USER4008", "값을 입력해주세요."),
+	USER_PASSWORD_TOO_MANY_FAILED(HttpStatus.BAD_REQUEST, "USER4009", "비밀번호 입력 5회 이상 실패. 비밀번호를 재설정해주세요."),
 
 	/* JWT 관련 에러 */
 	// TODO: 이름 바꾸기
@@ -43,7 +55,8 @@ public enum ErrorCode {
 	UNSUPPORTED_JWT(HttpStatus.UNAUTHORIZED, "JWT4004", "지원하지 않는 JWT 토큰입니다."),
 	EMPTY_JWT(HttpStatus.UNAUTHORIZED, "JWT4005", "JWT 클레임이 비어 있습니다."),
 
-	NOT_FOUND_FACILITY(HttpStatus.BAD_REQUEST, "FACILITY400", "존재하지 않는 편의시설입니다."),
+	// 편의시설 관련 에러
+	FACILITY_NOT_FOUND(HttpStatus.BAD_REQUEST, "FACILITY400", "존재하지 않는 편의시설입니다."),
 
 	JWT_INVALID(HttpStatus.UNAUTHORIZED, "JWT4001", "유효하지 않은 JWT 토큰입니다."),
 	JWT_EXPIRED(HttpStatus.UNAUTHORIZED, "JWT4002", "JWT 토큰이 만료되었습니다."),

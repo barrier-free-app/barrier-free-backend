@@ -4,13 +4,12 @@ import com.example.barrier_free.global.response.ErrorCode;
 import org.springframework.http.HttpStatus;
 
 import lombok.Getter;
-import lombok.RequiredArgsConstructor;
 
 @Getter
-@RequiredArgsConstructor
 public class CustomException extends RuntimeException {
 
 	private final ErrorCode errorCode;
+	private final String customMessage;	// 커스텀 메시지
 
 	public ErrorCode getErrorcode() {
 		return errorCode;
@@ -25,6 +24,21 @@ public class CustomException extends RuntimeException {
 	}
 
 	public String getMessage() {
-		return errorCode.getMessage();
+		return customMessage != null ? customMessage : errorCode.getMessage();
+	}
+
+	// 생성자
+	// 기본
+	public CustomException(ErrorCode errorCode) {
+		super(errorCode.getMessage());
+		this.errorCode = errorCode;
+		this.customMessage = null;
+	}
+
+	// 커스텀(동적)
+	public CustomException(ErrorCode errorCode, String customMessage) {
+		super(customMessage);
+		this.errorCode = errorCode;
+		this.customMessage = customMessage;
 	}
 }

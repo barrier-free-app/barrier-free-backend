@@ -1,6 +1,6 @@
 package com.example.barrier_free.domain.user.controller;
 
-import com.example.barrier_free.domain.user.dto.EmailVeriCodeRequest;
+import com.example.barrier_free.domain.user.dto.EmailCodeRequest;
 import com.example.barrier_free.domain.user.dto.EmailRequest;
 import com.example.barrier_free.domain.user.service.EmailService;
 import com.example.barrier_free.global.response.ApiResponse;
@@ -14,12 +14,12 @@ import org.springframework.web.bind.annotation.*;
 @RequestMapping("/auth/email")
 @RequiredArgsConstructor
 @Tag(name = "1. 이메일", description = "이메일 인증코드 관련 API")
-public class AuthController {
+public class EmailController {
 
     private final EmailService emailService;
 
     // 이메일 인증코드 요청
-    @PostMapping("/veri-code/send")
+    @PostMapping("/send")
     @Operation(summary = "이메일 인증코드 발송 API",
             description = """
                     해당 이메일 주소로 4자리 인증코드(숫자+문자)를 발송합니다.
@@ -31,7 +31,7 @@ public class AuthController {
     }
 
     // 이메일 인증코드 확인
-    @PostMapping("/veri-code/verify")
+    @PostMapping("/verify")
     @Operation(summary = "이메일 인증코드 확인 API",
             description = """
                     발송된 이메일 인증코드를 확인합니다. (이메일 인증코드 발송 API 우선)
@@ -39,7 +39,7 @@ public class AuthController {
                     - email: 이메일 주소
                     - verificationCode: 인증코드 4자리
                     """)
-    public ApiResponse<?> verifyEmailVeriCode(@RequestBody EmailVeriCodeRequest emailVeriCodeRequest) {
-        return ApiResponse.success(SuccessCode.OK, emailService.verifyCode(emailVeriCodeRequest));
+    public ApiResponse<?> verifyEmailVeriCode(@RequestBody EmailCodeRequest emailCodeRequest) {
+        return ApiResponse.success(SuccessCode.OK, emailService.verifyCode(emailCodeRequest));
     }
 }

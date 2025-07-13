@@ -6,6 +6,7 @@ import com.example.barrier_free.domain.user.service.KakaoLoginService;
 import com.example.barrier_free.global.response.SuccessCode;
 import com.example.barrier_free.global.response.ApiResponse;
 import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
@@ -16,6 +17,7 @@ import java.io.IOException;
 @RestController
 @RequestMapping("/oauth")
 @RequiredArgsConstructor
+@Tag(name = "3. 소셜로그인", description = "소셜 로그인 관련 API")
 public class OAuthContoller {
 
     @Value("${kakao.client_id}")

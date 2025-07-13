@@ -1,5 +1,6 @@
 package com.example.barrier_free.domain.user.dto;
 
+import com.example.barrier_free.domain.facility.dto.FacilityResponse;
 import com.example.barrier_free.domain.user.enums.SocialType;
 import com.example.barrier_free.domain.user.enums.UserType;
 import lombok.AllArgsConstructor;
@@ -15,8 +16,7 @@ public class UserResponse {
     private Long userId;
     private String email;
     private String nickname;
-    private String profile;
     private UserType userType;
-    private List<Integer> userFacilities;
+    private List<FacilityResponse> userFacilities;
     private SocialType socialType;
 }
