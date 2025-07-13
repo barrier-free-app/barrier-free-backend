@@ -47,8 +47,8 @@ public class AuthController {
                     - type: 확인할 타입 (nickname/username 중 입력)
                     - input: 확인할 값
                     """)
-    public ApiResponse<?> verifyInputDuplicate(@RequestParam String type, @RequestParam String username) {
-        return ApiResponse.success(SuccessCode.OK, authService.verifyInputDuplicate(type, username));
+    public ApiResponse<?> verifyInputDuplicate(@RequestParam String type, @RequestParam String input) {
+        return ApiResponse.success(SuccessCode.OK, authService.verifyInputDuplicate(type, input));
     }
 
     // 일반 로그인
