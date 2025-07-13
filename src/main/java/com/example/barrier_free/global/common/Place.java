@@ -20,4 +20,6 @@ public interface Place {
 	PlaceType getPlaceType(); //타입
 
 	List<Integer> getFacility();     // 편의시설 정보
+
+	int getImageType();
 }
