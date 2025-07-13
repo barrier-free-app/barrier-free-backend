@@ -119,6 +119,11 @@ public class User extends BaseEntity {
 		facilities.forEach(this::setUserFacility);
 	}
 
+	// 비밀번호 설정
+	public void updatePassword(String password) {
+		this.password = password;
+	}
+
 	// 비밀번호 틀린 횟수
 	public void setIncorrectTimes() {
 		this.incorrectTimes++;

@@ -1,5 +1,6 @@
 package com.example.barrier_free.domain.user.controller;
 
+import com.example.barrier_free.domain.user.dto.EmailRequest;
 import com.example.barrier_free.domain.user.dto.LoginRequest;
 import com.example.barrier_free.domain.user.dto.SignupRequest;
 import com.example.barrier_free.domain.user.service.AuthService;
@@ -37,11 +38,11 @@ public class AuthController {
         return ApiResponse.success(SuccessCode.USER_CREATED, authService.signupUser(signupRequest));
     }
 
-    // 회원가입 - 아이디 중복 확인
+    // 회원가입 - 닉네임/아이디 중복 확인
     @GetMapping("/signup/verify")
-    @Operation(summary = "아이디 중복 확인 API",
+    @Operation(summary = "닉네임/아이디 중복 확인 API",
             description = """
-                    회원가입 진행 시 아이디를 중복 확인합니다.
+                    회원가입 진행 시 닉네임/아이디를 중복 확인합니다.
                     
                     
                     - type: 확인할 타입 (nickname/username 중 입력)
@@ -55,14 +56,25 @@ public class AuthController {
     @PostMapping("/login")
     @Operation(summary = "일반 로그인 API",
             description = """
-                    일반 로그인을 진행합니다. \n
+                    일반 로그인을 진행합니다. 
                     
-                    - username: 이메일 또는 아이디 (영문+숫자 6~16자, 테스트 값 - nimuyman@gmail.com/test123)
-                    - password: 비밀번호 (영문+숫자 6~16자, 테스트 값 - a12345)
+                    - username: 이메일 또는 아이디 (영문+숫자 6~16자, 테스트 계정 - nimuyman@gmail.com/test123)
+                    - password: 비밀번호 (영문+숫자 6~16자, 테스트 계정 - a12345)
                     """)
-    public ApiResponse<?> signup(@RequestBody LoginRequest loginRequest) {
-        return ApiResponse.success(SuccessCode.OK, authService.loginUser(loginRequest));
+    public ApiResponse<?> login(@RequestBody LoginRequest loginRequest) {
+        return ApiResponse.success(SuccessCode.LOGIN_SUCCESSFUL, authService.loginUser(loginRequest));
     }
 
-
+    @PostMapping("/find")
+    @Operation(summary = "아이디/비밀번호 찾기 API",
+            description = """
+                    해당 이메일 계정의 아이디/비밀번호 찾습니다. \n
+                    비밀번호 찾기 시 임시 비밀번호(영문+숫자 16자)가 발급되며, 발급된 비밀번호로 로그인 진행해야 함
+                    
+                    - type: 찾을 타입 (username/password 중 입력)
+                    - email: 일반 로그인 계정의 이메일 주소
+                    """)
+    public ApiResponse<?> findAccount(@RequestParam String type, @RequestBody EmailRequest emailRequest) {
+        return ApiResponse.success(SuccessCode.OK, authService.findAccount(type, emailRequest));
+    }
 }

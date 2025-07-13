@@ -2,6 +2,7 @@ package com.example.barrier_free.domain.user.service;
 
 import com.example.barrier_free.domain.user.UserRepository;
 import com.example.barrier_free.domain.user.converter.UserConverter;
+import com.example.barrier_free.domain.user.dto.PasswordRequest;
 import com.example.barrier_free.domain.user.dto.UserResponse;
 import com.example.barrier_free.domain.user.entity.User;
 import com.example.barrier_free.global.exception.CustomException;

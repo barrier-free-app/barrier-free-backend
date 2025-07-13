@@ -5,10 +5,7 @@ import com.example.barrier_free.domain.facility.repository.FacilityRepository;
 import com.example.barrier_free.domain.user.UserRepository;
 import com.example.barrier_free.domain.user.VerificationCodeRepository;
 import com.example.barrier_free.domain.user.converter.UserConverter;
-import com.example.barrier_free.domain.user.dto.LoginRequest;
-import com.example.barrier_free.domain.user.dto.LoginResponse;
-import com.example.barrier_free.domain.user.dto.SignupRequest;
-import com.example.barrier_free.domain.user.dto.UserResponse;
+import com.example.barrier_free.domain.user.dto.*;
 import com.example.barrier_free.domain.user.entity.User;
 import com.example.barrier_free.domain.user.entity.VerificationCode;
 import com.example.barrier_free.domain.user.enums.SocialType;
@@ -17,10 +14,13 @@ import com.example.barrier_free.global.exception.CustomException;
 import com.example.barrier_free.global.jwt.JwtManager;
 import com.example.barrier_free.global.response.ErrorCode;
 import lombok.RequiredArgsConstructor;
+import org.springframework.mail.SimpleMailMessage;
+import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.security.SecureRandom;
 import java.util.List;
 import java.util.regex.Pattern;
 import java.util.stream.Collectors;
@@ -34,6 +34,7 @@ public class AuthService {
     private final UserRepository userRepository;
     private final PasswordEncoder passwordEncoder;
     private final JwtManager jwtManager;
+    private final JavaMailSender mailSender;
 
     // 회원가입
     @Transactional
@@ -164,5 +165,79 @@ public class AuthService {
         // 유저에 토큰 저장
         user.setTokens(accessToken, refreshToken);
         return new LoginResponse(user.getId(), accessToken, refreshToken);
+    }
+
+    @Transactional
+    public String findAccount(String type, EmailRequest emailRequest) {
+
+        String email = emailRequest.getEmail();
+
+        // 유저 존재하는지 확인
+        User user = userRepository.findByEmailAndSocialType(email, SocialType.GENERAL)
+                .orElseThrow(() -> new CustomException(ErrorCode.USER_NOT_FOUND));
+
+        switch (type) {
+            case "username" -> {
+                generateFindMailFormat(email, "아이디", user.getUsername());
+                return "아이디가 이메일로 발송되었습니다.";
+            }
+            case "password" -> {
+                // 16자 임시 비번 생성 및 저장
+                String temp = generatePassword(16);
+                user.updatePassword(passwordEncoder.encode(temp));
+
+                generateFindMailFormat(email, "비밀번호", temp);
+                return "비밀번호가 이메일로 발송되었습니다.";
+            }
+            default -> {
+                String message = "유효하지 않은 찾기 타입입니다. (username/password 중 입력 바랍니다.)";
+                throw new CustomException(ErrorCode.USER_INVALID_TYPE, message); // 다른 타입 입력한 경우
+            }
+        }
+    }
+
+    // 찾기 이메일 전송 형식
+    private void generateFindMailFormat(String email, String type, String input) {
+        SimpleMailMessage message = new SimpleMailMessage();
+        message.setTo(email);
+        message.setSubject("[모두로] " + type + " 찾기 안내");
+        message.setText("회원님의 " + type + "는 다음과 같습니다.\n\n" + input);
+        mailSender.send(message);
+    }
+
+    // 임시 비밀번호
+    private String generatePassword(int length) {
+        StringBuilder code = new StringBuilder();
+        SecureRandom random = new SecureRandom();
+        for (int i = 0; i < length; i++) {
+            int type = random.nextInt(3);
+
+            switch (type) {
+                case 0 -> code.append((char)(random.nextInt(26) + 'a')); // 소문자
+                case 1 -> code.append((char)(random.nextInt(26) + 'A')); // 대문자
+                case 2 -> code.append(random.nextInt(10));               // 숫자 0~9
+            }
+        }
+
+        return code.toString();
+    }
+
+    // 비밀번호 변경
+    @Transactional
+    public String updatePassword(Long userId, PasswordRequest passwordRequest) {
+        User user = userRepository.findById(userId)
+                .orElseThrow(() -> new CustomException(ErrorCode.USER_NOT_FOUND));
+
+        String password = passwordRequest.getPassword();
+
+        // 비밀번호 유효성 검사
+        validateInput(password);
+        if (!password.equals(passwordRequest.getVerifyPassword())) {
+            throw new CustomException(ErrorCode.USER_PASSWORD_MISMATCH);
+        }
+
+        // 새 비밀번호 저장
+        user.updatePassword(passwordEncoder.encode(password));
+        return "비밀번호가 변경되었습니다.";
     }
 }
