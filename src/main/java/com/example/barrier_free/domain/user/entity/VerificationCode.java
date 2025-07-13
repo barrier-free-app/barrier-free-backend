@@ -18,19 +18,19 @@ public class VerificationCode {
     private Long id;
 
     private String email;
-    private String authCode;
+    private String verificationCode;
     private boolean verified;
 
     private LocalDateTime createdAt;
 
-    public VerificationCode(String email, String authCode) {
+    public VerificationCode(String email, String verificationCode) {
         this.email = email;
-        this.authCode = authCode;
+        this.verificationCode = verificationCode;
         this.verified = false;
         this.createdAt = LocalDateTime.now();
     }
 
-    public void markVerified() {
+    public void setVerified() {
         this.verified = true;
     }
 }

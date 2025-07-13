@@ -17,13 +17,18 @@ public class AuthController {
 
     // 이메일 인증코드 요청
     @PostMapping("/veri-code/send")
-    public ApiResponse<?> sendEmailAuthCode(@RequestBody EmailRequest emailRequest) {
+    public ApiResponse<?> sendEmailVeriCode(@RequestBody EmailRequest emailRequest) {
         return ApiResponse.success(SuccessCode.OK, emailService.sendToEmail(emailRequest));
     }
 
     // 이메일 인증코드 확인
     @PostMapping("/veri-code/verify")
-    public ApiResponse<?> verifyEmailAuthCode(@RequestBody EmailVeriCodeRequest emailVeriCodeRequest) {
-        return null;
+    public ApiResponse<?> verifyEmailVeriCode(@RequestBody EmailVeriCodeRequest emailVeriCodeRequest) {
+        return ApiResponse.success(SuccessCode.OK, emailService.verifyCode(emailVeriCodeRequest));
     }
+
+    // 회원가입 진행
+
+    // 로그인 진행
+
 }

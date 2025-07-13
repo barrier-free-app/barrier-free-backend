@@ -25,7 +25,13 @@ public enum ErrorCode {
 	LOGIN_FAILED(HttpStatus.UNAUTHORIZED, "USER4011", "로그인 정보가 잘못되었습니다."),
 
 	// 이메일 관련
-	EMAIL_DUPLICATE(HttpStatus.BAD_REQUEST, "USER4006", "중복된 이메일입니다"),
+	EMAIL_DUPLICATE(HttpStatus.BAD_REQUEST, "EMAIL4001", "중복된 이메일입니다"),
+
+	// 인증코드 관련 에러
+	VERIFICATION_CODE_NOT_FOUND(HttpStatus.NOT_FOUND, "VERIFICATIONCODE4001", "인증코드를 찾을 수 없습니다."),
+	VERIFICATION_CODE_ALREADY_VERIFIED(HttpStatus.BAD_REQUEST, "VERIFICATIONCODE4002", "이미 인증 완료된 인증코드입니다."),
+	VERIFICATION_CODE_MISMATCH(HttpStatus.UNAUTHORIZED, "VERIFICATIONCODE4003", "인증코드가 일치하지 않습니다."),
+	VERIFICATION_CODE_EXPIRED(HttpStatus.UNAUTHORIZED, "VERIFICATIONCODE4004", "인증코드가 만료되었습니다."),
 
 	/* JWT 관련 에러 */
 	// TODO: 이름 바꾸기

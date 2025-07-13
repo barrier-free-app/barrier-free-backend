@@ -1,8 +1,9 @@
 package com.example.barrier_free.domain.user.service;
 
-import com.example.barrier_free.domain.user.EmailAuthRepository;
+import com.example.barrier_free.domain.user.VerificationCodeRepository;
 import com.example.barrier_free.domain.user.UserRepository;
 import com.example.barrier_free.domain.user.dto.EmailRequest;
+import com.example.barrier_free.domain.user.dto.EmailVeriCodeRequest;
 import com.example.barrier_free.domain.user.entity.VerificationCode;
 import com.example.barrier_free.domain.user.enums.SocialType;
 import com.example.barrier_free.global.exception.CustomException;
@@ -11,8 +12,10 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.mail.SimpleMailMessage;
 import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.security.SecureRandom;
+import java.time.LocalDateTime;
 
 
 @Service
@@ -20,10 +23,11 @@ import java.security.SecureRandom;
 public class EmailService {
 
     private final UserRepository userRepository;
-    private final EmailAuthRepository emailAuthRepository;
+    private final VerificationCodeRepository verificationCodeRepository;
     private final JavaMailSender mailSender;
 
     // 메일로 전송
+    @Transactional
     public String sendToEmail(EmailRequest emailRequest) {
 
         String email = emailRequest.getEmail();
@@ -34,12 +38,12 @@ public class EmailService {
         }
 
         // 4자리 인증코드 생성
-        String authCode = generateAuthCode(4);
-        VerificationCode verificationCode = new VerificationCode(email, authCode);
-        emailAuthRepository.save(verificationCode);
+        String code = generateVeriCode(4);
+        VerificationCode verificationCode = new VerificationCode(email, code);
+        verificationCodeRepository.save(verificationCode);
 
         // 메일 전송
-        generateEmailFormat(email, authCode);
+        generateEmailFormat(email, code);
         return "인증코드 메일 전송 완료";
     }
 
@@ -53,7 +57,7 @@ public class EmailService {
     }
 
     // 인증 코드 생성
-    private String generateAuthCode(int length) {
+    private String generateVeriCode(int length) {
 
         StringBuilder code = new StringBuilder();
         SecureRandom random = new SecureRandom();
@@ -69,5 +73,31 @@ public class EmailService {
         }
 
         return code.toString();
+    }
+
+    // 메일 인증
+    @Transactional
+    public String verifyCode(EmailVeriCodeRequest emailVeriCodeRequest) {
+
+        // 이메일의 최근 인증번호
+        VerificationCode verificationCode =
+                verificationCodeRepository.findTopByEmailOrderByCreatedAtDesc(emailVeriCodeRequest.getEmail())
+                        .orElseThrow(() -> new CustomException(ErrorCode.VERIFICATION_CODE_NOT_FOUND));
+
+        // 인증 완료된 경우
+        if (verificationCode.isVerified()) throw new CustomException(ErrorCode.VERIFICATION_CODE_ALREADY_VERIFIED);
+
+        // 인증 번호 다른 경우
+        else if (!verificationCode.getVerificationCode()
+                .equals(emailVeriCodeRequest.getVerificationCode()))
+            throw new CustomException(ErrorCode.VERIFICATION_CODE_MISMATCH);
+
+        // 유효 기간 완료된 경우 (5분)
+        else if (verificationCode.getCreatedAt().isBefore(LocalDateTime.now().minusMinutes(5)))
+            throw new CustomException(ErrorCode.VERIFICATION_CODE_EXPIRED);
+
+        else verificationCode.setVerified();
+
+        return "인증되었습니다. 상태:" + verificationCode.isVerified();
     }
 }

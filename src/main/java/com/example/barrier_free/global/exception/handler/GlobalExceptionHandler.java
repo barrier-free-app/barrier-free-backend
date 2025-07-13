@@ -50,13 +50,6 @@ public class GlobalExceptionHandler {
 		return buildResponse(ErrorCode._BAD_REQUEST);
 	}
 
-	// 커스텀 예외
-	@ExceptionHandler(value = {CustomException.class})
-	public ResponseEntity<ApiResponse<?>> handleCustomException(CustomException e) {
-		log.error("CustomException: {}", e.getMessage());
-		return buildResponse(e.getErrorcode());
-	}
-
 	@ExceptionHandler(value = {HttpRequestMethodNotSupportedException.class})
 	public ResponseEntity<ApiResponse<?>> handleHttpRequestMethodNotSupported(
 		HttpRequestMethodNotSupportedException e) {
@@ -74,9 +67,16 @@ public class GlobalExceptionHandler {
 		return buildResponse(ErrorCode._INTERNAL_SERVER_ERROR);
 	}
 
+	// 커스텀 예외
+	@ExceptionHandler(value = {CustomException.class})
+	public ResponseEntity<ApiResponse<?>> handleCustomException(CustomException e) {
+		log.error("CustomException: {}", e.getMessage());
+		return buildResponse(e.getErrorcode());
+	}
+
 	private ResponseEntity<ApiResponse<?>> buildResponse(ErrorCode errorCode) {
 		return ResponseEntity
-			.status(errorCode.getHttpStatus())
-			.body(ApiResponse.fail(errorCode));
+				.status(errorCode.getHttpStatus())
+				.body(ApiResponse.fail(errorCode));
 	}
 }

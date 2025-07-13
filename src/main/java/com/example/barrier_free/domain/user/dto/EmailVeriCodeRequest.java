@@ -1,6 +1,11 @@
 package com.example.barrier_free.domain.user.dto;
 
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+
+@Getter
+@NoArgsConstructor
 public class EmailVeriCodeRequest {
     private String email;
-    private String authCode;
+    private String verificationCode;
 }
