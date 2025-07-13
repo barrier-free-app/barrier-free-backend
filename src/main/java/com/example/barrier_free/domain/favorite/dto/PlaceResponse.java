@@ -19,6 +19,7 @@ public class PlaceResponse {
 	private String name;
 	private String description;
 	private List<Integer> facility;
+	private int imageType;
 
 	public static PlaceResponse fromPlace(Place place) {
 		return new PlaceResponse(
@@ -26,7 +27,8 @@ public class PlaceResponse {
 			place.getPlaceType(),
 			place.getName(),
 			place.getDescription(),
-			place.getFacility()
+			place.getFacility(),
+			place.getImageType()
 		);
 	}
 
@@ -37,7 +39,8 @@ public class PlaceResponse {
 				PlaceType.map,
 				weeklyRank.getMap().getName(),
 				weeklyRank.getMap().getDescription(),
-				weeklyRank.getMap().getFacility()
+				weeklyRank.getMap().getFacility(),
+				weeklyRank.getMap().getImageType()
 			);
 		} else if (weeklyRank.getReport() != null) {
 			return new PlaceResponse(
@@ -45,7 +48,8 @@ public class PlaceResponse {
 				PlaceType.report,
 				weeklyRank.getReport().getName(),
 				weeklyRank.getReport().getDescription(),
-				weeklyRank.getReport().getFacility()
+				weeklyRank.getReport().getFacility(),
+				weeklyRank.getReport().getImageType()
 			);
 		} else {
 			throw new CustomException(ErrorCode.INVALID_WEEKLY_RANK);

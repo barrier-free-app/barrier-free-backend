@@ -10,11 +10,11 @@ import lombok.Getter;
 @AllArgsConstructor
 @Getter
 public class PlaceSearchResponse {
-	Long placeId;
-	PlaceType placeType;
-	List<Integer> facilities;
-	String address;
-	String name;
-	// int imageType;
+	private Long placeId;
+	private PlaceType placeType;
+	private List<Integer> facilities;
+	private String address;
+	private String name;
+	private int imageType;
 
 }

@@ -3,6 +3,8 @@ package com.example.barrier_free.domain.review.dto;
 import java.util.List;
 import java.util.Optional;
 
+import com.example.barrier_free.domain.map.entity.Map;
+import com.example.barrier_free.domain.report.entity.Report;
 import com.example.barrier_free.domain.review.entity.Review;
 import com.example.barrier_free.global.common.PlaceType;
 import com.example.barrier_free.global.exception.CustomException;
@@ -19,7 +21,7 @@ public class UserReviewResponse {
 	private Long placeId;
 	private String placeName;
 	private PlaceType placeType; //
-	// private Category category; // 나중에 사용 가능
+	private int imageType;
 	private String content;
 	private float rating;
 	private List<String> reviewImageUrls;
@@ -33,19 +35,23 @@ public class UserReviewResponse {
 			.toList();
 
 		if (review.getMap() != null) {
+			Map currentMap = review.getMap();
 			return new UserReviewResponse(
-				review.getMap().getId(),
-				review.getMap().getName(),
+				currentMap.getId(),
+				currentMap.getName(),
 				PlaceType.map,
+				currentMap.getImageType(),
 				review.getContent(),
 				review.getRating(),
 				reviewImageUrls
 			);
 		} else if (review.getReport() != null) {
+			Report currentReport = review.getReport();
 			return new UserReviewResponse(
-				review.getReport().getId(),
-				review.getReport().getName(),
+				currentReport.getId(),
+				currentReport.getName(),
 				PlaceType.report,
+				currentReport.getImageType(),
 				review.getContent(),
 				review.getRating(),
 				reviewImageUrls
