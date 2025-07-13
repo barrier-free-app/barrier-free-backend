@@ -19,7 +19,7 @@ public enum ErrorCode {
 	_TOO_MANY_REQUESTS(HttpStatus.TOO_MANY_REQUESTS, "COMMON429", "너무 많은 요청입니다. 잠시 후 다시 시도해주세요."),
 
 	/*에러 추가 가능*/
-	USER_NOT_FOUND(HttpStatus.BAD_REQUEST, "USER4001", "존재하지 않는 사용자 ID입니다."),
+	USER_NOT_FOUND(HttpStatus.BAD_REQUEST, "USER4001", "존재하지 않는 사용자 계정입니다."),
 	USER_NOT_AUTHORIZED(HttpStatus.UNAUTHORIZED, "USER4002", "사용자 인증이 필요합니다."),
 	NOT_FOUND_AUTHORIZATION(HttpStatus.UNAUTHORIZED, "USER4003", "Authorization 오류가 있습니다."),
 	LOGIN_FAILED(HttpStatus.UNAUTHORIZED, "USER4011", "로그인 정보가 잘못되었습니다."),
