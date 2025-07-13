@@ -1,5 +1,6 @@
 package com.example.barrier_free.domain.user.controller;
 
+import com.example.barrier_free.domain.user.dto.DeleteReasonRequest;
 import com.example.barrier_free.domain.user.dto.PasswordRequest;
 import com.example.barrier_free.domain.user.service.AuthService;
 import com.example.barrier_free.domain.user.service.UserService;
@@ -27,8 +28,15 @@ public class UserController {
 
     // 비밀번호 변경
     @PatchMapping("/my-password")
-    public ApiResponse<?> updateMyPassword(@RequestBody PasswordRequest passwordRequest ) {
+    public ApiResponse<?> updateMyPassword(@RequestBody PasswordRequest passwordRequest) {
         Long userId = JwtUserUtils.getCurrentUserId();
         return ApiResponse.success(SuccessCode.OK, authService.updatePassword(userId, passwordRequest));
+    }
+
+    // 계정 삭제
+    @DeleteMapping("/delete")
+    public ApiResponse<?> deleteUser(@RequestBody DeleteReasonRequest deleteReasonRequest) {
+        Long userId = JwtUserUtils.getCurrentUserId();
+        return ApiResponse.success(SuccessCode.OK, userService.deleteUser(userId, deleteReasonRequest));
     }
 }
