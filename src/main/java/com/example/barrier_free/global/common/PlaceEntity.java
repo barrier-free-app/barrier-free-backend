@@ -15,6 +15,10 @@ public abstract class PlaceEntity extends BaseEntity {
 	private String name;
 	private String address;
 	private String contact;
+	private int imageType;
+	@Column(columnDefinition = "TEXT")
+	private String description;
+	
 	@Column(name = "opening_hours")
 	private String openingHours;
 
