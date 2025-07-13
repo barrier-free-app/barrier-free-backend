@@ -55,11 +55,10 @@ public class AuthController {
     @PostMapping("/login")
     @Operation(summary = "일반 로그인 API",
             description = """
-                    일반 로그인을 진행합니다.
-                    테스트 계정: nimuyman@gmail.com/test123 - a12345
+                    일반 로그인을 진행합니다. \n
                     
-                    - username: 이메일 또는 아이디 (영문+숫자 6~16자)
-                    - password: 비밀번호 (영문+숫자 6~16자)
+                    - username: 이메일 또는 아이디 (영문+숫자 6~16자, 테스트 값 - nimuyman@gmail.com/test123)
+                    - password: 비밀번호 (영문+숫자 6~16자, 테스트 값 - a12345)
                     """)
     public ApiResponse<?> signup(@RequestBody LoginRequest loginRequest) {
         return ApiResponse.success(SuccessCode.OK, authService.loginUser(loginRequest));
