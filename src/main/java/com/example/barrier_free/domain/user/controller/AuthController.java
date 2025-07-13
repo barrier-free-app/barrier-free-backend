@@ -16,8 +16,8 @@ public class AuthController {
     private final EmailService emailService;
 
     // 이메일 인증코드 요청
-    @PostMapping("/veri-code/create")
-    public ApiResponse<?> createEmailAuthCode(@RequestBody EmailRequest emailRequest) {
+    @PostMapping("/veri-code/send")
+    public ApiResponse<?> sendEmailAuthCode(@RequestBody EmailRequest emailRequest) {
         return ApiResponse.success(SuccessCode.OK, emailService.sendToEmail(emailRequest));
     }
 
