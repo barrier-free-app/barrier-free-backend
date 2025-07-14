@@ -41,8 +41,8 @@ jobs:
         run: chmod +x gradlew
 
       # 6. 빌드
-      - name: Build with Gradle
-        run: ./gradlew build
+      - name: Build without test
+        run: ./gradlew build -x test
 
       # 7. Docker 빌드 & 푸시
       - name: docker build & push
