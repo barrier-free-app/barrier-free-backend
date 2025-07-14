@@ -47,8 +47,8 @@ jobs:
       - name: docker build & push
         run: |
           docker login -u ${{ secrets.DOCKER_USERNAME }} -p ${{ secrets.DOCKER_PASSWORD }}
-          docker build -t ${{ secrets.DOCKER_USERNAME }}/imagename .
-          docker push ${{ secrets.DOCKER_USERNAME }}/imagename:latest
+          docker build -t ${{ secrets.DOCKER_USERNAME }}/BFM-DOCKER .
+          docker push ${{ secrets.DOCKER_USERNAME }}/BFM-DOCKER:latest
 
       # 8. EC2에 배포
       - name: Deploy to prod
@@ -60,6 +60,6 @@ jobs:
           port: 22
           script: |
             docker rm -f $(docker ps -qa)
-            docker pull ${{ secrets.DOCKER_USERNAME }}/imagename
+            docker pull ${{ secrets.DOCKER_USERNAME }}/BFM-DOCKER
             docker-compose up -d
             docker image prune -f
