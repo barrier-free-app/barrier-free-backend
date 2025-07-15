@@ -1,10 +1,12 @@
 package com.example.barrier_free.domain.user.controller;
 
+import com.example.barrier_free.domain.user.dto.KakaoAuthCodeRequest;
 import com.example.barrier_free.domain.user.dto.LoginResponse;
 import com.example.barrier_free.domain.user.service.KakaoLoginService;
 import com.example.barrier_free.global.response.SuccessCode;
 import com.example.barrier_free.global.response.ApiResponse;
 import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
@@ -15,6 +17,7 @@ import java.io.IOException;
 @RestController
 @RequestMapping("/oauth")
 @RequiredArgsConstructor
+@Tag(name = "3. 소셜로그인", description = "소셜 로그인 관련 API")
 public class OAuthContoller {
 
     @Value("${kakao.client_id}")
@@ -53,8 +56,8 @@ public class OAuthContoller {
     @PostMapping("/token")
     @Operation(summary = "인가코드로 JWT 발급",
             description = "앱이 인가코드를 보내면 서버 자체 AccessToken/RefreshToken 발급")
-    public ApiResponse<?> exchangeCodeToToken(@RequestParam String code) {
-        LoginResponse loginResponse = kakaoLoginService.getKakaoAccessToken(code);
+    public ApiResponse<?> exchangeCodeToToken(@RequestBody KakaoAuthCodeRequest kakaoAuthCodeRequest) {
+        LoginResponse loginResponse = kakaoLoginService.getKakaoAccessToken(kakaoAuthCodeRequest);
         return ApiResponse.success(SuccessCode.LOGIN_SUCCESSFUL, loginResponse);
     }
 }

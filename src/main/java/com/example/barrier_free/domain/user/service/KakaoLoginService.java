@@ -1,6 +1,7 @@
 package com.example.barrier_free.domain.user.service;
 
 import com.example.barrier_free.domain.user.UserRepository;
+import com.example.barrier_free.domain.user.dto.KakaoAuthCodeRequest;
 import com.example.barrier_free.domain.user.dto.LoginResponse;
 import com.example.barrier_free.domain.user.entity.User;
 import com.example.barrier_free.domain.user.enums.SocialType;
@@ -28,7 +29,7 @@ public class KakaoLoginService {
     private final JwtManager jwtManager;
 
     // 인가코드로부터 카카오 액세스 토큰 발급
-    public LoginResponse getKakaoAccessToken(String code) {
+    public LoginResponse getKakaoAccessToken(KakaoAuthCodeRequest kakaoAuthCodeRequest) {
 
         // 카카오 로그인 api 이용하므로 WebClient 이용
         JsonNode tokenNode = WebClient.create("https://kauth.kakao.com")
@@ -38,7 +39,7 @@ public class KakaoLoginService {
                 .body(BodyInserters.fromFormData("grant_type", "authorization_code")
                         .with("client_id", client_id)
                         .with("redirect_uri", redirect_uri)
-                        .with("code", code))
+                        .with("code", kakaoAuthCodeRequest.getAuthCode()))
                 .retrieve()
                 .bodyToMono(JsonNode.class)
                 .block();
@@ -51,12 +52,11 @@ public class KakaoLoginService {
 
         String email = userInfoNode.get("kakao_account").get("email").asText();
         String nickname = userInfoNode.get("properties").get("nickname").asText();
-        String profileImage = userInfoNode.get("properties").get("profile_image").asText();
 
         // 우리 db에 유저 없으면 유저 생성
         User user = userRepository.findByEmail(email);
         if (user == null) {
-            user = userRepository.save(new User(email, nickname, profileImage, SocialType.KAKAO));
+            user = userRepository.save(new User(email, nickname, SocialType.KAKAO));
         }
 
         Long userId = user.getId();

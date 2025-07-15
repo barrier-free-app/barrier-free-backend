@@ -33,7 +33,8 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
         String requestURI = request.getRequestURI();
 
         // 인증 제외할 경로는 필터 건너뜀
-        if (requestURI.startsWith("/oauth")
+        if (requestURI.startsWith("/auth")
+                || requestURI.startsWith("/oauth")
                 || requestURI.startsWith("/swagger-ui")
                 || requestURI.startsWith("/v3/api-docs")) {
             filterChain.doFilter(request, response);

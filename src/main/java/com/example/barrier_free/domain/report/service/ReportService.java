@@ -42,7 +42,7 @@ public class ReportService {
 
 		//요청한 편의시설이 진짜 편의시설에 있는지 확인
 		if (facilities.size() != dto.getFacilities().size()) {
-			throw new CustomException(ErrorCode.NOT_FOUND_FACILITY);
+			throw new CustomException(ErrorCode.FACILITY_NOT_FOUND);
 		}
 
 		for (Facility facility : facilities) {
