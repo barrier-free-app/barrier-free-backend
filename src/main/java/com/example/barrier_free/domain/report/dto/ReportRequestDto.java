@@ -6,15 +6,13 @@ import lombok.Data;
 
 @Data
 public class ReportRequestDto {
-	/*추후 토큰 구현되면 토큰에서 유저 뽑아서 쓰면 되므로 이곳은 삭제 됩니다*/
-	private Long userId;
-	/*삭제 예정*/
-
-	private String description;
 	private String name;
 	private String address;
+	private String description;
+	private int imageType;
 	private List<Integer> facilities;
-	private String phone;
-	private String hours;
+	private String thumbnail;
+	private String openingHours;
+	private String contact;
 
 }

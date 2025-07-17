@@ -11,8 +11,10 @@ public class ReportMapper {
 			.name(dto.getName())
 			.address(dto.getAddress())
 			.description(dto.getDescription())
-			.contact(dto.getPhone())
-			.openingHours(dto.getHours())
+			.contact(dto.getContact())
+			.openingHours(dto.getOpeningHours())
+			.thumbnail(dto.getThumbnail())
+			.imageType(dto.getImageType())
 			.user(user)
 			.build();
 	}
