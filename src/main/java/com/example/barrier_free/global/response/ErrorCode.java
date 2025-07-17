@@ -75,7 +75,12 @@ public enum ErrorCode {
 
 	INVALID_REDISKEY(HttpStatus.BAD_REQUEST, "REDIS4001", "유효하지 않은 키 형식입니다."),
 	INVALID_WEEKLY_RANK(HttpStatus.INTERNAL_SERVER_ERROR, "WEEKLY5001", "주간 랭킹에 장소 정보가 없습니다."),
-	INVALID_REVIEW(HttpStatus.BAD_REQUEST, "REVIEW4001", "리뷰에 연결된 장소가 없습니다.");
+	INVALID_REVIEW(HttpStatus.BAD_REQUEST, "REVIEW4001", "리뷰에 연결된 장소가 없습니다."),
+
+	INVALID_ADDRESS(HttpStatus.BAD_REQUEST, "ADDRESS4001", "잘못된 주소 형식입니다."),
+	ADDRESS_NOT_FOUND(HttpStatus.BAD_REQUEST, "ADDRESS4001", "입력한 주소를 찾을 수 없습니다."),
+
+	JSON_PARSE_FAILED(HttpStatus.INTERNAL_SERVER_ERROR, "JSON5001", "JSON 파싱 실패");
 
 	private final HttpStatus httpStatus;
 	private final String code;
