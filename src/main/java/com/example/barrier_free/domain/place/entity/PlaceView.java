@@ -21,9 +21,11 @@ public class PlaceView {
 	private Long id;
 
 	private String name;
+	private String region;
 	private String address;
 	private int imageType;
 
 	@Enumerated(EnumType.STRING)
 	private PlaceType placeType;
+
 }

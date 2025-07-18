@@ -22,4 +22,10 @@ public interface Place {
 	List<Integer> getFacility();     // 편의시설 정보
 
 	int getImageType();
+
+	String getRegion();
+
+	double getLatitude();
+
+	double getLongitude();
 }

@@ -16,9 +16,13 @@ public abstract class PlaceEntity extends BaseEntity {
 	private String address;
 	private String contact;
 	private int imageType;
+	private String region;
+	private double latitude;
+	private double longitude;
+
 	@Column(columnDefinition = "TEXT")
 	private String description;
-	
+
 	@Column(name = "opening_hours")
 	private String openingHours;
 
