@@ -15,7 +15,7 @@ public class PlaceSearchResponseConverter {
 		PlaceType placeType = placeView.getPlaceType();
 		String name = placeView.getName();
 		String region = placeView.getRegion();
-		int imageType = placeView.getImageType();
+		int imageType = placeView.getImageType().getCode();
 
 		List<Integer> facilities;
 		if (placeType == PlaceType.map) {

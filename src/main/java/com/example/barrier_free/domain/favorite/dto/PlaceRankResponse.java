@@ -33,7 +33,7 @@ public class PlaceRankResponse {
 				map.getRegion(),
 				map.getDescription(),
 				map.getFacility(),
-				map.getImageType()
+				map.getImageType().getCode()
 			);
 		} else if (weeklyRank.getReport() != null) {
 			Report report = weeklyRank.getReport();
@@ -44,7 +44,7 @@ public class PlaceRankResponse {
 				report.getRegion(),
 				report.getDescription(),
 				report.getFacility(),
-				report.getImageType()
+				report.getImageType().getCode()
 			);
 		} else {
 			throw new CustomException(ErrorCode.INVALID_WEEKLY_RANK);

@@ -1,6 +1,10 @@
 package com.example.barrier_free.global.common;
 
+import com.example.barrier_free.domain.place.converter.ImageTypeConverter;
+import com.example.barrier_free.domain.place.enums.ImageType;
+
 import jakarta.persistence.Column;
+import jakarta.persistence.Convert;
 import jakarta.persistence.MappedSuperclass;
 import lombok.AccessLevel;
 import lombok.Getter;
@@ -15,7 +19,9 @@ public abstract class PlaceEntity extends BaseEntity {
 	private String name;
 	private String address;
 	private String contact;
-	private int imageType;
+
+	@Convert(converter = ImageTypeConverter.class)
+	private ImageType imageType;
 	private String region;
 	private double latitude;
 	private double longitude;

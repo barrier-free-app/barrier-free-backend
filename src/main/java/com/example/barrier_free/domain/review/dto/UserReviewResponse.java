@@ -4,6 +4,7 @@ import java.util.List;
 import java.util.Optional;
 
 import com.example.barrier_free.domain.map.entity.Map;
+import com.example.barrier_free.domain.place.enums.ImageType;
 import com.example.barrier_free.domain.report.entity.Report;
 import com.example.barrier_free.domain.review.entity.Review;
 import com.example.barrier_free.global.common.PlaceType;
@@ -36,22 +37,27 @@ public class UserReviewResponse {
 
 		if (review.getMap() != null) {
 			Map currentMap = review.getMap();
+			ImageType imageType = currentMap.getImageType();
+
 			return new UserReviewResponse(
 				currentMap.getId(),
 				currentMap.getName(),
 				PlaceType.map,
-				currentMap.getImageType(),
+				imageType != null ? imageType.getCode() : -1,
 				review.getContent(),
 				review.getRating(),
 				reviewImageUrls
 			);
 		} else if (review.getReport() != null) {
+
 			Report currentReport = review.getReport();
+			ImageType imageType = currentReport.getImageType();
+
 			return new UserReviewResponse(
 				currentReport.getId(),
 				currentReport.getName(),
 				PlaceType.report,
-				currentReport.getImageType(),
+				imageType != null ? imageType.getCode() : -1,
 				review.getContent(),
 				review.getRating(),
 				reviewImageUrls

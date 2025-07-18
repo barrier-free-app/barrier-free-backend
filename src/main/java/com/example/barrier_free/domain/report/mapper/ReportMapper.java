@@ -1,5 +1,6 @@
 package com.example.barrier_free.domain.report.mapper;
 
+import com.example.barrier_free.domain.place.enums.ImageType;
 import com.example.barrier_free.domain.report.dto.ReportContext;
 import com.example.barrier_free.domain.report.dto.ReportRequestDto;
 import com.example.barrier_free.domain.report.entity.Report;
@@ -23,7 +24,7 @@ public class ReportMapper {
 			.region(coordinatesAndRegion.region())
 			.latitude(coordinatesAndRegion.latitude())
 			.longitude(coordinatesAndRegion.longitude())
-			.imageType(reportRequest.getImageType())
+			.imageType(ImageType.fromCode(reportRequest.getImageType()))
 			.user(context.user())
 			.build();
 	}

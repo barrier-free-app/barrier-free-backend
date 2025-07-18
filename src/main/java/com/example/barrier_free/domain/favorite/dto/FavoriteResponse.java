@@ -25,7 +25,7 @@ public class FavoriteResponse {
 			place.getName(),
 			place.getDescription(),
 			place.getFacility(),
-			place.getImageType()
+			place.getImageType().getCode()
 		);
 	}
 }

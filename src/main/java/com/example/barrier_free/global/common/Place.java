@@ -2,6 +2,7 @@ package com.example.barrier_free.global.common;
 
 import java.util.List;
 
+import com.example.barrier_free.domain.place.enums.ImageType;
 import com.example.barrier_free.domain.review.entity.Review;
 
 public interface Place {
@@ -21,7 +22,7 @@ public interface Place {
 
 	List<Integer> getFacility();     // 편의시설 정보
 
-	int getImageType();
+	ImageType getImageType();
 
 	String getRegion();
 
