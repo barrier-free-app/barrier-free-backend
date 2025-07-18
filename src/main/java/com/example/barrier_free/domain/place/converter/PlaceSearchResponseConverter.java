@@ -14,7 +14,7 @@ public class PlaceSearchResponseConverter {
 		Long placeId = placeView.getId();
 		PlaceType placeType = placeView.getPlaceType();
 		String name = placeView.getName();
-		String address = placeView.getAddress();
+		String region = placeView.getRegion();
 		int imageType = placeView.getImageType();
 
 		List<Integer> facilities;
@@ -24,7 +24,7 @@ public class PlaceSearchResponseConverter {
 			facilities = reportFacilities.getOrDefault(placeId, List.of());
 		}
 
-		return new PlaceSearchResponse(placeId, placeType, facilities, address, name, imageType);
+		return new PlaceSearchResponse(placeId, placeType, facilities, region, name, imageType);
 
 	}
 }

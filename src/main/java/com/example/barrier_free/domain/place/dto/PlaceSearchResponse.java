@@ -13,7 +13,7 @@ public class PlaceSearchResponse {
 	private Long placeId;
 	private PlaceType placeType;
 	private List<Integer> facilities;
-	private String address;
+	private String region;
 	private String name;
 	private int imageType;
 
