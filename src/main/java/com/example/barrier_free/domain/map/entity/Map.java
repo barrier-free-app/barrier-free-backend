@@ -12,7 +12,6 @@ import com.example.barrier_free.global.common.PlaceEntity;
 import com.example.barrier_free.global.common.PlaceType;
 
 import jakarta.persistence.CascadeType;
-import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
@@ -31,8 +30,6 @@ public class Map extends PlaceEntity implements Place {
 	private float latitude;
 	private float longitude;
 
-	@Column(columnDefinition = "TEXT")
-	private String description;
 	@OneToMany(mappedBy = "map", cascade = CascadeType.ALL, orphanRemoval = true)
 	private List<MapFacility> mapFacilities = new ArrayList<>();
 	@OneToMany(mappedBy = "map", cascade = CascadeType.ALL, orphanRemoval = true)
@@ -50,11 +47,6 @@ public class Map extends PlaceEntity implements Place {
 	@Override
 	public Long getId() {
 		return id;
-	}
-
-	@Override
-	public String getDescription() {
-		return description;
 	}
 
 	@Override

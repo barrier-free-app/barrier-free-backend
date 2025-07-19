@@ -3,7 +3,8 @@ package com.example.barrier_free.domain.favorite.dto;
 import java.util.List;
 
 import com.example.barrier_free.domain.favorite.entity.WeeklyRank;
-import com.example.barrier_free.global.common.Place;
+import com.example.barrier_free.domain.map.entity.Map;
+import com.example.barrier_free.domain.report.entity.Report;
 import com.example.barrier_free.global.common.PlaceType;
 import com.example.barrier_free.global.exception.CustomException;
 import com.example.barrier_free.global.response.ErrorCode;
@@ -13,39 +14,37 @@ import lombok.Getter;
 
 @Getter
 @AllArgsConstructor
-public class PlaceResponse {
+public class PlaceRankResponse {
 	private Long placeId;
 	private PlaceType placeType;
 	private String name;
+	private String region;
 	private String description;
 	private List<Integer> facility;
+	private int imageType;
 
-	public static PlaceResponse fromPlace(Place place) {
-		return new PlaceResponse(
-			place.getId(),
-			place.getPlaceType(),
-			place.getName(),
-			place.getDescription(),
-			place.getFacility()
-		);
-	}
-
-	public static PlaceResponse from(WeeklyRank weeklyRank) {
+	public static PlaceRankResponse from(WeeklyRank weeklyRank) {
 		if (weeklyRank.getMap() != null) {
-			return new PlaceResponse(
-				weeklyRank.getMap().getId(),
+			Map map = weeklyRank.getMap();
+			return new PlaceRankResponse(
+				map.getId(),
 				PlaceType.map,
-				weeklyRank.getMap().getName(),
-				weeklyRank.getMap().getDescription(),
-				weeklyRank.getMap().getFacility()
+				map.getName(),
+				map.getRegion(),
+				map.getDescription(),
+				map.getFacility(),
+				map.getImageType().getCode()
 			);
 		} else if (weeklyRank.getReport() != null) {
-			return new PlaceResponse(
-				weeklyRank.getReport().getId(),
+			Report report = weeklyRank.getReport();
+			return new PlaceRankResponse(
+				report.getId(),
 				PlaceType.report,
-				weeklyRank.getReport().getName(),
-				weeklyRank.getReport().getDescription(),
-				weeklyRank.getReport().getFacility()
+				report.getName(),
+				report.getRegion(),
+				report.getDescription(),
+				report.getFacility(),
+				report.getImageType().getCode()
 			);
 		} else {
 			throw new CustomException(ErrorCode.INVALID_WEEKLY_RANK);

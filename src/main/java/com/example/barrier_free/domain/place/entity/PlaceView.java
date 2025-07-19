@@ -3,6 +3,7 @@ package com.example.barrier_free.domain.place.entity;
 import org.hibernate.annotations.Immutable;
 import org.hibernate.annotations.Subselect;
 
+import com.example.barrier_free.domain.place.enums.ImageType;
 import com.example.barrier_free.global.common.PlaceType;
 
 import jakarta.persistence.Entity;
@@ -21,8 +22,11 @@ public class PlaceView {
 	private Long id;
 
 	private String name;
+	private String region;
 	private String address;
+	private ImageType imageType;
 
 	@Enumerated(EnumType.STRING)
 	private PlaceType placeType;
+
 }

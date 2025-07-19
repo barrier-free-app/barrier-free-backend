@@ -14,7 +14,7 @@ public class PlaceSummaryResponse {
 	private String description;
 	private String address;
 	private List<Integer> facilities;
-	//private int imageType;
 	private PlaceType placeType;
+	private int imageType;
 	private boolean favorite;
 }
