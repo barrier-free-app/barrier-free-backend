@@ -11,7 +11,7 @@ public class ReportRequestDto {
 	private String description;
 	private int imageType;
 	private List<Integer> facilities;
-	private String thumbnail;
+	private String homepage;
 	private String openingHours;
 	private String contact;
 

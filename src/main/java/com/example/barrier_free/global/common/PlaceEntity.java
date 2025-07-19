@@ -31,10 +31,7 @@ public abstract class PlaceEntity extends BaseEntity {
 
 	@Column(name = "opening_hours")
 	private String openingHours;
-
-	@Column(length = 500)
-	private String thumbnail;
-
+	
 	@Column(length = 500)
 	private String homepage;
 
