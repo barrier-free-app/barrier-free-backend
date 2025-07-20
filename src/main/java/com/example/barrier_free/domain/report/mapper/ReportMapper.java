@@ -1,19 +1,31 @@
 package com.example.barrier_free.domain.report.mapper;
 
+import com.example.barrier_free.domain.place.enums.ImageType;
+import com.example.barrier_free.domain.report.dto.ReportContext;
 import com.example.barrier_free.domain.report.dto.ReportRequestDto;
 import com.example.barrier_free.domain.report.entity.Report;
-import com.example.barrier_free.domain.user.entity.User;
+import com.example.barrier_free.global.common.geo.CoordinatesAndRegion;
 
+import lombok.RequiredArgsConstructor;
+
+@RequiredArgsConstructor
 public class ReportMapper {
+	public static Report toEntity(ReportContext context) {
+		ReportRequestDto reportRequest = context.dto();
+		CoordinatesAndRegion coordinatesAndRegion = context.coordinatesAndRegion();
 
-	public static Report toEntity(ReportRequestDto dto, User user) {
 		return Report.builder()
-			.name(dto.getName())
-			.address(dto.getAddress())
-			.description(dto.getDescription())
-			.contact(dto.getPhone())
-			.openingHours(dto.getHours())
-			.user(user)
+			.name(reportRequest.getName())
+			.address(reportRequest.getAddress())
+			.description(reportRequest.getDescription())
+			.contact(reportRequest.getContact())
+			.openingHours(reportRequest.getOpeningHours())
+			.region(coordinatesAndRegion.region())
+			.homepage(reportRequest.getHomepage())
+			.latitude(coordinatesAndRegion.latitude())
+			.longitude(coordinatesAndRegion.longitude())
+			.imageType(ImageType.fromCode(reportRequest.getImageType()))
+			.user(context.user())
 			.build();
 	}
 

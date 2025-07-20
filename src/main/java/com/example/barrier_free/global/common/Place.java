@@ -2,6 +2,7 @@ package com.example.barrier_free.global.common;
 
 import java.util.List;
 
+import com.example.barrier_free.domain.place.enums.ImageType;
 import com.example.barrier_free.domain.review.entity.Review;
 
 public interface Place {
@@ -20,4 +21,20 @@ public interface Place {
 	PlaceType getPlaceType(); //타입
 
 	List<Integer> getFacility();     // 편의시설 정보
+
+	ImageType getImageType();
+
+	String getRegion();
+
+	double getLatitude();
+
+	double getLongitude();
+
+	void increaseReviewStats(double rating);
+
+	void decreaseReviewStats(double deletedRating);
+
+	int getReviewCount();
+
+	double getRatingSum();
 }

@@ -18,7 +18,8 @@ import org.springframework.transaction.annotation.Transactional;
 import com.example.barrier_free.domain.favorite.dto.FavoritePlaceGroup;
 import com.example.barrier_free.domain.favorite.dto.FavoritePlaceGroupResponse;
 import com.example.barrier_free.domain.favorite.dto.FavoriteRequestDto;
-import com.example.barrier_free.domain.favorite.dto.PlaceResponse;
+import com.example.barrier_free.domain.favorite.dto.FavoriteResponse;
+import com.example.barrier_free.domain.favorite.dto.PlaceRankResponse;
 import com.example.barrier_free.domain.favorite.dto.YearWeek;
 import com.example.barrier_free.domain.favorite.entity.Favorite;
 import com.example.barrier_free.domain.favorite.entity.WeeklyRank;
@@ -32,6 +33,7 @@ import com.example.barrier_free.domain.user.UserRepository;
 import com.example.barrier_free.domain.user.entity.User;
 import com.example.barrier_free.global.common.PlaceType;
 import com.example.barrier_free.global.exception.CustomException;
+import com.example.barrier_free.global.jwt.JwtUserUtils;
 import com.example.barrier_free.global.response.ErrorCode;
 
 import lombok.RequiredArgsConstructor;
@@ -47,7 +49,7 @@ public class FavoriteService {
 	private final WeeklyRankRepository weeklyRankRepository;
 
 	@Transactional(readOnly = true)
-	public List<PlaceResponse> getWeeklyTop3() {
+	public List<PlaceRankResponse> getWeeklyTop3() {
 
 		String redisKey = getLastWeekKey();
 		YearWeek yearWeek = extractYearAndWeek(redisKey);
@@ -64,7 +66,7 @@ public class FavoriteService {
 		}
 
 		return rankings.stream()
-			.map(PlaceResponse::from)
+			.map(PlaceRankResponse::from)
 			.collect((Collectors.toList()));
 	}
 
@@ -240,18 +242,19 @@ public class FavoriteService {
 	}
 
 	@Transactional
-	public FavoritePlaceGroupResponse getFavorite(Long userId, List<Integer> facilities) {
+	public FavoritePlaceGroupResponse getFavorite(List<Integer> facilities) {
+		Long userId = JwtUserUtils.getCurrentUserId();
 		User user = userRepository.findById(userId)
 			.orElseThrow(() -> new CustomException(ErrorCode.USER_NOT_FOUND));
 
 		FavoritePlaceGroup favoritePlace = favoriteRepository.findFilteredFavorites(userId, facilities);
 
-		List<PlaceResponse> mapResponses = favoritePlace.getMapFavorites().stream()
-			.map(PlaceResponse::fromPlace)
+		List<FavoriteResponse> mapResponses = favoritePlace.getMapFavorites().stream()
+			.map(FavoriteResponse::fromPlace)
 			.toList();
 
-		List<PlaceResponse> reportResponses = favoritePlace.getReportFavorites().stream()
-			.map(PlaceResponse::fromPlace)
+		List<FavoriteResponse> reportResponses = favoritePlace.getReportFavorites().stream()
+			.map(FavoriteResponse::fromPlace)
 			.toList();
 
 		return new FavoritePlaceGroupResponse(mapResponses, reportResponses);

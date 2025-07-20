@@ -3,7 +3,6 @@ package com.example.barrier_free.domain.favorite.controller;
 import java.util.List;
 
 import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -12,7 +11,7 @@ import org.springframework.web.bind.annotation.RestController;
 import com.example.barrier_free.domain.favorite.FavoriteService;
 import com.example.barrier_free.domain.favorite.dto.FavoritePlaceGroupResponse;
 import com.example.barrier_free.domain.favorite.dto.FavoriteRequestDto;
-import com.example.barrier_free.domain.favorite.dto.PlaceResponse;
+import com.example.barrier_free.domain.favorite.dto.PlaceRankResponse;
 import com.example.barrier_free.global.response.ApiResponse;
 import com.example.barrier_free.global.response.SuccessCode;
 
@@ -48,15 +47,15 @@ public class FavoriteController {
 
 	@GetMapping("/places/populars")
 	public ApiResponse<?> getWeeklyTop3() {
-		List<PlaceResponse> weeklyTop3 = favoriteService.getWeeklyTop3();
+		List<PlaceRankResponse> weeklyTop3 = favoriteService.getWeeklyTop3();
 		return ApiResponse.success(SuccessCode.OK, weeklyTop3);
 	}
 
-	@GetMapping(value = "/users/{userId}/favorites")
-	public ApiResponse<?> getFavorite(@PathVariable Long userId,
+	@GetMapping(value = "/users/favorites")
+	public ApiResponse<?> getFavorite(
 		@RequestParam(required = false) List<Integer> facilities
 	) {
-		FavoritePlaceGroupResponse response = favoriteService.getFavorite(userId, facilities);
+		FavoritePlaceGroupResponse response = favoriteService.getFavorite(facilities);
 		return ApiResponse.success(SuccessCode.OK, response);
 
 	}

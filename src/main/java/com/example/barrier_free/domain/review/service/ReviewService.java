@@ -24,6 +24,7 @@ import com.example.barrier_free.global.common.PlaceFinder;
 import com.example.barrier_free.global.common.PlaceType;
 import com.example.barrier_free.global.exception.CustomException;
 import com.example.barrier_free.global.infra.S3Service;
+import com.example.barrier_free.global.jwt.JwtUserUtils;
 import com.example.barrier_free.global.response.ErrorCode;
 
 import lombok.RequiredArgsConstructor;
@@ -45,7 +46,8 @@ public class ReviewService {
 		return PlaceReviewPageResponse.from(reviews, s3Service);
 	}
 
-	public UserReviewPageResponse getReviewsByUser(Long userId, Pageable pageable) {
+	public UserReviewPageResponse getReviewsByUser(Pageable pageable) {
+		Long userId = JwtUserUtils.getCurrentUserId();
 		User user = userRepository.findById(userId).orElseThrow(() -> new CustomException(ErrorCode.USER_NOT_FOUND));
 		Page<Review> reviews = reviewRepository.findByUserId(userId, pageable);
 		return UserReviewPageResponse.from(reviews, s3Service);
@@ -64,6 +66,7 @@ public class ReviewService {
 
 		Place place = placeFinder.findPlace(placeId, placeType);
 		place.attachTo(review);
+		place.increaseReviewStats(dto.getRating());
 		List<String> uploadedKeys = new ArrayList<>();
 
 		try {
@@ -81,8 +84,8 @@ public class ReviewService {
 	}
 
 	@Transactional
-	public void deleteReview(long userId, long reviewId) {
-		User user = userRepository.findById(userId)
+	public void deleteReview(long reviewId) {
+		User user = userRepository.findById(JwtUserUtils.getCurrentUserId())
 			.orElseThrow(() -> new CustomException(ErrorCode.USER_NOT_FOUND));
 
 		Review review = reviewRepository.findById(reviewId)
@@ -91,7 +94,10 @@ public class ReviewService {
 		if (!writer.equals(user.getId())) {
 			throw new CustomException(ErrorCode.USER_NOT_AUTHORIZED);
 		}
-
+		double deletedRating = review.getRating();
+		Place place = (review.getMap() != null) ? review.getMap() : review.getReport();
+		place.decreaseReviewStats(deletedRating);
+		
 		review.getReviewImages().forEach(image -> {
 			s3Service.deleteFile(image.getUrl()); // 이미지 URL이 S3 key면 OK
 		});
