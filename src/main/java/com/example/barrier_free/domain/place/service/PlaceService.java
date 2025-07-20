@@ -1,5 +1,6 @@
 package com.example.barrier_free.domain.place.service;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
@@ -12,15 +13,19 @@ import com.example.barrier_free.domain.facility.repository.FacilityRepository;
 import com.example.barrier_free.domain.facility.repository.mapFacility.MapFacilityRepository;
 import com.example.barrier_free.domain.facility.repository.reportFacility.ReportFacilityRepository;
 import com.example.barrier_free.domain.favorite.repository.FavoriteRepository;
+import com.example.barrier_free.domain.map.repository.MapRepository;
 import com.example.barrier_free.domain.place.converter.PlaceConverter;
 import com.example.barrier_free.domain.place.converter.PlaceSearchResponseConverter;
 import com.example.barrier_free.domain.place.dto.PlaceDetailResponse;
+import com.example.barrier_free.domain.place.dto.PlaceMapMarkerResponse;
 import com.example.barrier_free.domain.place.dto.PlaceSearchCondition;
 import com.example.barrier_free.domain.place.dto.PlaceSearchResponse;
 import com.example.barrier_free.domain.place.dto.PlaceSearchResponsePage;
 import com.example.barrier_free.domain.place.dto.PlaceSummaryResponse;
 import com.example.barrier_free.domain.place.entity.PlaceView;
 import com.example.barrier_free.domain.place.repository.PlaceRepository;
+import com.example.barrier_free.domain.report.entity.Report;
+import com.example.barrier_free.domain.report.repository.ReportRepository;
 import com.example.barrier_free.domain.user.UserRepository;
 import com.example.barrier_free.domain.user.entity.User;
 import com.example.barrier_free.global.common.Place;
@@ -41,6 +46,8 @@ public class PlaceService {
 	private final ReportFacilityRepository reportFacilityRepository;
 	private final FacilityRepository facilityRepository;
 	private final PlaceFinder placeFinder;
+	private final MapRepository mapRepository;
+	private final ReportRepository reportRepository;
 	private final FavoriteRepository favoriteRepository;
 	private final UserRepository userRepository;
 
@@ -117,4 +124,34 @@ public class PlaceService {
 
 	}
 
+	public List<PlaceMapMarkerResponse> getAllPlaceMarkers() {
+		List<PlaceMapMarkerResponse> result = new ArrayList<>();
+
+		List<com.example.barrier_free.domain.map.entity.Map> maps = mapRepository.findAll();
+		for (com.example.barrier_free.domain.map.entity.Map m : maps) {
+			result.add(new PlaceMapMarkerResponse(
+				m.getId(),
+				m.getName(),
+				m.getLatitude(),
+				m.getLongitude(),
+				m.getRegion(),
+				PlaceType.map
+			));
+		}
+
+		List<Report> reports = reportRepository.findAll();
+		for (Report r : reports) {
+			result.add(new PlaceMapMarkerResponse(
+				r.getId(),
+				r.getName(),
+				r.getLatitude(),
+				r.getLongitude(),
+				r.getRegion(),
+				PlaceType.report
+			));
+		}
+
+		return result;
+	}
 }
+

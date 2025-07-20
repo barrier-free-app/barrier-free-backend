@@ -18,17 +18,16 @@ import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.OneToMany;
 import lombok.AccessLevel;
+import lombok.Getter;
 import lombok.NoArgsConstructor;
 
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @Entity
+@Getter
 public class Map extends PlaceEntity implements Place {
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long id;
-	private float totalRating;
-	private float latitude;
-	private float longitude;
 
 	@OneToMany(mappedBy = "map", cascade = CascadeType.ALL, orphanRemoval = true)
 	private List<MapFacility> mapFacilities = new ArrayList<>();

@@ -1,5 +1,7 @@
 package com.example.barrier_free.domain.place.controller;
 
+import java.util.List;
+
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.data.web.PageableDefault;
@@ -10,6 +12,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.example.barrier_free.domain.place.dto.PlaceDetailResponse;
+import com.example.barrier_free.domain.place.dto.PlaceMapMarkerResponse;
 import com.example.barrier_free.domain.place.dto.PlaceSearchCondition;
 import com.example.barrier_free.domain.place.dto.PlaceSearchResponsePage;
 import com.example.barrier_free.domain.place.dto.PlaceSummaryResponse;
@@ -18,10 +21,12 @@ import com.example.barrier_free.global.common.PlaceType;
 import com.example.barrier_free.global.response.ApiResponse;
 import com.example.barrier_free.global.response.SuccessCode;
 
+import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
 
 @RequiredArgsConstructor
 @RestController
+@Tag(name = "장소", description = "장소 검색 및 장소 관련 API")
 @RequestMapping("/places")
 public class PlaceController {
 	private final PlaceService placeService;
@@ -50,4 +55,9 @@ public class PlaceController {
 		return ApiResponse.success(SuccessCode.OK, placeDetailResponse);
 	}
 
+	@GetMapping("/places/all")
+	public ApiResponse<?> getAllPlacesForMap() {
+		List<PlaceMapMarkerResponse> markers = placeService.getAllPlaceMarkers();
+		return ApiResponse.success(SuccessCode.OK, markers);
+	}
 }
