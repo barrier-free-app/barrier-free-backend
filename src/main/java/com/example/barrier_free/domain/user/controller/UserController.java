@@ -1,7 +1,6 @@
 package com.example.barrier_free.domain.user.controller;
 
-import com.example.barrier_free.domain.user.dto.DeleteReasonRequest;
-import com.example.barrier_free.domain.user.dto.PasswordRequest;
+import com.example.barrier_free.domain.user.dto.*;
 import com.example.barrier_free.domain.user.service.AuthService;
 import com.example.barrier_free.domain.user.service.UserService;
 import com.example.barrier_free.global.jwt.JwtUserUtils;
@@ -21,8 +20,7 @@ public class UserController {
     private final UserService userService;
     private final AuthService authService;
 
-    // 내정보 테스트
-    // TODO: 삭제
+    // 유저 정보 조회
     @GetMapping("/me")
     public ApiResponse<?> getMe() {
         Long userId = JwtUserUtils.getCurrentUserId();
@@ -62,4 +60,25 @@ public class UserController {
         Long userId = JwtUserUtils.getCurrentUserId();
         return ApiResponse.success(SuccessCode.OK, userService.deleteUser(userId, deleteReasonRequest));
     }
+
+    // 사용자 편의정보 변경
+	@PutMapping("/facilities")
+	public ApiResponse<?> updateUserFacilities(@RequestBody UpdateUserFacilitiesRequest request) {
+		userService.updateUserFacilities(request.getFacilityIds());
+		return ApiResponse.success(SuccessCode.OK, "Facilities updated");
+	}
+
+    // 사용자 닉네임 변경
+	@PutMapping("/nickname")
+	public ApiResponse<?> updateNickname(@RequestBody UpdateNicknameRequest request) {
+
+		return ApiResponse.success(SuccessCode.OK, userService.updateUserNickname(request));
+	}
+
+    // 사용자 유형 변경
+	@PutMapping("/userType")
+	public ApiResponse<?> updateUserType(@RequestBody UpdateUserType request) {
+		userService.updateUserType(request);
+		return ApiResponse.success(SuccessCode.OK, "UserType updated");
+	}
 }
