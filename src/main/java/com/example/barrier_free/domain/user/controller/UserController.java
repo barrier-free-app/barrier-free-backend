@@ -22,6 +22,8 @@ public class UserController {
 
     // 유저 정보 조회
     @GetMapping("/me")
+    @Operation(summary = "유저 정보 조회(마이페이지 진입) API",
+            description = "로그인 상태 유저의 정보를 조회합니다. ")
     public ApiResponse<?> getMe() {
         Long userId = JwtUserUtils.getCurrentUserId();
         return ApiResponse.success(SuccessCode.OK, userService.getUser(userId));
