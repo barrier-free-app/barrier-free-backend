@@ -43,6 +43,13 @@ public class UserController {
         return ApiResponse.success(SuccessCode.OK, authService.updatePassword(userId, passwordRequest));
     }
 
+    @PostMapping("/logout")
+    @Operation(summary = "로그아웃 API")
+    public ApiResponse<?> logout() {
+        Long userId = JwtUserUtils.getCurrentUserId();
+        return ApiResponse.success(SuccessCode.OK, authService.logoutUser(userId));
+    }
+
     // 계정 삭제
     @DeleteMapping("/delete")
     @Operation(summary = "회원 탈퇴 API",

@@ -244,4 +244,14 @@ public class AuthService {
         user.updatePassword(passwordEncoder.encode(password));
         return "비밀번호가 변경되었습니다.";
     }
+
+    // 로그아웃
+    @Transactional
+    public String logoutUser(Long userId) {
+        User user = userRepository.findById(userId)
+                .orElseThrow(() -> new CustomException(ErrorCode.USER_NOT_FOUND));
+
+        user.setTokens(null, null);
+        return "로그아웃 되었습니다.";
+    }
 }

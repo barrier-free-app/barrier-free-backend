@@ -55,6 +55,7 @@ public enum ErrorCode {
 	JWT_MALFORMED(HttpStatus.UNAUTHORIZED, "JWT4002", "JWT 토큰의 형식이 잘못되었습니다."), // 형식 오류
 	UNSUPPORTED_JWT(HttpStatus.UNAUTHORIZED, "JWT4004", "지원하지 않는 JWT 토큰입니다."),
 	EMPTY_JWT(HttpStatus.UNAUTHORIZED, "JWT4005", "JWT 클레임이 비어 있습니다."),
+	JWT_REVOKED(HttpStatus.UNAUTHORIZED, "JWT4006", "JWT가 무효화되었습니다. JWT 재발급이 필요합니다."),
 
 	// 편의시설 관련 에러
 	FACILITY_NOT_FOUND(HttpStatus.BAD_REQUEST, "FACILITY400", "존재하지 않는 편의시설입니다."),
