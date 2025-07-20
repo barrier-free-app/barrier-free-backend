@@ -6,11 +6,11 @@ import lombok.Getter;
 
 @Getter
 public class FavoritePlaceGroupResponse {
-	private List<PlaceResponse> mapFavorites;
-	private List<PlaceResponse> reportFavorites;
+	private List<FavoriteResponse> mapFavorites;
+	private List<FavoriteResponse> reportFavorites;
 
-	public FavoritePlaceGroupResponse(List<PlaceResponse> mapFavorites,
-		List<PlaceResponse> reportFavorites) {
+	public FavoritePlaceGroupResponse(List<FavoriteResponse> mapFavorites,
+		List<FavoriteResponse> reportFavorites) {
 		this.mapFavorites = mapFavorites;
 		this.reportFavorites = reportFavorites;
 	}

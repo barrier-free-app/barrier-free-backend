@@ -14,6 +14,7 @@ public class PlaceConverter {
 			place.getOpeningHours(),
 			place.getFacility(),
 			place.getPlaceType(),
+			place.getImageType().getCode(),
 			favorite
 		);
 	}
@@ -25,6 +26,7 @@ public class PlaceConverter {
 			place.getAddress(),
 			place.getFacility(),
 			place.getPlaceType(),
+			place.getImageType().getCode(),
 			favorite
 		);
 	}
