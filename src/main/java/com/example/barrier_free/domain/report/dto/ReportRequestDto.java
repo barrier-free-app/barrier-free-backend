@@ -6,9 +6,10 @@ import lombok.Data;
 
 @Data
 public class ReportRequestDto {
+
+	private String description;
 	private String name;
 	private String address;
-	private String description;
 	private int imageType;
 	private List<Integer> facilities;
 	private String homepage;

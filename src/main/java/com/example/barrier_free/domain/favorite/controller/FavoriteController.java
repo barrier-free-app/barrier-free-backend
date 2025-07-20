@@ -3,7 +3,6 @@ package com.example.barrier_free.domain.favorite.controller;
 import java.util.List;
 
 import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -52,11 +51,11 @@ public class FavoriteController {
 		return ApiResponse.success(SuccessCode.OK, weeklyTop3);
 	}
 
-	@GetMapping(value = "/users/{userId}/favorites")
-	public ApiResponse<?> getFavorite(@PathVariable Long userId,
+	@GetMapping(value = "/users/favorites")
+	public ApiResponse<?> getFavorite(
 		@RequestParam(required = false) List<Integer> facilities
 	) {
-		FavoritePlaceGroupResponse response = favoriteService.getFavorite(userId, facilities);
+		FavoritePlaceGroupResponse response = favoriteService.getFavorite(facilities);
 		return ApiResponse.success(SuccessCode.OK, response);
 
 	}

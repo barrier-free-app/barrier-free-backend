@@ -8,7 +8,6 @@ import org.springframework.transaction.annotation.Transactional;
 import com.example.barrier_free.domain.facility.entity.Facility;
 import com.example.barrier_free.domain.facility.entity.ReportFacility;
 import com.example.barrier_free.domain.facility.repository.FacilityRepository;
-import com.example.barrier_free.domain.report.dto.ReportContext;
 import com.example.barrier_free.domain.report.dto.ReportRequestDto;
 import com.example.barrier_free.domain.report.dto.VoteRequestDto;
 import com.example.barrier_free.domain.report.entity.Report;
@@ -48,6 +47,7 @@ public class ReportService {
 
 		List<Facility> facilities = facilityRepository.findAllByIdIn(dto.getFacilities());
 
+		//요청한 편의시설이 진짜 편의시설에 있는지 확인
 		if (facilities.size() != dto.getFacilities().size()) {
 			throw new CustomException(ErrorCode.FACILITY_NOT_FOUND);
 		}

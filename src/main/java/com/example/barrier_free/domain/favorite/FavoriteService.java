@@ -33,6 +33,7 @@ import com.example.barrier_free.domain.user.UserRepository;
 import com.example.barrier_free.domain.user.entity.User;
 import com.example.barrier_free.global.common.PlaceType;
 import com.example.barrier_free.global.exception.CustomException;
+import com.example.barrier_free.global.jwt.JwtUserUtils;
 import com.example.barrier_free.global.response.ErrorCode;
 
 import lombok.RequiredArgsConstructor;
@@ -241,7 +242,8 @@ public class FavoriteService {
 	}
 
 	@Transactional
-	public FavoritePlaceGroupResponse getFavorite(Long userId, List<Integer> facilities) {
+	public FavoritePlaceGroupResponse getFavorite(List<Integer> facilities) {
+		Long userId = JwtUserUtils.getCurrentUserId();
 		User user = userRepository.findById(userId)
 			.orElseThrow(() -> new CustomException(ErrorCode.USER_NOT_FOUND));
 
