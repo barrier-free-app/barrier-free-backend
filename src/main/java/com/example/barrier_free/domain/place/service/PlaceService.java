@@ -13,10 +13,10 @@ import com.example.barrier_free.domain.facility.repository.mapFacility.MapFacili
 import com.example.barrier_free.domain.facility.repository.reportFacility.ReportFacilityRepository;
 import com.example.barrier_free.domain.favorite.repository.FavoriteRepository;
 import com.example.barrier_free.domain.place.converter.PlaceConverter;
+import com.example.barrier_free.domain.place.converter.PlaceSearchResponseConverter;
 import com.example.barrier_free.domain.place.dto.PlaceDetailResponse;
 import com.example.barrier_free.domain.place.dto.PlaceSearchCondition;
 import com.example.barrier_free.domain.place.dto.PlaceSearchResponse;
-import com.example.barrier_free.domain.place.dto.PlaceSearchResponseConverter;
 import com.example.barrier_free.domain.place.dto.PlaceSearchResponsePage;
 import com.example.barrier_free.domain.place.dto.PlaceSummaryResponse;
 import com.example.barrier_free.domain.place.entity.PlaceView;
@@ -81,7 +81,7 @@ public class PlaceService {
 
 		List<Facility> facilities = facilityRepository.findAllByIdIn(facilityIds);
 		if (facilities.size() != facilityIds.size()) {
-			throw new CustomException(ErrorCode.NOT_FOUND_FACILITY);
+			throw new CustomException(ErrorCode.FACILITY_NOT_FOUND);
 		}
 	}
 
