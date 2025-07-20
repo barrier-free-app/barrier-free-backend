@@ -46,12 +46,12 @@ public class Review extends BaseEntity {
 	@OneToMany(mappedBy = "review", cascade = CascadeType.ALL, orphanRemoval = true)
 	@BatchSize(size = 10)
 	private List<ReviewImage> reviewImages = new ArrayList<>();
-	private float rating; // 별점
+	private double rating; // 별점
 	@Column(columnDefinition = "TEXT")
 	private String content; // 리뷰 내용
 
 	@Builder
-	public Review(User user, Map map, Report report, float rating, String content) {
+	public Review(User user, Map map, Report report, double rating, String content) {
 		this.user = user;
 		this.map = map;
 		this.report = report;

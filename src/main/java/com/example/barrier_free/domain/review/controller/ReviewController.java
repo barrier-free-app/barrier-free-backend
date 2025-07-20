@@ -50,21 +50,19 @@ public class ReviewController {
 		return ApiResponse.success(SuccessCode.REVIEW_CREATED, Map.of("reviewId", reviewId));
 	}
 
-	@DeleteMapping(value = "users/{userId}/reviews/{reviewId}")
+	@DeleteMapping(value = "users/reviews/{reviewId}")
 	public ApiResponse<?> deleteReview(
-		@PathVariable long userId
-		, @PathVariable long reviewId
+		@PathVariable long reviewId
 	) {
-		reviewService.deleteReview(userId, reviewId);
+		reviewService.deleteReview(reviewId);
 		return ApiResponse.success(SuccessCode.OK, "삭제완료");
 	}
 
-	@GetMapping(value = "users/{userId}/reviews")
+	@GetMapping(value = "users/reviews")
 	public ApiResponse<?> getUserReviews(
-		@PathVariable long userId,
 		@PageableDefault(size = 10, sort = "createdAt", direction = Sort.Direction.DESC) Pageable pageable
 	) {
-		UserReviewPageResponse reviews = reviewService.getReviewsByUser(userId, pageable);
+		UserReviewPageResponse reviews = reviewService.getReviewsByUser(pageable);
 		return ApiResponse.success(SuccessCode.OK, reviews);
 	}
 
