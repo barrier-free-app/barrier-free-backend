@@ -40,10 +40,11 @@ public class AuthService {
     @Transactional
     public UserResponse signupUser(SignupRequest signupRequest) {
 
+        // 일반 로그인 이메일 중복 확인
         String email = signupRequest.getEmail();
-        String nickname = signupRequest.getNickname();
-        String username = signupRequest.getUsername();
-        String password = signupRequest.getPassword();
+        if (userRepository.existsByEmailAndSocialType(email, SocialType.GENERAL)) {
+            throw new CustomException(ErrorCode.EMAIL_ALREADY_EXISTED);
+        }
 
         // 이메일 인증 여부 확인
         VerificationCode verificationCode = verificationCodeRepository.findTopByEmailOrderByCreatedAtDesc(email)
@@ -51,6 +52,10 @@ public class AuthService {
         if (!verificationCode.isVerified()) {
             throw new CustomException(ErrorCode.EMAIL_UNAUTHORIZED);
         }
+
+        String nickname = signupRequest.getNickname();
+        String username = signupRequest.getUsername();
+        String password = signupRequest.getPassword();
 
         // 아이디 및 비밀번호 유효성 검사
         validateInput(signupRequest.getUsername());
@@ -61,11 +66,8 @@ public class AuthService {
         password = passwordEncoder.encode(password); // 비밀번호 인코딩 진행
 
         // 닉네임 및 아이디 중복 확인
-        if (userRepository.existsByNickname(nickname))
-            throw new CustomException(ErrorCode.USER_NICKNAME_DUPLICATE);
-        if (userRepository.existsByUsername(signupRequest.getUsername())) {
-            throw new CustomException(ErrorCode.USER_USERNAME_DUPLICATE);
-        }
+        if (userRepository.existsByNickname(nickname)) throw new CustomException(ErrorCode.USER_NICKNAME_DUPLICATE);
+        if (userRepository.existsByUsername(signupRequest.getUsername())) throw new CustomException(ErrorCode.USER_USERNAME_DUPLICATE);
 
         // 사용자 유형 변환
         UserType userType = UserType.fromString(signupRequest.getUserType());
@@ -104,7 +106,8 @@ public class AuthService {
     public String verifyInputDuplicate(String type, String input) {
         switch (type) {
             case "nickname" -> {
-                if (userRepository.existsByNickname(input)) {
+                if (input == null || input.isBlank()) throw new CustomException(ErrorCode.USER_INPUT_REQUIRED);
+                else if (userRepository.existsByNickname(input)) {
                     throw new CustomException(ErrorCode.USER_NICKNAME_DUPLICATE);
                 }
             }
@@ -185,6 +188,7 @@ public class AuthService {
                 // 16자 임시 비번 생성 및 저장
                 String temp = generatePassword(16);
                 user.updatePassword(passwordEncoder.encode(temp));
+                user.resetIncorrectTimes(); // 틀린 횟수 초기화
 
                 generateFindMailFormat(email, "비밀번호", temp);
                 return "비밀번호가 이메일로 발송되었습니다.";
@@ -239,5 +243,15 @@ public class AuthService {
         // 새 비밀번호 저장
         user.updatePassword(passwordEncoder.encode(password));
         return "비밀번호가 변경되었습니다.";
+    }
+
+    // 로그아웃
+    @Transactional
+    public String logoutUser(Long userId) {
+        User user = userRepository.findById(userId)
+                .orElseThrow(() -> new CustomException(ErrorCode.USER_NOT_FOUND));
+
+        user.setTokens(null, null);
+        return "로그아웃 되었습니다.";
     }
 }

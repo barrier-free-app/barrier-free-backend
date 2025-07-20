@@ -33,4 +33,18 @@ public class UserFacility {
 		this.user = user;
 		this.facility = facility;
 	}
+
+	public static UserFacility of(Facility facility) {
+		UserFacility uf = new UserFacility();
+		uf.setFacility(facility);
+		return uf;
+	}
+
+	public void setUser(User user) {
+		this.user = user;
+	}
+
+	public void setFacility(Facility facility) {
+		this.facility = facility;
+	}
 }

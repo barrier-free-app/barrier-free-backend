@@ -1,6 +1,5 @@
 package com.example.barrier_free.domain.user.dto;
 
-import com.example.barrier_free.domain.user.enums.UserType;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
@@ -15,5 +14,5 @@ public class SignupRequest {
     private String password;
     private String verifyPassword;
     private String userType;
-    private List<Long> userFacilityIds;
+    private List<Integer> userFacilityIds;
 }

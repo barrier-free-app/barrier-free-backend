@@ -35,7 +35,7 @@ public enum ErrorCode {
 	VERIFICATION_CODE_EXPIRED(HttpStatus.UNAUTHORIZED, "VERIFICATIONCODE4004", "인증코드가 만료되었습니다."),
 
 	// 유저 관련 에러
-	USER_TYPE_NOT_FOUND(HttpStatus.NOT_FOUND, "USER4001", "잘못된 유저 타입입니다. (ALL/DISABLED/PREGNANT 중 입력 바랍니다.)"),
+	USER_TYPE_NOT_FOUND(HttpStatus.NOT_FOUND, "USER4001", "존재하지 않는 유저 타입입니다. (ALL/DISABLED/PREGNANT 중 입력 바랍니다.)"),
 	USER_NICKNAME_DUPLICATE(HttpStatus.BAD_REQUEST, "USER4002", "중복된 닉네임입니다."),
 	USER_USERNAME_DUPLICATE(HttpStatus.BAD_REQUEST, "USER4003", "중복된 아이디입니다."),
 	USER_PASSWORD_MISMATCH(HttpStatus.BAD_REQUEST, "USER4004", "비밀번호가 일치하지 않습니다."),
@@ -44,6 +44,7 @@ public enum ErrorCode {
 	USER_INVALID_TYPE(HttpStatus.BAD_REQUEST, "USER4007", "유효하지 않은 검사 타입입니다. (nickname/username 중 입력 바랍니다.)"),
 	USER_INPUT_REQUIRED(HttpStatus.BAD_REQUEST, "USER4008", "값을 입력해주세요."),
 	USER_PASSWORD_TOO_MANY_FAILED(HttpStatus.BAD_REQUEST, "USER4009", "비밀번호 입력 5회 이상 실패. 비밀번호를 재설정해주세요."),
+	USER_SOCIAL_TYPE_NOT_FOUND(HttpStatus.NOT_FOUND, "USER4010", "존재하지 않은 소셜 로그인 타입입니다. (KAKAO/NAVER 중 입력 바랍니다.)"),
 
 	/* JWT 관련 에러 */
 	// TODO: 이름 바꾸기
@@ -54,6 +55,7 @@ public enum ErrorCode {
 	JWT_MALFORMED(HttpStatus.UNAUTHORIZED, "JWT4002", "JWT 토큰의 형식이 잘못되었습니다."), // 형식 오류
 	UNSUPPORTED_JWT(HttpStatus.UNAUTHORIZED, "JWT4004", "지원하지 않는 JWT 토큰입니다."),
 	EMPTY_JWT(HttpStatus.UNAUTHORIZED, "JWT4005", "JWT 클레임이 비어 있습니다."),
+	JWT_REVOKED(HttpStatus.UNAUTHORIZED, "JWT4006", "JWT가 무효화되었습니다. JWT 재발급이 필요합니다."),
 
 	// 편의시설 관련 에러
 	FACILITY_NOT_FOUND(HttpStatus.BAD_REQUEST, "FACILITY400", "존재하지 않는 편의시설입니다."),
@@ -76,6 +78,7 @@ public enum ErrorCode {
 	INVALID_REDISKEY(HttpStatus.BAD_REQUEST, "REDIS4001", "유효하지 않은 키 형식입니다."),
 	INVALID_WEEKLY_RANK(HttpStatus.INTERNAL_SERVER_ERROR, "WEEKLY5001", "주간 랭킹에 장소 정보가 없습니다."),
 	INVALID_REVIEW(HttpStatus.BAD_REQUEST, "REVIEW4001", "리뷰에 연결된 장소가 없습니다."),
+	NICKNAME_UPDATE_NOT_ALLOWED(HttpStatus.BAD_REQUEST, "USER4007", "닉네임은 한달에 한 번 변경 가능합니다"),
 	INVALID_IMAGE_TYPE(HttpStatus.BAD_REQUEST, "IMAGETYPE4001", "유효하지 않은 이미지 타입입니다."),
 
 	INVALID_ADDRESS(HttpStatus.BAD_REQUEST, "ADDRESS4001", "잘못된 주소 형식입니다."),

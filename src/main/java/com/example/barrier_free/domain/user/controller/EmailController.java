@@ -37,7 +37,7 @@ public class EmailController {
                     발송된 이메일 인증코드를 확인합니다. (이메일 인증코드 발송 API 우선)
                     
                     - email: 이메일 주소
-                    - verificationCode: 인증코드 4자리
+                    - verificationCode: 인증코드 4자리 (5분 안에 입력)
                     """)
     public ApiResponse<?> verifyEmailVeriCode(@RequestBody EmailCodeRequest emailCodeRequest) {
         return ApiResponse.success(SuccessCode.OK, emailService.verifyCode(emailCodeRequest));
