@@ -6,9 +6,6 @@ import lombok.Data;
 
 @Data
 public class ReportRequestDto {
-	/*추후 토큰 구현되면 토큰에서 유저 뽑아서 쓰면 되므로 이곳은 삭제 됩니다*/
-	private Long userId;
-	/*삭제 예정*/
 
 	private String description;
 	private String name;

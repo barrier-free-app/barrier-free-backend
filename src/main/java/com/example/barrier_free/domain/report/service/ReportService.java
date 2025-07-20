@@ -18,6 +18,7 @@ import com.example.barrier_free.domain.report.repository.VoteRepository;
 import com.example.barrier_free.domain.user.UserRepository;
 import com.example.barrier_free.domain.user.entity.User;
 import com.example.barrier_free.global.exception.CustomException;
+import com.example.barrier_free.global.jwt.JwtUserUtils;
 import com.example.barrier_free.global.response.ErrorCode;
 
 import lombok.RequiredArgsConstructor;
@@ -33,7 +34,7 @@ public class ReportService {
 
 	@Transactional
 	public Long createReport(ReportRequestDto dto) {
-		User user = userRepository.findById(dto.getUserId())
+		User user = userRepository.findById(JwtUserUtils.getCurrentUserId())
 			.orElseThrow(() -> new IllegalArgumentException("사용자 없음"));
 
 		Report report = ReportMapper.toEntity(dto, user);
