@@ -81,7 +81,7 @@ public class PlaceService {
 
 		List<Facility> facilities = facilityRepository.findAllByIdIn(facilityIds);
 		if (facilities.size() != facilityIds.size()) {
-			throw new CustomException(ErrorCode.NOT_FOUND_FACILITY);
+			throw new CustomException(ErrorCode.FACILITY_NOT_FOUND);
 		}
 	}
 

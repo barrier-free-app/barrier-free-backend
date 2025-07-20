@@ -66,6 +66,7 @@ public class ReviewService {
 
 		Place place = placeFinder.findPlace(placeId, placeType);
 		place.attachTo(review);
+		place.increaseReviewStats(dto.getRating());
 		List<String> uploadedKeys = new ArrayList<>();
 
 		try {
@@ -93,7 +94,10 @@ public class ReviewService {
 		if (!writer.equals(user.getId())) {
 			throw new CustomException(ErrorCode.USER_NOT_AUTHORIZED);
 		}
-
+		double deletedRating = review.getRating();
+		Place place = (review.getMap() != null) ? review.getMap() : review.getReport();
+		place.decreaseReviewStats(deletedRating);
+		
 		review.getReviewImages().forEach(image -> {
 			s3Service.deleteFile(image.getUrl()); // 이미지 URL이 S3 key면 OK
 		});

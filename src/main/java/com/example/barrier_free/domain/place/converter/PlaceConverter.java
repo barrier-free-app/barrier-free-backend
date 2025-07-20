@@ -7,6 +7,10 @@ import com.example.barrier_free.global.common.Place;
 public class PlaceConverter {
 
 	public static PlaceDetailResponse toPlaceDetailResponse(Place place, boolean favorite) {
+		int reviewCount = place.getReviewCount();
+		double avgRating = reviewCount == 0 ? 0.0 :
+			Math.round((place.getRatingSum() / reviewCount) * 10.0) / 10.0;
+
 		return new PlaceDetailResponse(
 			place.getName(),
 			place.getDescription(),
@@ -14,7 +18,10 @@ public class PlaceConverter {
 			place.getOpeningHours(),
 			place.getFacility(),
 			place.getPlaceType(),
-			favorite
+			favorite,
+			reviewCount,
+			avgRating
+
 		);
 	}
 

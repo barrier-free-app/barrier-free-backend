@@ -20,4 +20,12 @@ public interface Place {
 	PlaceType getPlaceType(); //타입
 
 	List<Integer> getFacility();     // 편의시설 정보
+
+	void increaseReviewStats(double rating);
+
+	void decreaseReviewStats(double deletedRating);
+
+	int getReviewCount();
+
+	double getRatingSum();
 }
