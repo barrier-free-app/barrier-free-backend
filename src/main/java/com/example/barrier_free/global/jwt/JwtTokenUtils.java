@@ -1,5 +1,7 @@
 package com.example.barrier_free.global.jwt;
 
+import com.example.barrier_free.domain.user.UserRepository;
+import com.example.barrier_free.domain.user.entity.User;
 import com.example.barrier_free.global.exception.CustomException;
 import com.example.barrier_free.global.response.ErrorCode;
 import io.jsonwebtoken.Claims;
@@ -12,6 +14,8 @@ import org.springframework.stereotype.Component;
 import javax.crypto.SecretKey;
 import java.util.Date;
 
+import static com.example.barrier_free.global.response.ErrorCode.USER_NOT_FOUND;
+
 @Component
 @RequiredArgsConstructor
 public class JwtTokenUtils {
@@ -20,6 +24,8 @@ public class JwtTokenUtils {
 
     private static final Long ACCESS_TOKEN_EXPIRATION =  60 * 60 * 1000L; // 1시간
     private static final Long REFRESH_TOKEN_EXPIRATION = 7 * 24 * 60 * 60 * 1000L;  // 7일
+
+    private final UserRepository userRepository;
 
     public String createAccessToken(Long id) {
         return Jwts.builder()
@@ -40,16 +46,18 @@ public class JwtTokenUtils {
     }
 
     public Long validateToken(String token) {
+        Claims claims;
+
+        // jwt 토큰 파싱
         try{
-            Claims claims = Jwts
+            claims = Jwts
                     .parser()
                     .verifyWith(key)
                     .build()
                     .parseSignedClaims(token)
                     .getPayload();
-            return Long.parseLong(claims.getSubject());
         }
-        catch(ExpiredJwtException e){
+        catch(ExpiredJwtException e) {
             throw new CustomException(ErrorCode.JWT_EXPIRED);
         }
         catch (JwtException e) {
@@ -58,5 +66,16 @@ public class JwtTokenUtils {
         catch (Exception e) {
             throw new CustomException(ErrorCode.JWT_UNKNOWN_ERROR);
         }
+
+        // 파싱 이후
+        Long userId = Long.parseLong(claims.getSubject());
+        User user = userRepository.findById(userId)
+                .orElseThrow(() -> new CustomException(USER_NOT_FOUND));
+
+        if (user.getAccessToken() == null || !user.getAccessToken().equals(token)) {
+            throw new CustomException(ErrorCode.JWT_REVOKED);  // 무효화된 토큰
+        }
+
+        return userId;
     }
 }

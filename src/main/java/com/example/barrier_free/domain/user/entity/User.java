@@ -5,7 +5,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import com.example.barrier_free.domain.facility.entity.Facility;
-import lombok.*;
+
 import org.springframework.data.annotation.CreatedDate;
 
 import com.example.barrier_free.domain.facility.entity.UserFacility;
@@ -27,6 +27,8 @@ import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.OneToMany;
 import jakarta.validation.constraints.Email;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
 
 @Entity
 @Getter
@@ -132,5 +134,14 @@ public class User extends BaseEntity {
 	// 비밀번호 실패 횟수 초기화
 	public void resetIncorrectTimes() {
 		this.incorrectTimes = 0;
+	}
+
+	public void updateNickname(String nickname) {
+		this.nickname = nickname;
+		this.nicknameUpdatedAt = LocalDateTime.now();
+	}
+
+	public void updateUserType(UserType userType) {
+		this.userType = userType;
 	}
 }
