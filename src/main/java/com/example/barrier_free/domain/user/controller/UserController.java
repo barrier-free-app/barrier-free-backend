@@ -63,6 +63,13 @@ public class UserController {
 
     // 사용자 편의정보 변경
 	@PutMapping("/facilities")
+    @Operation(summary = "회원 탈퇴 API",
+            description = """
+                    로그인 상태 유저의 사용자 편의정보를 변경합니다.
+                    
+                    - facilityIds: 편의시설 아이디 번호 (예: [1, 2, 4])
+                    --- 1: 승강기, 2: 장애인 화장싱, 3: 영유아 동반, 4: 수유실, 5: 경사로
+                    """)
 	public ApiResponse<?> updateUserFacilities(@RequestBody UpdateUserFacilitiesRequest request) {
 		userService.updateUserFacilities(request.getFacilityIds());
 		return ApiResponse.success(SuccessCode.OK, "Facilities updated");
@@ -70,6 +77,12 @@ public class UserController {
 
     // 사용자 닉네임 변경
 	@PutMapping("/nickname")
+    @Operation(summary = "닉네임 변경 API",
+            description = """
+                    로그인 상태 유저의 사용자 편의정보를 변경합니다.
+                    
+                    - nickname: 변경할 닉네임 (1달 이내 또는 중복된 닉네임은 변경 불가)
+                    """)
 	public ApiResponse<?> updateNickname(@RequestBody UpdateNicknameRequest request) {
 
 		return ApiResponse.success(SuccessCode.OK, userService.updateUserNickname(request));
@@ -77,6 +90,12 @@ public class UserController {
 
     // 사용자 유형 변경
 	@PutMapping("/userType")
+    @Operation(summary = "사용자 유형 변경 API",
+            description = """
+                    로그인 상태 유저의 사용자 유형을 변경합니다.
+                    
+                    - userType: 사용자 유형 (ALL/DISABLED/PREGNANT 중 입력, 소문자 가능)
+                    """)
 	public ApiResponse<?> updateUserType(@RequestBody UpdateUserType request) {
 		userService.updateUserType(request);
 		return ApiResponse.success(SuccessCode.OK, "UserType updated");
