@@ -8,6 +8,7 @@ import org.springframework.transaction.annotation.Transactional;
 import com.example.barrier_free.domain.facility.entity.Facility;
 import com.example.barrier_free.domain.facility.entity.ReportFacility;
 import com.example.barrier_free.domain.facility.repository.FacilityRepository;
+import com.example.barrier_free.domain.report.dto.ReportContext;
 import com.example.barrier_free.domain.report.dto.ReportRequestDto;
 import com.example.barrier_free.domain.report.dto.VoteRequestDto;
 import com.example.barrier_free.domain.report.entity.Report;

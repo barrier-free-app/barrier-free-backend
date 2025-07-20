@@ -24,7 +24,7 @@ public class UserReviewResponse {
 	private PlaceType placeType; //
 	private int imageType;
 	private String content;
-	private float rating;
+	private double rating;
 	private List<String> reviewImageUrls;
 
 	public static UserReviewResponse from(Review review, S3Service s3Service) {
