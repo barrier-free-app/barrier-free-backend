@@ -16,6 +16,8 @@ import lombok.experimental.SuperBuilder;
 @MappedSuperclass
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 public abstract class PlaceEntity extends BaseEntity {
+	private int reviewCount;
+	private double ratingSum;
 	private String name;
 	private String address;
 	private String contact;
@@ -34,5 +36,15 @@ public abstract class PlaceEntity extends BaseEntity {
 	
 	@Column(length = 500)
 	private String homepage;
+
+	public void increaseReviewStats(double rating) {
+		this.reviewCount++;
+		this.ratingSum += rating;
+	}
+
+	public void decreaseReviewStats(double rating) {
+		this.reviewCount = Math.max(0, this.reviewCount - 1);
+		this.ratingSum = Math.max(0, this.ratingSum - rating);
+	}
 
 }

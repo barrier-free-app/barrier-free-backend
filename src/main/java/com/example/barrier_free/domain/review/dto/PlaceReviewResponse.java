@@ -13,7 +13,7 @@ import lombok.Getter;
 @AllArgsConstructor
 public class PlaceReviewResponse {
 	private String nickname;
-	private float rating;
+	private double rating;
 	private String content;
 	private List<String> imageUrls;
 

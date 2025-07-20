@@ -29,4 +29,12 @@ public interface Place {
 	double getLatitude();
 
 	double getLongitude();
+
+	void increaseReviewStats(double rating);
+
+	void decreaseReviewStats(double deletedRating);
+
+	int getReviewCount();
+
+	double getRatingSum();
 }

@@ -18,4 +18,7 @@ public class PlaceDetailResponse {
 	private PlaceType placeType;
 	private int imageType;
 	private boolean favorite;
+
+	private int reviewCount;
+	private double avgRating;
 }
