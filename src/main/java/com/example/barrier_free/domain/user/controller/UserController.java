@@ -7,12 +7,15 @@ import com.example.barrier_free.domain.user.service.UserService;
 import com.example.barrier_free.global.jwt.JwtUserUtils;
 import com.example.barrier_free.global.response.ApiResponse;
 import com.example.barrier_free.global.response.SuccessCode;
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequestMapping("/users")
 @RequiredArgsConstructor
+@Tag(name = "4. 마이페이지", description = "마이페이지 관련 API")
 public class UserController {
 
     private final UserService userService;
@@ -28,6 +31,13 @@ public class UserController {
 
     // 비밀번호 변경
     @PatchMapping("/my-password")
+    @Operation(summary = "비밀번호 재설정 API",
+            description = """
+                    로그인 상태 유저의 비밀번호를 재설정합니다.
+                    
+                    - password: 비밀번호 (영문+숫자 6~16자)
+                    - verifyPassword: password와 동일한 비밀번호
+                    """)
     public ApiResponse<?> updateMyPassword(@RequestBody PasswordRequest passwordRequest) {
         Long userId = JwtUserUtils.getCurrentUserId();
         return ApiResponse.success(SuccessCode.OK, authService.updatePassword(userId, passwordRequest));
@@ -35,6 +45,12 @@ public class UserController {
 
     // 계정 삭제
     @DeleteMapping("/delete")
+    @Operation(summary = "회원 탈퇴 API",
+            description = """
+                    로그인 상태 유저의 계정을 삭제합니다. (바로 삭제됨 주의)
+                    
+                    - reason: 삭제하려는 이유
+                    """)
     public ApiResponse<?> deleteUser(@RequestBody DeleteReasonRequest deleteReasonRequest) {
         Long userId = JwtUserUtils.getCurrentUserId();
         return ApiResponse.success(SuccessCode.OK, userService.deleteUser(userId, deleteReasonRequest));
