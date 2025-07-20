@@ -64,7 +64,7 @@ public class UserController {
     }
 
     // 사용자 편의정보 변경
-	@PutMapping("/facilities")
+	@PutMapping("/my-facilities")
     @Operation(summary = "회원 탈퇴 API",
             description = """
                     로그인 상태 유저의 사용자 편의정보를 변경합니다.
@@ -78,7 +78,7 @@ public class UserController {
 	}
 
     // 사용자 닉네임 변경
-	@PutMapping("/nickname")
+	@PutMapping("/my-nickname")
     @Operation(summary = "닉네임 변경 API",
             description = """
                     로그인 상태 유저의 사용자 편의정보를 변경합니다.
@@ -91,7 +91,7 @@ public class UserController {
 	}
 
     // 사용자 유형 변경
-	@PutMapping("/userType")
+	@PutMapping("/my-type")
     @Operation(summary = "사용자 유형 변경 API",
             description = """
                     로그인 상태 유저의 사용자 유형을 변경합니다.
