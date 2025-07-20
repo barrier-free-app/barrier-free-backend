@@ -56,7 +56,7 @@ public class AuthController {
     @PostMapping("/login")
     @Operation(summary = "일반 로그인 API",
             description = """
-                    일반 로그인을 진행합니다. 
+                    일반 로그인을 진행합니다.
                     
                     - username: 이메일 또는 아이디 (영문+숫자 6~16자, 테스트 계정 - nimuyman@gmail.com/test123)
                     - password: 비밀번호 (영문+숫자 6~16자, 테스트 계정 - a12345)

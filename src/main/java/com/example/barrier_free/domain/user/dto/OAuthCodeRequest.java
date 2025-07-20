@@ -5,6 +5,8 @@ import lombok.NoArgsConstructor;
 
 @Getter
 @NoArgsConstructor
-public class KakaoAuthCodeRequest {
+public class OAuthCodeRequest {
+    private String type;
     private String authCode;
+    private String state;
 }

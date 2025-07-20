@@ -35,7 +35,7 @@ public enum ErrorCode {
 	VERIFICATION_CODE_EXPIRED(HttpStatus.UNAUTHORIZED, "VERIFICATIONCODE4004", "인증코드가 만료되었습니다."),
 
 	// 유저 관련 에러
-	USER_TYPE_NOT_FOUND(HttpStatus.NOT_FOUND, "USER4001", "잘못된 유저 타입입니다. (ALL/DISABLED/PREGNANT 중 입력 바랍니다.)"),
+	USER_TYPE_NOT_FOUND(HttpStatus.NOT_FOUND, "USER4001", "존재하지 않는 유저 타입입니다. (ALL/DISABLED/PREGNANT 중 입력 바랍니다.)"),
 	USER_NICKNAME_DUPLICATE(HttpStatus.BAD_REQUEST, "USER4002", "중복된 닉네임입니다."),
 	USER_USERNAME_DUPLICATE(HttpStatus.BAD_REQUEST, "USER4003", "중복된 아이디입니다."),
 	USER_PASSWORD_MISMATCH(HttpStatus.BAD_REQUEST, "USER4004", "비밀번호가 일치하지 않습니다."),
@@ -44,6 +44,7 @@ public enum ErrorCode {
 	USER_INVALID_TYPE(HttpStatus.BAD_REQUEST, "USER4007", "유효하지 않은 검사 타입입니다. (nickname/username 중 입력 바랍니다.)"),
 	USER_INPUT_REQUIRED(HttpStatus.BAD_REQUEST, "USER4008", "값을 입력해주세요."),
 	USER_PASSWORD_TOO_MANY_FAILED(HttpStatus.BAD_REQUEST, "USER4009", "비밀번호 입력 5회 이상 실패. 비밀번호를 재설정해주세요."),
+	USER_SOCIAL_TYPE_NOT_FOUND(HttpStatus.NOT_FOUND, "USER4010", "존재하지 않은 소셜 로그인 타입입니다. (KAKAO/NAVER 중 입력 바랍니다.)"),
 
 	/* JWT 관련 에러 */
 	// TODO: 이름 바꾸기
