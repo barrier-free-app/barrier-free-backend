@@ -17,6 +17,8 @@ import com.example.barrier_free.domain.report.repository.ReportRepository;
 import com.example.barrier_free.domain.report.repository.VoteRepository;
 import com.example.barrier_free.domain.user.UserRepository;
 import com.example.barrier_free.domain.user.entity.User;
+import com.example.barrier_free.global.common.geo.CoordinatesAndRegion;
+import com.example.barrier_free.global.common.geo.GeoService;
 import com.example.barrier_free.global.exception.CustomException;
 import com.example.barrier_free.global.jwt.JwtUserUtils;
 import com.example.barrier_free.global.response.ErrorCode;
@@ -27,6 +29,7 @@ import lombok.RequiredArgsConstructor;
 @Service
 public class ReportService {
 
+	private final GeoService geoService;
 	private final VoteRepository voteRepository;
 	private final ReportRepository reportRepository;
 	private final UserRepository userRepository;
@@ -35,9 +38,12 @@ public class ReportService {
 	@Transactional
 	public Long createReport(ReportRequestDto dto) {
 		User user = userRepository.findById(JwtUserUtils.getCurrentUserId())
-			.orElseThrow(() -> new IllegalArgumentException("사용자 없음"));
+			.orElseThrow(() -> new CustomException(ErrorCode.USER_NOT_FOUND));
 
-		Report report = ReportMapper.toEntity(dto, user);
+		CoordinatesAndRegion coordinatesAndRegion = geoService.getCoordinatesAndRegionFromAddress(dto.getAddress());
+
+		ReportContext reportContext = new ReportContext(dto, user, coordinatesAndRegion);
+		Report report = ReportMapper.toEntity(reportContext);
 
 		List<Facility> facilities = facilityRepository.findAllByIdIn(dto.getFacilities());
 

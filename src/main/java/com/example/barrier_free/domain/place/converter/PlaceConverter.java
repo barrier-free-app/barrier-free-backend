@@ -17,10 +17,11 @@ public class PlaceConverter {
 			place.getAddress(),
 			place.getOpeningHours(),
 			place.getFacility(),
-			place.getPlaceType(),
+			place.getImageType().getCode(),
 			favorite,
 			reviewCount,
 			avgRating
+
 
 		);
 	}
@@ -31,7 +32,7 @@ public class PlaceConverter {
 			place.getDescription(),
 			place.getAddress(),
 			place.getFacility(),
-			place.getPlaceType(),
+			place.getImageType().getCode(),
 			favorite
 		);
 	}

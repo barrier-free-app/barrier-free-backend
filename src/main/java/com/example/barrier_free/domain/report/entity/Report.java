@@ -14,7 +14,6 @@ import com.example.barrier_free.global.common.PlaceEntity;
 import com.example.barrier_free.global.common.PlaceType;
 
 import jakarta.persistence.CascadeType;
-import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.FetchType;
 import jakarta.persistence.GeneratedValue;
@@ -39,8 +38,6 @@ public class Report extends PlaceEntity implements Place {
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long id;
 
-	@Column(columnDefinition = "TEXT")
-	private String description; //추가정보
 	@Builder.Default
 	@OneToMany(mappedBy = "report", cascade = CascadeType.ALL, orphanRemoval = true)
 	private List<ReportFacility> reportFacilities = new ArrayList<>();
@@ -76,11 +73,6 @@ public class Report extends PlaceEntity implements Place {
 	@Override
 	public Long getId() {
 		return id;
-	}
-
-	@Override
-	public String getDescription() {
-		return description;
 	}
 
 	@Override

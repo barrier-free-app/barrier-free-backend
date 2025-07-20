@@ -10,8 +10,10 @@ public class ReportRequestDto {
 	private String description;
 	private String name;
 	private String address;
+	private int imageType;
 	private List<Integer> facilities;
-	private String phone;
-	private String hours;
+	private String homepage;
+	private String openingHours;
+	private String contact;
 
 }

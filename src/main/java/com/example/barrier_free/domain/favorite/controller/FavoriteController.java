@@ -11,7 +11,7 @@ import org.springframework.web.bind.annotation.RestController;
 import com.example.barrier_free.domain.favorite.FavoriteService;
 import com.example.barrier_free.domain.favorite.dto.FavoritePlaceGroupResponse;
 import com.example.barrier_free.domain.favorite.dto.FavoriteRequestDto;
-import com.example.barrier_free.domain.favorite.dto.PlaceResponse;
+import com.example.barrier_free.domain.favorite.dto.PlaceRankResponse;
 import com.example.barrier_free.global.response.ApiResponse;
 import com.example.barrier_free.global.response.SuccessCode;
 
@@ -47,7 +47,7 @@ public class FavoriteController {
 
 	@GetMapping("/places/populars")
 	public ApiResponse<?> getWeeklyTop3() {
-		List<PlaceResponse> weeklyTop3 = favoriteService.getWeeklyTop3();
+		List<PlaceRankResponse> weeklyTop3 = favoriteService.getWeeklyTop3();
 		return ApiResponse.success(SuccessCode.OK, weeklyTop3);
 	}
 

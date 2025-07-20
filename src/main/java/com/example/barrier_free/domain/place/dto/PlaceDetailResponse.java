@@ -15,8 +15,8 @@ public class PlaceDetailResponse {
 	private String address;
 	private String openingHours;
 	private List<Integer> facilities;
-	// private int imageType;
 	private PlaceType placeType;
+	private int imageType;
 	private boolean favorite;
 
 	private int reviewCount;
