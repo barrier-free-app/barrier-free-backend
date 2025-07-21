@@ -6,7 +6,6 @@ import lombok.Getter;
 
 @Getter
 public class FavoriteRequestDto {
-	private Long userId;
 	private Long placeId;
 	private PlaceType type;
 

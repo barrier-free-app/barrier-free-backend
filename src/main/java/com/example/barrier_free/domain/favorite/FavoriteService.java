@@ -72,7 +72,7 @@ public class FavoriteService {
 
 	@Transactional
 	public boolean toggleFavorite(FavoriteRequestDto request) {
-		Long userId = request.getUserId();
+		Long userId = JwtUserUtils.getCurrentUserId();
 		Long placeId = request.getPlaceId();
 		PlaceType type = request.getType();
 

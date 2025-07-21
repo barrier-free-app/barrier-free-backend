@@ -64,7 +64,7 @@ public class ReportService {
 
 	@Transactional
 	public long createVote(VoteRequestDto dto, Long reportId) {
-		User user = userRepository.findById(dto.getUserId())
+		User user = userRepository.findById(JwtUserUtils.getCurrentUserId())
 			.orElseThrow(() -> new CustomException(ErrorCode.NOT_FOUND_USER));
 
 		Report report = reportRepository.findById(reportId)
