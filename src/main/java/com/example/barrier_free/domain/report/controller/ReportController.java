@@ -2,6 +2,7 @@ package com.example.barrier_free.domain.report.controller;
 
 import java.util.Map;
 
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -9,6 +10,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.example.barrier_free.domain.report.dto.ReportRequestDto;
+import com.example.barrier_free.domain.report.dto.VoteInfoResponse;
 import com.example.barrier_free.domain.report.dto.VoteRequestDto;
 import com.example.barrier_free.domain.report.service.ReportService;
 import com.example.barrier_free.global.response.ApiResponse;
@@ -38,9 +40,19 @@ public class ReportController {
 		summary = "제보 장소에 대한 투표 API",
 		description = "voteType 은 UP, DOWN 두가지 입니다")
 	@PostMapping("/{reportId}/vote")
-	public ApiResponse<?> createVote(@RequestBody VoteRequestDto dto, @PathVariable Long reportId) {
+	public ApiResponse<?> getVoteInfo(@RequestBody VoteRequestDto dto, @PathVariable Long reportId) {
 		Long id = reportService.createVote(dto, reportId);
 		return ApiResponse.success(SuccessCode.CREATED, Map.of("voteId", Long.valueOf(id)));
+
+	}
+
+	@Operation(
+		summary = "제보 장소에 대한 투표 수 확인과 투표여부 API",
+		description = " VoteTypeStatus 는 UP, DOWN, NONE 세가지 입니다. NONE은 아직 투표하지 않은 경우 입니다.")
+	@GetMapping("/{reportId}/vote")
+	public ApiResponse<?> getVoteInfo(@PathVariable Long reportId) {
+		VoteInfoResponse voteInfo = reportService.getReportVoteInfo(reportId);
+		return ApiResponse.success(SuccessCode.OK, voteInfo);
 
 	}
 
