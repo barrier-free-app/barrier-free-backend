@@ -6,5 +6,4 @@ import lombok.Getter;
 public class ReviewRequestDto {
 	private String content;
 	private double rating;
-	private Long userId;
 }

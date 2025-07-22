@@ -6,6 +6,5 @@ import lombok.Getter;
 
 @Getter
 public class VoteRequestDto {
-	private Long userId;
 	private VoteType voteType;
 }

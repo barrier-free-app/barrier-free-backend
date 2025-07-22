@@ -55,7 +55,7 @@ public class ReviewService {
 
 	@Transactional
 	public Long createReview(Long placeId, ReviewRequestDto dto, List<MultipartFile> images, PlaceType placeType) {
-		User user = userRepository.findById(dto.getUserId())
+		User user = userRepository.findById(JwtUserUtils.getCurrentUserId())
 			.orElseThrow(() -> new CustomException(ErrorCode.USER_NOT_FOUND));
 
 		Review review = Review.builder()
@@ -97,7 +97,7 @@ public class ReviewService {
 		double deletedRating = review.getRating();
 		Place place = (review.getMap() != null) ? review.getMap() : review.getReport();
 		place.decreaseReviewStats(deletedRating);
-		
+
 		review.getReviewImages().forEach(image -> {
 			s3Service.deleteFile(image.getUrl()); // 이미지 URL이 S3 key면 OK
 		});
