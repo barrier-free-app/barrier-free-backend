@@ -17,6 +17,7 @@ public class FavoriteResponse {
 	private String description;
 	private List<Integer> facility;
 	private int imageType;
+	private boolean favorite;
 
 	public static FavoriteResponse fromPlace(Place place) {
 		return new FavoriteResponse(
@@ -25,7 +26,8 @@ public class FavoriteResponse {
 			place.getName(),
 			place.getDescription(),
 			place.getFacility(),
-			place.getImageType().getCode()
+			place.getImageType().getCode(),
+			true
 		);
 	}
 }
