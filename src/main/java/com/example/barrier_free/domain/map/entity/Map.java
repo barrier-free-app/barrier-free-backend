@@ -6,10 +6,10 @@ import java.util.List;
 import com.example.barrier_free.domain.facility.entity.MapFacility;
 import com.example.barrier_free.domain.favorite.entity.Favorite;
 import com.example.barrier_free.domain.favorite.entity.WeeklyRank;
+import com.example.barrier_free.domain.place.entity.PlaceEntity;
+import com.example.barrier_free.domain.place.enums.PlaceType;
 import com.example.barrier_free.domain.review.entity.Review;
 import com.example.barrier_free.global.common.Place;
-import com.example.barrier_free.global.common.PlaceEntity;
-import com.example.barrier_free.global.common.PlaceType;
 
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Entity;
@@ -54,7 +54,6 @@ public class Map extends PlaceEntity implements Place {
 	}
 
 	@Override
-	//lazy로딩이므로 transactional 안에서만 사용
 	public List<Integer> getFacility() {
 		return mapFacilities.stream()
 			.map(mapFacility -> mapFacility.getFacility().getId())

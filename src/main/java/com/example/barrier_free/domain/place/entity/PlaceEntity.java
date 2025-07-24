@@ -1,7 +1,8 @@
-package com.example.barrier_free.global.common;
+package com.example.barrier_free.domain.place.entity;
 
 import com.example.barrier_free.domain.place.converter.ImageTypeConverter;
 import com.example.barrier_free.domain.place.enums.ImageType;
+import com.example.barrier_free.global.common.BaseEntity;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Convert;
@@ -33,7 +34,7 @@ public abstract class PlaceEntity extends BaseEntity {
 
 	@Column(name = "opening_hours")
 	private String openingHours;
-	
+
 	@Column(length = 500)
 	private String homepage;
 

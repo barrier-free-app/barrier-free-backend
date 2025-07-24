@@ -10,6 +10,7 @@ import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
 
 import com.example.barrier_free.domain.map.repository.MapRepository;
+import com.example.barrier_free.domain.place.enums.PlaceType;
 import com.example.barrier_free.domain.report.repository.ReportRepository;
 import com.example.barrier_free.domain.review.dto.PlaceReviewPageResponse;
 import com.example.barrier_free.domain.review.dto.ReviewRequestDto;
@@ -21,7 +22,6 @@ import com.example.barrier_free.domain.user.UserRepository;
 import com.example.barrier_free.domain.user.entity.User;
 import com.example.barrier_free.global.common.Place;
 import com.example.barrier_free.global.common.PlaceFinder;
-import com.example.barrier_free.global.common.PlaceType;
 import com.example.barrier_free.global.exception.CustomException;
 import com.example.barrier_free.global.infra.S3Service;
 import com.example.barrier_free.global.jwt.JwtUserUtils;

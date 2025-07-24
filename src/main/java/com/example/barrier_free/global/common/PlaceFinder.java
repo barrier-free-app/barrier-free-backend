@@ -3,6 +3,7 @@ package com.example.barrier_free.global.common;
 import org.springframework.stereotype.Component;
 
 import com.example.barrier_free.domain.map.repository.MapRepository;
+import com.example.barrier_free.domain.place.enums.PlaceType;
 import com.example.barrier_free.domain.report.repository.ReportRepository;
 import com.example.barrier_free.global.exception.CustomException;
 import com.example.barrier_free.global.response.ErrorCode;
