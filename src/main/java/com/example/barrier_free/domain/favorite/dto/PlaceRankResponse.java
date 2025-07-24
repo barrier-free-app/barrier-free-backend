@@ -4,8 +4,8 @@ import java.util.List;
 
 import com.example.barrier_free.domain.favorite.entity.WeeklyRank;
 import com.example.barrier_free.domain.map.entity.Map;
+import com.example.barrier_free.domain.place.enums.PlaceType;
 import com.example.barrier_free.domain.report.entity.Report;
-import com.example.barrier_free.global.common.PlaceType;
 import com.example.barrier_free.global.exception.CustomException;
 import com.example.barrier_free.global.response.ErrorCode;
 

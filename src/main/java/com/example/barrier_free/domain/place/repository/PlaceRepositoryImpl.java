@@ -12,8 +12,8 @@ import com.example.barrier_free.domain.facility.entity.QReportFacility;
 import com.example.barrier_free.domain.map.entity.QMap;
 import com.example.barrier_free.domain.place.entity.PlaceView;
 import com.example.barrier_free.domain.place.entity.QPlaceView;
+import com.example.barrier_free.domain.place.enums.PlaceType;
 import com.example.barrier_free.domain.report.entity.QReport;
-import com.example.barrier_free.global.common.PlaceType;
 import com.querydsl.core.BooleanBuilder;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 

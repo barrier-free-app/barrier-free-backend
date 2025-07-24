@@ -6,12 +6,12 @@ import java.util.List;
 import com.example.barrier_free.domain.facility.entity.ReportFacility;
 import com.example.barrier_free.domain.favorite.entity.Favorite;
 import com.example.barrier_free.domain.favorite.entity.WeeklyRank;
+import com.example.barrier_free.domain.place.entity.PlaceEntity;
+import com.example.barrier_free.domain.place.enums.PlaceType;
 import com.example.barrier_free.domain.report.enums.VoteType;
 import com.example.barrier_free.domain.review.entity.Review;
 import com.example.barrier_free.domain.user.entity.User;
 import com.example.barrier_free.global.common.Place;
-import com.example.barrier_free.global.common.PlaceEntity;
-import com.example.barrier_free.global.common.PlaceType;
 
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Entity;

@@ -16,11 +16,11 @@ import org.springframework.web.bind.annotation.RequestPart;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
 
+import com.example.barrier_free.domain.place.enums.PlaceType;
 import com.example.barrier_free.domain.review.dto.PlaceReviewPageResponse;
 import com.example.barrier_free.domain.review.dto.ReviewRequestDto;
 import com.example.barrier_free.domain.review.dto.UserReviewPageResponse;
 import com.example.barrier_free.domain.review.service.ReviewService;
-import com.example.barrier_free.global.common.PlaceType;
 import com.example.barrier_free.global.response.ApiResponse;
 import com.example.barrier_free.global.response.SuccessCode;
 
