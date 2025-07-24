@@ -11,7 +11,6 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.example.barrier_free.domain.report.dto.ReportRequestDto;
 import com.example.barrier_free.domain.report.dto.VoteInfoResponse;
-import com.example.barrier_free.domain.report.dto.VoteRequestDto;
 import com.example.barrier_free.domain.report.service.ReportService;
 import com.example.barrier_free.global.response.ApiResponse;
 import com.example.barrier_free.global.response.SuccessCode;
@@ -34,16 +33,6 @@ public class ReportController {
 	public ApiResponse<?> createReport(@RequestBody ReportRequestDto dto) {
 		Long id = reportService.createReport(dto);
 		return ApiResponse.success(SuccessCode.CREATED, Map.of("reportId", Long.valueOf(id)));
-	}
-
-	@Operation(
-		summary = "제보 장소에 대한 투표 API",
-		description = "voteType 은 UP, DOWN 두가지 입니다")
-	@PostMapping("/{reportId}/vote")
-	public ApiResponse<?> getVoteInfo(@RequestBody VoteRequestDto dto, @PathVariable Long reportId) {
-		Long id = reportService.createVote(dto, reportId);
-		return ApiResponse.success(SuccessCode.CREATED, Map.of("voteId", Long.valueOf(id)));
-
 	}
 
 	@Operation(
