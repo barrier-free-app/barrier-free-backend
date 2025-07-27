@@ -11,12 +11,14 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.example.barrier_free.domain.report.dto.ReportRequestDto;
 import com.example.barrier_free.domain.report.dto.VoteInfoResponse;
+import com.example.barrier_free.domain.report.dto.VoteRequestDto;
 import com.example.barrier_free.domain.report.service.ReportService;
 import com.example.barrier_free.global.response.ApiResponse;
 import com.example.barrier_free.global.response.SuccessCode;
 
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 
 @RequiredArgsConstructor
@@ -30,9 +32,19 @@ public class ReportController {
 	@Operation(
 		summary = "장소 제보 생성 API")
 	@PostMapping
-	public ApiResponse<?> createReport(@RequestBody ReportRequestDto dto) {
+	public ApiResponse<?> createReport(@RequestBody @Valid ReportRequestDto dto) {
 		Long id = reportService.createReport(dto);
 		return ApiResponse.success(SuccessCode.CREATED, Map.of("reportId", Long.valueOf(id)));
+	}
+
+	@Operation(
+		summary = "제보 장소에 투표 생성 API",
+		description = "voteType 은 UP, DOWN 두 가지입니다."
+	)
+	@PostMapping("/{reportId}/vote")
+	public ApiResponse<?> createVote(@PathVariable Long reportId, @RequestBody @Valid VoteRequestDto dto) {
+		Long voteId = reportService.createVote(dto, reportId);
+		return ApiResponse.success(SuccessCode.CREATED, Map.of("voteId", voteId));
 	}
 
 	@Operation(
