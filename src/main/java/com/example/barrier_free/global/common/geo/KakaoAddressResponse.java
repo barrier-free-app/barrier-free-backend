@@ -23,8 +23,6 @@ public class KakaoAddressResponse {
 	public static class Address {
 		private String x; // 경도
 		private String y; // 위도
-		@JsonProperty("region_1depth_name")
-		private String provinceOrCity;
 		@JsonProperty("region_2depth_name")
 		private String district;
 	}
