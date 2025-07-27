@@ -40,12 +40,14 @@ public class PlaceConverter {
 			place.getLatitude(),
 			place.getLongitude(),
 			place.getRegion(),
-			place.getPlaceType());
+			place.getPlaceType(),
+			place.getFacility()
+		);
 	}
 
 	public static PlaceDetailResponse toPlaceDetailResponse(PlaceAndFavorite placeAndFavorite) {
-		Place place = placeAndFavorite.place();
-		boolean favorite = placeAndFavorite.favorite();
+		Place place = placeAndFavorite.getPlace();
+		boolean favorite = placeAndFavorite.isFavorite();
 
 		int reviewCount = place.getReviewCount();
 		double avgRating = reviewCount == 0 ? 0.0 :
@@ -67,8 +69,8 @@ public class PlaceConverter {
 	}
 
 	public static PlaceSummaryResponse toPlaceSummaryResponse(PlaceAndFavorite placeAndFavorite) {
-		Place place = placeAndFavorite.place();
-		boolean favorite = placeAndFavorite.favorite();
+		Place place = placeAndFavorite.getPlace();
+		boolean favorite = placeAndFavorite.isFavorite();
 		return new PlaceSummaryResponse(
 			place.getName(),
 			place.getDescription(),
