@@ -6,4 +6,6 @@ import java.util.Map;
 public interface MapFacilityRepositoryCustom {
 	Map<Long, List<Integer>> findFacilitiesByMapIds(List<Long> mapIds);
 
+	List<com.example.barrier_free.domain.map.entity.Map> findMapHavingAllFacilities(List<Integer> facilityIds);
+
 }
