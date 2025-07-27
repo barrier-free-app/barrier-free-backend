@@ -3,7 +3,6 @@ package com.example.barrier_free.domain.place.service;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
-import java.util.stream.Collectors;
 
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -116,15 +115,28 @@ public class PlaceService {
 		return placeType.isFavorite(favoriteRepository, userId, placeId);
 	}
 
-	public List<PlaceMapMarkerResponse> getAllPlaceMarkers() {
-
-		List<Place> places = new ArrayList<>();
-		places.addAll(mapRepository.findAll());
-		places.addAll(reportRepository.findAll());
+	public List<PlaceMapMarkerResponse> getPlaceMarkersWithFilter(List<Integer> facilities) {
+		List<Place> places = (facilities == null || facilities.isEmpty())
+			? getAllPlaces()
+			: getFilteredPlaces(facilities);
 
 		return places.stream()
 			.map(PlaceConverter::toPlaceMapMarkerResponse)
-			.collect(Collectors.toList());
+			.toList();
+	}
+
+	private List<Place> getFilteredPlaces(List<Integer> facilities) {
+		List<Place> filteredPlaces = new ArrayList<>();
+		filteredPlaces.addAll(mapFacilityRepository.findMapHavingAllFacilities(facilities));
+		filteredPlaces.addAll(reportFacilityRepository.findReportHavingAllFacilities(facilities));
+		return filteredPlaces;
+	}
+
+	private List<Place> getAllPlaces() {
+		List<Place> all = new ArrayList<>();
+		all.addAll(mapRepository.findAll());
+		all.addAll(reportRepository.findAll());
+		return all;
 	}
 
 	private User getCurrentUser() {

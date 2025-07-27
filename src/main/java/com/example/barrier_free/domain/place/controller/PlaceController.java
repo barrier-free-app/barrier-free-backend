@@ -85,8 +85,9 @@ public class PlaceController {
 		summary = "지도에서 장소 전체 조회 API"
 	)
 	@GetMapping("/all")
-	public ApiResponse<?> getAllPlacesForMap() {
-		List<PlaceMapMarkerResponse> markers = placeService.getAllPlaceMarkers();
+	public ApiResponse<?> getPlacesForMap(@RequestParam(required = false) List<Integer> facilities
+	) {
+		List<PlaceMapMarkerResponse> markers = placeService.getPlaceMarkersWithFilter(facilities);
 		return ApiResponse.success(SuccessCode.OK, markers);
 	}
 }
