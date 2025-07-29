@@ -16,8 +16,8 @@ import com.example.barrier_free.domain.place.dto.PlaceMapMarkerResponse;
 import com.example.barrier_free.domain.place.dto.PlaceSearchCondition;
 import com.example.barrier_free.domain.place.dto.PlaceSearchResponsePage;
 import com.example.barrier_free.domain.place.dto.PlaceSummaryResponse;
+import com.example.barrier_free.domain.place.enums.PlaceType;
 import com.example.barrier_free.domain.place.service.PlaceService;
-import com.example.barrier_free.global.common.PlaceType;
 import com.example.barrier_free.global.response.ApiResponse;
 import com.example.barrier_free.global.response.SuccessCode;
 
@@ -84,9 +84,11 @@ public class PlaceController {
 	@Operation(
 		summary = "지도에서 장소 전체 조회 API"
 	)
-	@GetMapping("/all")
-	public ApiResponse<?> getAllPlacesForMap() {
-		List<PlaceMapMarkerResponse> markers = placeService.getAllPlaceMarkers();
+	@GetMapping
+	public ApiResponse<?> getPlacesForMap(@RequestParam(required = false) List<Integer> facilities
+	) {
+		List<PlaceMapMarkerResponse> markers = placeService.getPlaceMarkersWithFilter(facilities);
 		return ApiResponse.success(SuccessCode.OK, markers);
 	}
+
 }

@@ -1,6 +1,8 @@
 package com.example.barrier_free.domain.place.dto;
 
-import com.example.barrier_free.global.common.PlaceType;
+import java.util.List;
+
+import com.example.barrier_free.domain.place.enums.PlaceType;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -14,4 +16,5 @@ public class PlaceMapMarkerResponse {
 	private double longitude;
 	private String region;
 	private PlaceType placeType;
+	private List<Integer> facilities;
 }

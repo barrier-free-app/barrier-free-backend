@@ -4,7 +4,7 @@ import org.hibernate.annotations.Immutable;
 import org.hibernate.annotations.Subselect;
 
 import com.example.barrier_free.domain.place.enums.ImageType;
-import com.example.barrier_free.global.common.PlaceType;
+import com.example.barrier_free.domain.place.enums.PlaceType;
 
 import jakarta.persistence.Entity;
 import jakarta.persistence.EnumType;

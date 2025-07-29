@@ -6,6 +6,7 @@ import java.util.stream.Collectors;
 
 import com.example.barrier_free.domain.facility.entity.QReportFacility;
 import com.example.barrier_free.domain.report.entity.QReport;
+import com.example.barrier_free.domain.report.entity.Report;
 import com.querydsl.core.Tuple;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 
@@ -36,5 +37,16 @@ public class ReportFacilityRepositoryImpl implements ReportFacilityRepositoryCus
 			));
 
 		return result;
+	}
+
+	@Override
+	public List<Report> findReportHavingAllFacilities(List<Integer> facilityIds) {
+		return queryFactory
+			.select(reportFacility.report)
+			.from(reportFacility)
+			.where(reportFacility.facility.id.in(facilityIds))
+			.groupBy(reportFacility.report)
+			.having(reportFacility.facility.id.countDistinct().eq((long)facilityIds.size()))
+			.fetch();
 	}
 }
