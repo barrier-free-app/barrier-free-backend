@@ -22,6 +22,7 @@ public class PlaceConverter {
 		String name = placeView.getName();
 		String region = placeView.getRegion();
 		int imageType = placeView.getImageType().getCode();
+		String description = placeView.getDescription();
 
 		List<Integer> facilities;
 		if (placeType == PlaceType.map) {
@@ -30,7 +31,7 @@ public class PlaceConverter {
 			facilities = reportFacilities.getOrDefault(placeId, List.of());
 		}
 
-		return new PlaceSearchResponse(placeId, placeType, facilities, region, name, imageType);
+		return new PlaceSearchResponse(placeId, placeType, facilities, region, name, description, imageType);
 
 	}
 

@@ -15,6 +15,7 @@ public class PlaceSearchResponse {
 	private List<Integer> facilities;
 	private String region;
 	private String name;
+	private String description;
 	private int imageType;
 
 }
