@@ -153,7 +153,7 @@ public class FavoriteService {
 	}
 
 	@Transactional
-	@Scheduled(cron = "0 0 23 ? * MON")
+	@Scheduled(cron = "0 20 23 ? * MON")
 	public void saveWeeklyRanking() {
 		//지난 주 기준 키를 부르기
 		// popular: 2025 - W2  같은 형식의 키
