@@ -37,7 +37,9 @@ import com.example.barrier_free.global.jwt.JwtUserUtils;
 import com.example.barrier_free.global.response.ErrorCode;
 
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 
+@Slf4j
 @RequiredArgsConstructor
 @Service
 public class FavoriteService {
@@ -144,14 +146,14 @@ public class FavoriteService {
 		return favorite;
 	}
 
-	@Scheduled(cron = "0 0 3 ? * MON") // 매주 월요일일 새벽 3시 ->이전 좋아요 랭킹 redis에서 지우기
+	@Scheduled(cron = "0 1 0 ? * TUE")
 	public void cleanupLastWeeklyRankFromRedis() {
 		String prevWeekKey = getLastWeekKey();
 		redisTemplate.delete(prevWeekKey);
 	}
 
 	@Transactional
-	@Scheduled(cron = "0 0 2 ? * MON") // 매주 월요일 새벽 2시
+	@Scheduled(cron = "0 0 23 ? * MON")
 	public void saveWeeklyRanking() {
 		//지난 주 기준 키를 부르기
 		// popular: 2025 - W2  같은 형식의 키
@@ -160,15 +162,22 @@ public class FavoriteService {
 		//테스트 때문에 이미 있는 경우엔 db에서 지우고 스케쥴링함
 		YearWeek yearWeek = extractYearAndWeek(redisKey);
 
+		Set<ZSetOperations.TypedTuple<Object>> top3 = getTop3FromRedis(redisKey);
+		log.info("[SCHEDULER] 주간 랭킹 저장 시작 - RedisKey: {}", redisKey);
+
+		if (top3 == null || top3.isEmpty()) {
+			log.warn("[SCHEDULER] Redis에 지난주 데이터 없음 - DB 삭제하지 않음");
+			return;
+		}
+		log.info("[SCHEDULER] Redis 랭킹 발견 - 기존 DB 데이터 삭제 후 저장 진행");
 		weeklyRankRepository.deleteByYearAndWeek(yearWeek.getYear(), yearWeek.getWeek());
 
-		Set<ZSetOperations.TypedTuple<Object>> top3 = getTop3FromRedis(redisKey);
-
-		if (top3 == null || top3.isEmpty())
-			return;
-
 		List<WeeklyRank> rankings = convertToWeeklyRanks(top3, redisKey);
+		log.info("[SCHEDULER] 저장할 랭킹 수: {}", rankings.size());
+
 		weeklyRankRepository.saveAll(rankings);
+		log.info("[SCHEDULER] 주간 랭킹 저장 완료");
+
 	}
 
 	private Set<ZSetOperations.TypedTuple<Object>> getTop3FromRedis(String key) {
@@ -230,12 +239,15 @@ public class FavoriteService {
 	public void saveCurrentWeeklyRanking() {
 		String redisKey = getCurrentKey();
 		YearWeek yearWeek = extractYearAndWeek(redisKey);
-		weeklyRankRepository.deleteByYearAndWeek(yearWeek.getYear(), yearWeek.getWeek());
-
+		System.out.println("[DEBUG] 저장 주차: " + yearWeek);
 		Set<ZSetOperations.TypedTuple<Object>> top3 = getTop3FromRedis(redisKey);
 
-		if (top3 == null || top3.isEmpty())
+		if (top3 == null || top3.isEmpty()) {
+			System.out.println("[DEBUG] Redis에 데이터 없음, 삭제없이 종료");
 			return;
+		}
+
+		weeklyRankRepository.deleteByYearAndWeek(yearWeek.getYear(), yearWeek.getWeek());
 
 		List<WeeklyRank> rankings = convertToWeeklyRanks(top3, redisKey);
 		weeklyRankRepository.saveAll(rankings);
