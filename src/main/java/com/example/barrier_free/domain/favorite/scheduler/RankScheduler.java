@@ -20,13 +20,13 @@ import lombok.extern.slf4j.Slf4j;
 @Slf4j
 @Component
 @RequiredArgsConstructor
-public class FavoriteScheduler {
+public class RankScheduler {
 
 	private final FavoriteService favoriteService;
 	private final WeeklyRankRepository weeklyRankRepository;
 	private final RedisTemplate<String, Object> redisTemplate;
 
-	@Scheduled(cron = "0 50 23 ? * MON")
+	@Scheduled(cron = "0 40 0 ? * TUE")
 	@Transactional
 	public void saveWeeklyRanking() {
 		String redisKey = favoriteService.getLastWeekKey();
