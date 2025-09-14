@@ -25,7 +25,7 @@ import com.example.barrier_free.domain.place.entity.PlaceView;
 import com.example.barrier_free.domain.place.enums.PlaceType;
 import com.example.barrier_free.domain.place.repository.PlaceRepository;
 import com.example.barrier_free.domain.report.repository.ReportRepository;
-import com.example.barrier_free.domain.user.UserRepository;
+import com.example.barrier_free.domain.user.repository.UserRepository;
 import com.example.barrier_free.domain.user.entity.User;
 import com.example.barrier_free.global.common.Place;
 import com.example.barrier_free.global.common.PlaceFinder;

@@ -1,6 +1,6 @@
 package com.example.barrier_free.domain.user.service;
 
-import com.example.barrier_free.domain.user.UserRepository;
+import com.example.barrier_free.domain.user.repository.UserRepository;
 import com.example.barrier_free.domain.user.dto.OAuthCodeRequest;
 import com.example.barrier_free.domain.user.dto.LoginResponse;
 import com.example.barrier_free.domain.user.entity.User;

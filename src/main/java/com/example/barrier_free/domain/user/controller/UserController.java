@@ -51,7 +51,7 @@ public class UserController {
     }
 
     // 계정 삭제
-    @DeleteMapping("/delete")
+    @PostMapping("/delete")
     @Operation(summary = "회원 탈퇴 API",
             description = """
                     로그인 상태 유저의 계정을 삭제합니다. (바로 삭제됨 주의)

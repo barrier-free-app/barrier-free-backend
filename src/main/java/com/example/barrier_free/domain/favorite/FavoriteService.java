@@ -29,7 +29,7 @@ import com.example.barrier_free.domain.map.repository.MapRepository;
 import com.example.barrier_free.domain.place.enums.PlaceType;
 import com.example.barrier_free.domain.report.entity.Report;
 import com.example.barrier_free.domain.report.repository.ReportRepository;
-import com.example.barrier_free.domain.user.UserRepository;
+import com.example.barrier_free.domain.user.repository.UserRepository;
 import com.example.barrier_free.domain.user.entity.User;
 import com.example.barrier_free.global.exception.CustomException;
 import com.example.barrier_free.global.jwt.JwtUserUtils;

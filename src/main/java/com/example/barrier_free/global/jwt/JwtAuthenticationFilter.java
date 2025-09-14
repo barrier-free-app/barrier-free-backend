@@ -1,7 +1,6 @@
 package com.example.barrier_free.global.jwt;
 
-import com.example.barrier_free.domain.user.UserRepository;
-import com.example.barrier_free.domain.user.entity.User;
+import com.example.barrier_free.domain.user.repository.UserRepository;
 import com.example.barrier_free.global.exception.CustomException;
 import com.example.barrier_free.global.response.ErrorCode;
 import jakarta.servlet.FilterChain;
@@ -31,7 +30,6 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
             throws ServletException, IOException {
 
         String requestURI = request.getRequestURI();
-        System.out.println("[JwtFilter] URI: " + requestURI);
 
         // 인증 제외할 경로는 필터 건너뜀
         if (requestURI.startsWith("/auth")

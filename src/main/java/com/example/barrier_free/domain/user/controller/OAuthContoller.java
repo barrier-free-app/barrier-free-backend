@@ -61,12 +61,12 @@ public class OAuthContoller {
             description = "로그인 성공 후 인가코드 발급 및 앱으로 리다이렉트")
     public void redirectToAppByKakao(@RequestParam String code,
                               HttpServletResponse response) throws IOException {
+        // TODO: 삭제
+        System.out.println("카카오 인가 코드: " + code);
+
         // 앱 전용 딥링크로 리디렉션
         String deepLink = "myapp://login-success?code=" + code;
         response.sendRedirect(deepLink);
-
-        // TODO: 삭제
-        System.out.println("카카오 인가 코드: " + code);
     }
 
     /*
@@ -115,13 +115,13 @@ public class OAuthContoller {
             throw new RuntimeException("state 값이 일치하지 않습니다!");
         }
 
-        // 앱 전용 딥링크로 리디렉션
-        String deepLink = "myapp://login-success?code=" + code + "&state=" + sessionState;
-        response.sendRedirect(deepLink);
-
         // TODO: 삭제
         System.out.println("네이버 인가 코드: " + code);
         System.out.println("네이버 state 코드: " + sessionState);
+
+        // 앱 전용 딥링크로 리디렉션
+        String deepLink = "myapp://login-success?code=" + code + "&state=" + sessionState;
+        response.sendRedirect(deepLink);
     }
 
     /*

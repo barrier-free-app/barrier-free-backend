@@ -1,4 +1,4 @@
-package com.example.barrier_free.domain.user;
+package com.example.barrier_free.domain.user.repository;
 
 import com.example.barrier_free.domain.user.entity.VerificationCode;
 import org.springframework.data.jpa.repository.JpaRepository;
