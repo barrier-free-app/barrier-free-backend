@@ -1,7 +1,7 @@
 package com.example.barrier_free.domain.user.service;
 
-import com.example.barrier_free.domain.user.VerificationCodeRepository;
-import com.example.barrier_free.domain.user.UserRepository;
+import com.example.barrier_free.domain.user.repository.VerificationCodeRepository;
+import com.example.barrier_free.domain.user.repository.UserRepository;
 import com.example.barrier_free.domain.user.dto.EmailRequest;
 import com.example.barrier_free.domain.user.dto.EmailCodeRequest;
 import com.example.barrier_free.domain.user.entity.VerificationCode;

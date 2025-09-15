@@ -1,4 +1,4 @@
-package com.example.barrier_free.domain.user;
+package com.example.barrier_free.domain.user.repository;
 
 import com.example.barrier_free.domain.user.entity.User;
 import com.example.barrier_free.domain.user.enums.SocialType;

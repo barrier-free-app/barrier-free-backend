@@ -27,10 +27,6 @@ public class S3Config {
 
 	@Bean
 	public AmazonS3 amazonS3() {
-		log.info("**********888accessKey: {}", accessKey); // 디버깅용
-		log.info("**********88secretKey: {}", secretKey);
-		log.info("*****region: {}", region);
-		log.info("****Amazon S3 Bean 생성됨");
 		BasicAWSCredentials awsCreds = new BasicAWSCredentials(accessKey, secretKey);
 		return AmazonS3ClientBuilder.standard()
 			.withRegion(region)

@@ -1,4 +1,4 @@
-package com.example.barrier_free.domain.place.dto;
+package com.example.barrier_free.domain.recommendation.dto;
 
 import java.util.List;
 
@@ -7,15 +7,15 @@ import com.example.barrier_free.domain.place.enums.PlaceType;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 
-@AllArgsConstructor
 @Getter
-public class PlaceSearchResponse {
+@AllArgsConstructor
+public class RecommendationPlaceResponse {
 	private Long placeId;
 	private PlaceType placeType;
-	private List<Integer> facilities;
-	private String region;
 	private String name;
+	private String region;
 	private String description;
+	private List<Integer> facility;
 	private int imageType;
 
 }

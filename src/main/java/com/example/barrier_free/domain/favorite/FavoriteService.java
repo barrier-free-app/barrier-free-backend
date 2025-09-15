@@ -11,7 +11,6 @@ import java.util.stream.Collectors;
 
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.data.redis.core.ZSetOperations;
-import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -27,17 +26,19 @@ import com.example.barrier_free.domain.favorite.repository.FavoriteRepository;
 import com.example.barrier_free.domain.favorite.repository.WeeklyRankRepository;
 import com.example.barrier_free.domain.map.entity.Map;
 import com.example.barrier_free.domain.map.repository.MapRepository;
+import com.example.barrier_free.domain.place.enums.PlaceType;
 import com.example.barrier_free.domain.report.entity.Report;
 import com.example.barrier_free.domain.report.repository.ReportRepository;
-import com.example.barrier_free.domain.user.UserRepository;
+import com.example.barrier_free.domain.user.repository.UserRepository;
 import com.example.barrier_free.domain.user.entity.User;
-import com.example.barrier_free.global.common.PlaceType;
 import com.example.barrier_free.global.exception.CustomException;
 import com.example.barrier_free.global.jwt.JwtUserUtils;
 import com.example.barrier_free.global.response.ErrorCode;
 
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 
+@Slf4j
 @RequiredArgsConstructor
 @Service
 public class FavoriteService {
@@ -72,7 +73,7 @@ public class FavoriteService {
 
 	@Transactional
 	public boolean toggleFavorite(FavoriteRequestDto request) {
-		Long userId = request.getUserId();
+		Long userId = JwtUserUtils.getCurrentUserId();
 		Long placeId = request.getPlaceId();
 		PlaceType type = request.getType();
 
@@ -122,7 +123,7 @@ public class FavoriteService {
 		return "popular:" + year + "-W" + weekNum;
 	}
 
-	private String getLastWeekKey() {
+	public String getLastWeekKey() {
 		LocalDate lastWeek = LocalDate.now().minusWeeks(1);
 		WeekFields weekFields = WeekFields.of(Locale.getDefault());
 		int week = lastWeek.get(weekFields.weekOfWeekBasedYear());
@@ -144,38 +145,11 @@ public class FavoriteService {
 		return favorite;
 	}
 
-	@Scheduled(cron = "0 0 3 ? * MON") // 매주 월요일일 새벽 3시 ->이전 좋아요 랭킹 redis에서 지우기
-	public void cleanupLastWeeklyRankFromRedis() {
-		String prevWeekKey = getLastWeekKey();
-		redisTemplate.delete(prevWeekKey);
-	}
-
-	@Transactional
-	@Scheduled(cron = "0 0 2 ? * MON") // 매주 월요일 새벽 2시
-	public void saveWeeklyRanking() {
-		//지난 주 기준 키를 부르기
-		// popular: 2025 - W2  같은 형식의 키
-		String redisKey = getLastWeekKey();
-
-		//테스트 때문에 이미 있는 경우엔 db에서 지우고 스케쥴링함
-		YearWeek yearWeek = extractYearAndWeek(redisKey);
-
-		weeklyRankRepository.deleteByYearAndWeek(yearWeek.getYear(), yearWeek.getWeek());
-
-		Set<ZSetOperations.TypedTuple<Object>> top3 = getTop3FromRedis(redisKey);
-
-		if (top3 == null || top3.isEmpty())
-			return;
-
-		List<WeeklyRank> rankings = convertToWeeklyRanks(top3, redisKey);
-		weeklyRankRepository.saveAll(rankings);
-	}
-
-	private Set<ZSetOperations.TypedTuple<Object>> getTop3FromRedis(String key) {
+	public Set<ZSetOperations.TypedTuple<Object>> getTop3FromRedis(String key) {
 		return redisTemplate.opsForZSet().reverseRangeWithScores(key, 0, 2);
 	}
 
-	private List<WeeklyRank> convertToWeeklyRanks(Set<ZSetOperations.TypedTuple<Object>> top3, String redisKey) {
+	public List<WeeklyRank> convertToWeeklyRanks(Set<ZSetOperations.TypedTuple<Object>> top3, String redisKey) {
 		//year 랑 week 나누기
 		YearWeek yearWeek = extractYearAndWeek(redisKey);
 
@@ -195,7 +169,7 @@ public class FavoriteService {
 		return result;
 	}
 
-	private YearWeek extractYearAndWeek(String redisKey) {
+	public YearWeek extractYearAndWeek(String redisKey) {
 		// redisKey - "popular:2025-W27"
 		try {
 			String[] split = redisKey.split(":")[1].split("-W");
@@ -230,12 +204,15 @@ public class FavoriteService {
 	public void saveCurrentWeeklyRanking() {
 		String redisKey = getCurrentKey();
 		YearWeek yearWeek = extractYearAndWeek(redisKey);
-		weeklyRankRepository.deleteByYearAndWeek(yearWeek.getYear(), yearWeek.getWeek());
-
+		System.out.println("[DEBUG] 저장 주차: " + yearWeek);
 		Set<ZSetOperations.TypedTuple<Object>> top3 = getTop3FromRedis(redisKey);
 
-		if (top3 == null || top3.isEmpty())
+		if (top3 == null || top3.isEmpty()) {
+			System.out.println("[DEBUG] Redis에 데이터 없음, 삭제없이 종료");
 			return;
+		}
+
+		weeklyRankRepository.deleteByYearAndWeek(yearWeek.getYear(), yearWeek.getWeek());
 
 		List<WeeklyRank> rankings = convertToWeeklyRanks(top3, redisKey);
 		weeklyRankRepository.saveAll(rankings);

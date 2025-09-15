@@ -2,8 +2,8 @@ package com.example.barrier_free.domain.user.service;
 
 import com.example.barrier_free.domain.facility.entity.Facility;
 import com.example.barrier_free.domain.facility.repository.FacilityRepository;
-import com.example.barrier_free.domain.user.UserRepository;
-import com.example.barrier_free.domain.user.VerificationCodeRepository;
+import com.example.barrier_free.domain.user.repository.UserRepository;
+import com.example.barrier_free.domain.user.repository.VerificationCodeRepository;
 import com.example.barrier_free.domain.user.converter.UserConverter;
 import com.example.barrier_free.domain.user.dto.*;
 import com.example.barrier_free.domain.user.entity.User;

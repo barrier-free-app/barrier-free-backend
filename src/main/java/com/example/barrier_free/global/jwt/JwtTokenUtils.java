@@ -1,6 +1,6 @@
 package com.example.barrier_free.global.jwt;
 
-import com.example.barrier_free.domain.user.UserRepository;
+import com.example.barrier_free.domain.user.repository.UserRepository;
 import com.example.barrier_free.domain.user.entity.User;
 import com.example.barrier_free.global.exception.CustomException;
 import com.example.barrier_free.global.response.ErrorCode;

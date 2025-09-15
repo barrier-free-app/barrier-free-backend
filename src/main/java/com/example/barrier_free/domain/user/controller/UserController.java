@@ -14,7 +14,7 @@ import org.springframework.web.bind.annotation.*;
 @RestController
 @RequestMapping("/users")
 @RequiredArgsConstructor
-@Tag(name = "4. 마이페이지", description = "마이페이지 관련 API")
+@Tag(name = "마이페이지", description = "마이페이지 관련 API")
 public class UserController {
 
     private final UserService userService;
@@ -51,7 +51,7 @@ public class UserController {
     }
 
     // 계정 삭제
-    @DeleteMapping("/delete")
+    @PostMapping("/delete")
     @Operation(summary = "회원 탈퇴 API",
             description = """
                     로그인 상태 유저의 계정을 삭제합니다. (바로 삭제됨 주의)

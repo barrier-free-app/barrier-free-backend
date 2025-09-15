@@ -4,8 +4,9 @@ import org.hibernate.annotations.Immutable;
 import org.hibernate.annotations.Subselect;
 
 import com.example.barrier_free.domain.place.enums.ImageType;
-import com.example.barrier_free.global.common.PlaceType;
+import com.example.barrier_free.domain.place.enums.PlaceType;
 
+import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.EnumType;
 import jakarta.persistence.Enumerated;
@@ -25,6 +26,8 @@ public class PlaceView {
 	private String region;
 	private String address;
 	private ImageType imageType;
+	@Column(columnDefinition = "TEXT")
+	private String description;
 
 	@Enumerated(EnumType.STRING)
 	private PlaceType placeType;

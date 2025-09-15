@@ -55,7 +55,7 @@ public class GeoService {
 
 			double latitude = Double.parseDouble(addr.getY());
 			double longitude = Double.parseDouble(addr.getX());
-			String region = addr.getProvinceOrCity() + " " + addr.getDistrict();
+			String region = addr.getDistrict();
 
 			return new CoordinatesAndRegion(latitude, longitude, region);
 		} catch (Exception e) {

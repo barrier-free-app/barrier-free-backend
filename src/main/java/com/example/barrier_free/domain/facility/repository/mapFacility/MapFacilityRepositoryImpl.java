@@ -39,4 +39,15 @@ public class MapFacilityRepositoryImpl implements MapFacilityRepositoryCustom {
 		return result;
 
 	}
+
+	@Override
+	public List<com.example.barrier_free.domain.map.entity.Map> findMapHavingAllFacilities(List<Integer> facilityIds) {
+		return queryFactory
+			.select(mapFacility.map)
+			.from(mapFacility)
+			.where(mapFacility.facility.id.in(facilityIds))
+			.groupBy(mapFacility.map)
+			.having(mapFacility.facility.id.countDistinct().eq((long)facilityIds.size()))
+			.fetch();
+	}
 }

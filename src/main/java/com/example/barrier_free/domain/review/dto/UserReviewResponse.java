@@ -5,9 +5,9 @@ import java.util.Optional;
 
 import com.example.barrier_free.domain.map.entity.Map;
 import com.example.barrier_free.domain.place.enums.ImageType;
+import com.example.barrier_free.domain.place.enums.PlaceType;
 import com.example.barrier_free.domain.report.entity.Report;
 import com.example.barrier_free.domain.review.entity.Review;
-import com.example.barrier_free.global.common.PlaceType;
 import com.example.barrier_free.global.exception.CustomException;
 import com.example.barrier_free.global.infra.S3Service;
 import com.example.barrier_free.global.response.ErrorCode;

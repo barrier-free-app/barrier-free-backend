@@ -2,8 +2,8 @@ package com.example.barrier_free.domain.favorite.dto;
 
 import java.util.List;
 
+import com.example.barrier_free.domain.place.enums.PlaceType;
 import com.example.barrier_free.global.common.Place;
-import com.example.barrier_free.global.common.PlaceType;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -17,6 +17,7 @@ public class FavoriteResponse {
 	private String description;
 	private List<Integer> facility;
 	private int imageType;
+	private boolean favorite;
 
 	public static FavoriteResponse fromPlace(Place place) {
 		return new FavoriteResponse(
@@ -25,7 +26,8 @@ public class FavoriteResponse {
 			place.getName(),
 			place.getDescription(),
 			place.getFacility(),
-			place.getImageType().getCode()
+			place.getImageType().getCode(),
+			true
 		);
 	}
 }

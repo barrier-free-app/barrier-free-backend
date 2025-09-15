@@ -16,41 +16,52 @@ import com.example.barrier_free.global.response.ApiResponse;
 import com.example.barrier_free.global.response.SuccessCode;
 
 import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.tags.Tag;
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 
 @RestController
 @RequiredArgsConstructor
+@Tag(name = "좋아요/주간 랭킹", description = "좋아요 및 인기 장소 관련 API")
 public class FavoriteController {
 
 	private final FavoriteService favoriteService;
 
 	@Operation(
-		summary = "주간 랭킹 저장(테스트용)",
-		description =
-			"Redis에 저장된 *이번 주*(지난주 아님!) 인기 장소 데이터를 기반으로 주간랭킹을 수동 저장합니다. 주차가 지나지 않았을 경우 테스트용 혹은 연동시에 사용하는용도입니다!"
-				+ "한 번만 요청하시면 db에 이번주 인기 장소가 들어갑니다!!!"
-				+ "실제로는 자동 스케줄러가 지난 주 좋아요 수를 이용해 처리합니다!"
+		summary = "좋아요 등록/해제 API",
+		description = """
+			사용자가 장소에 좋아요(즐겨찾기)를 등록하거나 해제합니다.  
+			이미 등록되어 있으면 즐겨찾기를 해제하고, 없으면 새로 등록합니다.  
+			- 응답값: true = 등록됨, false = 해제됨
+			"""
 	)
-	/******테스트용임*****/
-	@GetMapping("/favorite/rank/test")
-	public void testRankThisWeekSave() {
-		favoriteService.saveCurrentWeeklyRanking();
-	}
-
-	/******테스트용임******/
 
 	@PostMapping("/favorites")
-	public ApiResponse<Boolean> toggleFavorite(@RequestBody FavoriteRequestDto request) {
+	public ApiResponse<Boolean> toggleFavorite(@RequestBody @Valid FavoriteRequestDto request) {
 		boolean result = favoriteService.toggleFavorite(request);
 		return ApiResponse.success(SuccessCode.OK, result); // true면 등록, false면 취소
 	}
 
+	@Operation(
+		summary = "주간 인기 장소 Top 3 조회 API",
+		description = """
+			- 좋아요 순위 Top 3 장소 목록을 반환합니다.  
+			"""
+	)
 	@GetMapping("/places/populars")
 	public ApiResponse<?> getWeeklyTop3() {
 		List<PlaceRankResponse> weeklyTop3 = favoriteService.getWeeklyTop3();
 		return ApiResponse.success(SuccessCode.OK, weeklyTop3);
 	}
 
+	@Operation(
+		summary = "사용자 좋아요 목록 조회 API",
+		description = """
+			- 현재 로그인한 사용자가 좋아요한 장소 목록을 조회합니다.  
+			- 특정 편의시설이 있는 장소만 필터링하고 싶다면 `facilities` 파라미터를 사용하세요.  
+			- 필터링 없이 전체 즐겨찾기를 조회하려면 파라미터 없이 호출하면 됩니다.
+			"""
+	)
 	@GetMapping(value = "/users/favorites")
 	public ApiResponse<?> getFavorite(
 		@RequestParam(required = false) List<Integer> facilities

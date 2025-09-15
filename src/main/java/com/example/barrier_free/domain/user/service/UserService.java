@@ -5,13 +5,14 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 import com.example.barrier_free.domain.user.dto.*;
+import com.example.barrier_free.domain.user.entity.Withdraw;
+import com.example.barrier_free.domain.user.repository.WithdrawRepository;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.example.barrier_free.domain.facility.entity.Facility;
-import com.example.barrier_free.domain.facility.entity.UserFacility;
 import com.example.barrier_free.domain.facility.repository.FacilityRepository;
-import com.example.barrier_free.domain.user.UserRepository;
+import com.example.barrier_free.domain.user.repository.UserRepository;
 import com.example.barrier_free.domain.user.converter.UserConverter;
 import com.example.barrier_free.domain.user.entity.User;
 import com.example.barrier_free.domain.user.enums.UserType;
@@ -20,8 +21,6 @@ import com.example.barrier_free.global.jwt.JwtUserUtils;
 import com.example.barrier_free.global.response.ErrorCode;
 
 import lombok.RequiredArgsConstructor;
-import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
 
 @Service
 @RequiredArgsConstructor
@@ -29,6 +28,7 @@ public class UserService {
 
 	private final UserRepository userRepository;
 	private final FacilityRepository facilityRepository;
+	private final WithdrawRepository withdrawRepository;
 
 	@Transactional
 	public void updateUserFacilities(List<Integer> newFacilityIds) {
@@ -100,8 +100,14 @@ public class UserService {
     public String deleteUser(Long userId, DeleteReasonRequest deleteReasonRequest) {
         User user = userRepository.findById(userId)
                 .orElseThrow(() -> new CustomException(ErrorCode.USER_NOT_FOUND));
-
+		withdrawRepository.save(
+				new Withdraw(
+						deleteReasonRequest.getReason(),
+						userId,
+						user.getEmail()
+				)
+		);
         userRepository.delete(user);
-        return "((" + deleteReasonRequest.getReason() + "))의 이유로 탈퇴가 완료되었습니다.";
+        return "회원 탈퇴 완료되었습니다.";
     }
 }
